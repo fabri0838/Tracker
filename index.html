@@ -683,6 +683,177 @@
             background: #D1FAE5;
             color: #065F46;
         }
+
+        /* ================================================
+           RESPONSIVE DESIGN - MOBILE
+           ================================================ */
+        
+        @media (max-width: 768px) {
+            /* Layout móvil */
+            .app-container {
+                padding: 0;
+            }
+            
+            .header {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            
+            .logo-section {
+                flex: 1 1 100%;
+                justify-content: center;
+            }
+            
+            .nav-buttons {
+                flex: 1 1 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .nav-buttons button {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+            
+            /* Contenido principal */
+            .main-content {
+                padding: 16px;
+            }
+            
+            /* Cards de estudiantes */
+            .students-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px;
+            }
+            
+            .student-card {
+                padding: 16px;
+            }
+            
+            .student-name {
+                font-size: 18px;
+            }
+            
+            /* Métricas */
+            .metrics-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 12px;
+            }
+            
+            .metric-card {
+                padding: 16px;
+            }
+            
+            .metric-value {
+                font-size: 28px;
+            }
+            
+            /* Training days */
+            .training-days-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* Formularios */
+            .form-input, .form-select {
+                font-size: 16px; /* Evita zoom en iOS */
+            }
+            
+            /* Modales */
+            .modal-content {
+                width: 95%;
+                max-width: 95%;
+                margin: 20px auto;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            
+            /* Botones más grandes para tocar */
+            button, .btn {
+                min-height: 44px; /* iOS guideline */
+                font-size: 14px;
+            }
+            
+            /* Tablas responsive */
+            .progress-table {
+                font-size: 12px;
+            }
+            
+            .progress-table th,
+            .progress-table td {
+                padding: 8px 4px;
+            }
+            
+            /* Ocultar elementos innecesarios en mobile */
+            .month-comparison {
+                display: none;
+            }
+            
+            /* Dashboard más compacto */
+            .card {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+            
+            /* Attendance section */
+            .attendance-section {
+                padding: 12px;
+            }
+            
+            /* Config banner mobile */
+            .config-banner {
+                font-size: 12px;
+                padding: 8px;
+            }
+            
+            /* Buscador móvil */
+            #searchStudent {
+                width: 100%;
+                max-width: 100% !important;
+            }
+            
+            /* Training day card */
+            .training-day-card {
+                min-height: auto;
+                padding: 16px;
+            }
+            
+            /* Blocks */
+            .block {
+                margin-bottom: 16px;
+            }
+            
+            .block-header {
+                padding: 12px;
+                flex-wrap: wrap;
+            }
+            
+            /* Exercise table responsive */
+            .exercise-table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            /* Inputs en ejercicios más grandes */
+            .exercise-table input {
+                min-width: 60px;
+                font-size: 16px;
+            }
+        }
+        
+        /* Táctil - áreas más grandes */
+        @media (hover: none) and (pointer: coarse) {
+            button, .btn {
+                min-height: 48px;
+                padding: 12px 20px;
+            }
+            
+            .student-card {
+                min-height: 100px;
+            }
+        }
     </style>
 </head>
 <body>
