@@ -1055,6 +1055,8 @@
         let currentStudent = null;
         let currentDay = null; // Current training day being viewed/edited
         let currentBlockForExercise = null;
+        let lastSyncTimestamp = null;
+        let isSyncing = false;
         let sheetsUrl = localStorage.getItem('gymTracker_sheetsUrl') || '';
         let currentMonth = new Date();
         let customLogo = localStorage.getItem('gymTracker_customLogo') || null;
@@ -1068,37 +1070,76 @@
                 sheetsUrl = savedUrl;
                 document.getElementById('sheetsUrl').value = savedUrl;
                 updateConfigBanner(true);
-                loadFromSheets();
+                
+                // IMPORTANTE: Cargar de Sheets automáticamente al abrir
+                loadFromSheetsAuto();
             } else {
                 updateConfigBanner(false);
-                const localData = (typeof localStorage !== 'undefined' && localStorage.getItem('gymTracker_students'));
-                if (localData) {
-                    students = JSON.parse(localData);
-                    // Migrate old data to new structure if needed
-                    students = students.map(s => {
-                        if (!s.trainingDays && s.blocks) {
-                            // Old format - convert to new
-                            return {
-                                ...s,
-                                trainingDays: [{
-                                    id: Date.now(),
-                                    name: "Plan Principal",
-                                    blocks: s.blocks
-                                }],
-                                blocks: undefined
-                            };
-                        }
-                        return s;
-                    });
-                    renderStudents();
-                }
+                loadFromLocalStorage();
             }
             
             updateExercisesList();
             updateMonthDisplay();
-            
-            // Set today's date
             document.getElementById('sessionDate').valueAsDate = new Date();
+            
+            // Actualizar indicador de sincronización cada minuto
+            setInterval(updateSyncIndicator, 60000);
+            updateSyncIndicator();
+        }
+        
+        // Cargar desde localStorage
+        function loadFromLocalStorage() {
+            const localData = (typeof localStorage !== 'undefined' && localStorage.getItem('gymTracker_students'));
+            if (localData) {
+                students = JSON.parse(localData);
+                students = students.map(function(s) {
+                    if (!s.trainingDays && s.blocks) {
+                        return {
+                            ...s,
+                            trainingDays: [{
+                                id: Date.now(),
+                                name: "Plan Principal",
+                                blocks: s.blocks
+                            }],
+                            blocks: undefined
+                        };
+                    }
+                    return s;
+                });
+                renderStudents();
+            }
+        }
+        
+        // Cargar de Sheets AUTOMÁTICAMENTE al iniciar
+        async function loadFromSheetsAuto() {
+            if (!sheetsUrl) {
+                loadFromLocalStorage();
+                return;
+            }
+            
+            try {
+                const response = await fetch(sheetsUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'loadStudents' })
+                });
+                
+                const data = await response.json();
+                
+                if (data.students && data.students.length > 0) {
+                    students = data.students;
+                    localStorage.setItem('gymTracker_students', JSON.stringify(students));
+                    renderStudents();
+                    lastSyncTimestamp = Date.now();
+                    localStorage.setItem('lastSync', lastSyncTimestamp);
+                    console.log('✅ Datos sincronizados automáticamente desde Google Sheets');
+                } else {
+                    loadFromLocalStorage();
+                }
+            } catch (error) {
+                console.warn('No se pudo sincronizar automáticamente, usando datos locales');
+                loadFromLocalStorage();
+            }
         }
         
         initialize();
