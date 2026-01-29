@@ -1250,6 +1250,10 @@
                     students = JSON.parse(localData);
                     // Migrate old data to new structure if needed
                     students = students.map(s => {
+                        if (!s.totalXP) s.totalXP = 0;
+                        if (!s.level) s.level = 1;
+                        if (!s.badges) s.badges = [];
+                        if (!s.goals) s.goals = [];
                         if (!s.trainingDays && s.blocks) {
                             // Old format - convert to new
                             return {
@@ -2953,14 +2957,14 @@
 
     </script>
 
-    <!-- Modal Nuevo Objetivo -->
+    <!-- Modal Nuevo Objetivo SMART -->
     <div id="newGoal" class="modal">
-        <div class="modal-content" style="max-width:600px;">
+        <div class="modal-content" style="max-width: 600px;">
             <span class="close" onclick="closeModal('newGoal')">&times;</span>
-            <h2 style="color:#1e3a8a;margin-bottom:24px;">🎯 Nuevo Objetivo SMART</h2>
+            <h2 style="color: #1e3a8a; margin-bottom: 24px;">🎯 Nuevo Objetivo SMART</h2>
             
-            <div style="margin-bottom:16px;">
-                <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Tipo de Objetivo</label>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Tipo de Objetivo</label>
                 <select id="goalType" class="form-select" onchange="document.getElementById('exerciseField').style.display = this.value === 'strength' ? 'block' : 'none';">
                     <option value="volume">📈 Aumentar Volumen Mensual (toneladas)</option>
                     <option value="strength">💪 Aumentar Fuerza en Ejercicio (kg)</option>
@@ -2969,42 +2973,42 @@
                 </select>
             </div>
             
-            <div style="margin-bottom:16px;">
-                <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Descripción del Objetivo</label>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Descripción del Objetivo *</label>
                 <input type="text" id="goalDesc" class="form-input" placeholder="Ej: Aumentar de 60 a 70 toneladas mensuales">
             </div>
             
-            <div id="exerciseField" style="margin-bottom:16px;display:none;">
-                <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Ejercicio</label>
+            <div id="exerciseField" style="margin-bottom: 20px; display: none;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Ejercicio</label>
                 <input type="text" id="goalExercise" class="form-input" placeholder="Ej: Sentadilla">
             </div>
             
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
                 <div>
-                    <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Valor Objetivo</label>
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Valor Objetivo *</label>
                     <input type="number" id="goalTarget" class="form-input" placeholder="70" step="0.1">
                 </div>
                 <div>
-                    <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Fecha Límite</label>
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Fecha Límite *</label>
                     <input type="date" id="goalDeadline" class="form-input">
                 </div>
             </div>
             
-            <div style="margin-bottom:24px;">
-                <label style="display:block;margin-bottom:8px;font-weight:600;color:#333;">Recompensa (opcional)</label>
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">Recompensa (opcional)</label>
                 <input type="text" id="goalReward" class="form-input" placeholder="Ej: Batido de proteína gratis">
             </div>
             
-            <div style="background:#f0f9ff;border:1px solid#86efac;padding:12px;border-radius:8px;margin-bottom:16px;font-size:13px;color:#0c4a6e;">
-                <strong>💡 Tips para objetivos efectivos:</strong><br>
-                • Específico: Define claramente qué quiere lograr<br>
+            <div style="background: #f0f9ff; border: 2px solid #86efac; padding: 16px; border-radius: 8px; margin-bottom: 20px; font-size: 13px;">
+                <strong>💡 Tips SMART:</strong><br>
+                • Específico: Define claramente qué lograr<br>
                 • Medible: Usa números concretos<br>
-                • Alcanzable: Que sea realista para el tiempo disponible<br>
-                • Relevante: Alineado con su objetivo principal<br>
-                • Tiempo definido: Con fecha límite clara
+                • Alcanzable: Que sea realista<br>
+                • Relevante: Alineado con su objetivo<br>
+                • Tiempo: Con fecha límite clara
             </div>
             
-            <button onclick="saveNewGoal()" class="btn btn-primary" style="width:100%;padding:12px;font-size:16px;">✅ Crear Objetivo</button>
+            <button onclick="saveNewGoal()" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px;">✅ Crear Objetivo</button>
         </div>
     </div>
 </body>
