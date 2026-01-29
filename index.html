@@ -2952,5 +2952,65 @@
         }
 
     </script>
+
+    <div id="newGoal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('newGoal')">&times;</span>
+            <h2>🎯 Nuevo Objetivo</h2>
+            <select id="goalType" class="form-select" onchange="updateGoalForm()">
+                <option value="volume">📈 Volumen (toneladas/mes)</option>
+                <option value="strength">💪 Fuerza (kg en ejercicio)</option>
+                <option value="attendance">📅 Asistencia (clases)</option>
+                <option value="prs">🏆 Records Personales</option>
+            </select>
+            <input type="text" id="goalDesc" class="form-input" placeholder="Descripción">
+            <div id="exerciseField" style="display:none;">
+                <input type="text" id="goalExercise" class="form-input" placeholder="Nombre del ejercicio">
+            </div>
+            <input type="number" id="goalTarget" class="form-input" placeholder="Valor objetivo">
+            <input type="date" id="goalDeadline" class="form-input">
+            <input type="text" id="goalReward" class="form-input" placeholder="Recompensa (opcional)">
+            <button onclick="saveGoal()" class="btn btn-primary">Guardar Objetivo</button>
+        </div>
+    </div>
+    
+    <script>
+        function updateGoalForm() {
+            const type = document.getElementById('goalType').value;
+            document.getElementById('exerciseField').style.display = type === 'strength' ? 'block' : 'none';
+        }
+        
+        function saveGoal() {
+            if (!currentStudent.goals) currentStudent.goals = [];
+            if (currentStudent.goals.filter(g => g.status !== 'completed').length >= 5) {
+                alert('⚠️ Máximo 5 objetivos activos por alumno');
+                return;
+            }
+            
+            const type = document.getElementById('goalType').value;
+            const goal = {
+                id: Date.now(),
+                type: type,
+                description: document.getElementById('goalDesc').value,
+                targetValue: parseFloat(document.getElementById('goalTarget').value),
+                currentValue: 0,
+                deadline: document.getElementById('goalDeadline').value,
+                reward: document.getElementById('goalReward').value,
+                status: 'in_progress',
+                progress: 0,
+                unit: type === 'volume' ? 'ton' : type === 'strength' ? 'kg' : type === 'attendance' ? 'clases' : 'PRs'
+            };
+            
+            if (type === 'strength') {
+                goal.exerciseName = document.getElementById('goalExercise').value;
+            }
+            
+            currentStudent.goals.push(goal);
+            saveStudents();
+            closeModal('newGoal');
+            renderGoals();
+            alert('✅ Objetivo creado!');
+        }
+    </script>
 </body>
 </html>
