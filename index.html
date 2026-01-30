@@ -2018,6 +2018,150 @@
         }
 
         // SAVE SESSION
+        function updateStudentMetrics(s) {
+    if (!s || !s.sessions) return;
+    
+    if (!s.totalXP) s.totalXP = 0;
+    if (!s.level) s.level = 1;
+    if (!s.badges) s.badges = [];
+    if (!s.goals) s.goals = [];
+    
+    // CALCULAR XP
+    s.totalXP = s.sessions.reduce(function(sum, sess) {
+        return sum + Math.floor((sess.volume || 0) / 100);
+    }, 0);
+    s.level = Math.min(Math.floor(s.totalXP / 100), 100);
+    
+    checkBadges(s);
+    if (s.goals) updateGoals(s);
+}
+
+function checkBadges(s) {
+    if (!s.badges) s.badges = [];
+    var vol = s.sessions.reduce(function(sum, sess) { return sum + (sess.volume || 0); }, 0);
+    var prs = s.sessions.reduce(function(sum, sess) { return sum + (sess.prs || 0); }, 0);
+    var str = calculateStreak(s.sessions || []);
+    
+    if (str >= 7 && s.badges.indexOf('streak_7') === -1) s.badges.push('streak_7');
+    if (vol >= 100000 && s.badges.indexOf('vol_100k') === -1) s.badges.push('vol_100k');
+    if (prs >= 10 && s.badges.indexOf('pr_10') === -1) s.badges.push('pr_10');
+    if (s.level >= 10 && s.badges.indexOf('lvl_10') === -1) s.badges.push('lvl_10');
+    if (s.level >= 50 && s.badges.indexOf('lvl_50') === -1) s.badges.push('lvl_50');
+    if (s.level >= 100 && s.badges.indexOf('lvl_100') === -1) s.badges.push('lvl_100');
+}
+
+function updateGoals(s) {
+    if (!s.goals) s.goals = [];
+    const now = new Date();
+    
+    s.goals.forEach(function(g) {
+        if (g.status === 'completed' || g.status === 'failed') return;
+        if (now > new Date(g.deadline)) { g.status = 'failed'; return; }
+        
+        let curr = 0;
+        
+        if (g.type === 'volume') {
+            const ms = new Date(now.getFullYear(), now.getMonth(), 1);
+            curr = Math.floor(s.sessions.filter(function(sess) {
+                return new Date(sess.date) >= ms;
+            }).reduce(function(sum, sess) { return sum + (sess.volume || 0); }, 0) / 1000);
+            
+        } else if (g.type === 'strength') {
+            s.sessions.forEach(function(sess) {
+                if (sess.blocks) sess.blocks.forEach(function(b) {
+                    if (b.exercises) b.exercises.forEach(function(e) {
+                        if (e.name === g.exerciseName && e.weight > curr) curr = e.weight;
+                    });
+                });
+            });
+            
+        } else if (g.type === 'attendance') {
+            const ms = new Date(now.getFullYear(), now.getMonth(), 1);
+            curr = s.sessions.filter(function(sess) { return new Date(sess.date) >= ms; }).length;
+            
+        } else if (g.type === 'prs') {
+            const start = new Date(g.startDate || g.deadline);
+            curr = s.sessions.filter(function(sess) { return new Date(sess.date) >= start; })
+                .reduce(function(sum, sess) { return sum + (sess.prs || 0); }, 0);
+        }
+        
+        g.currentValue = curr;
+        g.progress = Math.min((curr / g.targetValue) * 100, 100);
+        
+        if (g.progress >= 100 && g.status !== 'completed') {
+            g.status = 'completed';
+            setTimeout(function() {
+                alert('🏆 ¡OBJETIVO CUMPLIDO!\n\n' + s.name + ' completó:\n' + g.description + '\n\n🎁 Recompensa: ' + (g.reward || 'Sin recompensa') + '\n\n💡 RECORDATORIO: Entregá la recompensa al alumno');
+            }, 1500);
+        } else if (g.progress >= 75 && !g.alert75) {
+            g.alert75 = true;
+            setTimeout(function() { alert('🎉 ' + s.name + ' al 75%: ' + g.description); }, 500);
+        } else if (g.progress >= 50 && !g.alert50) {
+            g.alert50 = true;
+        }
+    });
+}
+        function saveGoal() {
+    if (!currentStudent) return;
+    if (!currentStudent.goals) currentStudent.goals = [];
+    
+    const active = currentStudent.goals.filter(function(g) { return g.status === 'in_progress'; });
+    if (active.length >= 5) { alert('⚠️ Máximo 5 objetivos activos'); return; }
+    
+    const type = document.getElementById('goalType').value;
+    const desc = document.getElementById('goalDesc').value;
+    const target = parseFloat(document.getElementById('goalTarget').value);
+    const deadline = document.getElementById('goalDeadline').value;
+    const reward = document.getElementById('goalReward').value;
+    
+    if (!desc || !target || !deadline) {
+        alert('⚠️ Completá descripción, valor objetivo y fecha límite');
+        return;
+    }
+    
+    const g = {
+        id: Date.now(),
+        type: type,
+        description: desc,
+        targetValue: target,
+        currentValue: 0,
+        deadline: deadline,
+        startDate: new Date().toISOString(),
+        reward: reward,
+        status: 'in_progress',
+        progress: 0,
+        unit: type === 'volume' ? 'ton' : type === 'strength' ? 'kg' : type === 'attendance' ? 'clases' : 'PRs',
+        alert50: false,
+        alert75: false
+    };
+    
+    if (type === 'strength') {
+        g.exerciseName = document.getElementById('goalExercise').value;
+        if (!g.exerciseName) { alert('⚠️ Especificá el ejercicio'); return; }
+    }
+    
+    currentStudent.goals.push(g);
+    updateGoals(currentStudent);
+    
+    const studentIndex = students.findIndex(function(s) { return s.id === currentStudent.id; });
+    if (studentIndex !== -1) students[studentIndex] = currentStudent;
+    
+    saveToSheets();
+    closeModal('newGoal');
+    renderDashboard();
+    alert('✅ Objetivo creado!');
+}
+
+function deleteGoal(goalId) {
+    if (!confirm('¿Eliminar objetivo?')) return;
+    currentStudent.goals = currentStudent.goals.filter(function(g) { return g.id !== goalId; });
+    
+    const studentIndex = students.findIndex(function(s) { return s.id === currentStudent.id; });
+    if (studentIndex !== -1) students[studentIndex] = currentStudent;
+    
+    saveToSheets();
+    renderDashboard();
+}
         function saveSession() {
             if (!currentStudent || !currentDay) {
                 alert('Seleccioná un atleta y un día de entrenamiento');
@@ -2078,7 +2222,8 @@
             if (studentIndex !== -1) {
                 students[studentIndex] = currentStudent;
             }
-            
+            // Actualizar métricas de gamificación
+updateStudentMetrics(currentStudent);
             saveToSheets();
             
             alert(`✅ Sesión de "${currentDay.name}" guardada!\n\n📊 Volumen: ${session.volume}kg\n⭐ RPE: ${avgRPE}\n🏆 PRs: ${prsCount}`);
@@ -2923,6 +3068,51 @@
                 
                 <!-- INDICADORES -->
                 <div class="card" style="margin-bottom:24px;">
+                <!-- OBJETIVOS SMART -->
+<div class="card" style="margin-bottom:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="margin:0;">🎯 Objetivos SMART</h3>
+        <button onclick="openModal('newGoal')" class="btn btn-primary btn-sm">➕ Nuevo Objetivo</button>
+    </div>
+    
+    ${(() => {
+        const active = (currentStudent.goals || []).filter(function(g) { return g.status === 'in_progress'; });
+        if (active.length === 0) {
+            return '<p style="color:#999;padding:20px;text-align:center;">No hay objetivos activos. ¡Creá uno!</p>';
+        }
+        return active.map(function(g) {
+            const days = Math.ceil((new Date(g.deadline) - new Date()) / 86400000);
+            const progressColor = g.progress >= 75 ? '#22c55e' : g.progress >= 50 ? '#f59e0b' : '#3b82f6';
+            return `
+                <div style="border:2px solid #e0e0e0;padding:20px;border-radius:12px;margin-bottom:16px;">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+                        <div style="flex:1;">
+                            <div style="font-size:18px;font-weight:bold;color:#1e3a8a;">${g.description}</div>
+                            <div style="font-size:13px;color:#666;">
+                                ${g.type === 'volume' ? '📈 Volumen' : g.type === 'strength' ? '💪 Fuerza (' + g.exerciseName + ')' : g.type === 'attendance' ? '📅 Asistencia' : '🏆 PRs'}
+                            </div>
+                        </div>
+                        <button onclick="deleteGoal(${g.id})" style="background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;">🗑️</button>
+                    </div>
+                    <div style="background:#f8f9fa;padding:16px;border-radius:8px;margin-bottom:12px;">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+                            <span style="font-size:28px;font-weight:bold;color:#1e3a8a;">${g.currentValue}</span>
+                            <span style="font-size:16px;color:#666;">/ ${g.targetValue} ${g.unit}</span>
+                        </div>
+                        <div style="background:#e0e0e0;height:12px;border-radius:6px;overflow:hidden;">
+                            <div style="background:${progressColor};height:100%;width:${g.progress}%;"></div>
+                        </div>
+                        <div style="font-size:13px;color:#666;margin-top:8px;text-align:right;">${Math.round(g.progress)}%</div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:13px;color:#666;">
+                        <div>📅 ${days > 0 ? days + ' días' : '❌ Venció'}</div>
+                        ${g.reward ? '<div style="color:#22c55e;font-weight:700;">🎁 ' + g.reward + '</div>' : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    })()}
+</div>
                     <h3>📊 Indicadores Clave</h3>
                     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px;">
                         <div style="background:linear-gradient(135deg,#86efac,#22c55e);padding:20px;border-radius:12px;color:white;">
@@ -3100,5 +3290,63 @@
         }
 
     </script>
+<!-- Modal Nuevo Objetivo SMART -->
+<div id="modal-newGoal" class="modal">
+    <div class="modal-content" style="max-width: 700px;">
+        <h3 class="modal-title">🎯 Nuevo Objetivo SMART</h3>
+        
+        <div class="form-group">
+            <label class="form-label">Tipo de Objetivo</label>
+            <select id="goalType" class="form-input" onchange="document.getElementById('exerciseField').style.display = this.value === 'strength' ? 'block' : 'none';">
+                <option value="volume">📈 Aumentar Volumen Mensual (toneladas)</option>
+                <option value="strength">💪 Aumentar Fuerza en Ejercicio (kg)</option>
+                <option value="attendance">📅 Mejorar Asistencia (clases/mes)</option>
+                <option value="prs">🏆 Romper Records Personales</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Descripción del Objetivo *</label>
+            <input type="text" id="goalDesc" class="form-input" placeholder="Ej: Aumentar de 60 a 70 toneladas mensuales" />
+        </div>
+        
+        <div id="exerciseField" class="form-group" style="display: none;">
+            <label class="form-label">Ejercicio Específico</label>
+            <input type="text" id="goalExercise" class="form-input" placeholder="Ej: Sentadilla" list="exercisesList" />
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+                <label class="form-label">Valor Objetivo *</label>
+                <input type="number" id="goalTarget" class="form-input" placeholder="70" step="0.1" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Fecha Límite *</label>
+                <input type="date" id="goalDeadline" class="form-input" />
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Recompensa (opcional)</label>
+            <input type="text" id="goalReward" class="form-input" placeholder="Ej: Batido gratis, Descuento 10%, Remera" />
+        </div>
+        
+        <div style="background: #f0f9ff; border: 2px solid #86efac; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+            <strong style="color: #1e3a8a;">💡 Tips SMART:</strong><br>
+            <ul style="margin-top: 8px; font-size: 13px; color: #666;">
+                <li><strong>Específico:</strong> Definí claramente qué</li>
+                <li><strong>Medible:</strong> Números concretos</li>
+                <li><strong>Alcanzable:</strong> Realista</li>
+                <li><strong>Relevante:</strong> Alineado al objetivo</li>
+                <li><strong>Tiempo:</strong> Fecha límite</li>
+            </ul>
+        </div>
+        
+        <div style="display: flex; gap: 12px;">
+            <button onclick="saveGoal()" class="btn btn-primary" style="flex: 1;">✅ Crear Objetivo</button>
+            <button onclick="closeModal('newGoal')" class="btn btn-secondary">Cancelar</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
