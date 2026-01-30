@@ -1250,10 +1250,6 @@
                     students = JSON.parse(localData);
                     // Migrate old data to new structure if needed
                     students = students.map(s => {
-                        if (!s.totalXP) s.totalXP = 0;
-                        if (!s.level) s.level = 1;
-                        if (!s.badges) s.badges = [];
-                        if (!s.goals) s.goals = [];
                         if (!s.trainingDays && s.blocks) {
                             // Old format - convert to new
                             return {
@@ -2862,99 +2858,59 @@
                     </div>
                 </div>
 
-                ${(() => {
-                    const m = calcMetrics(currentStudent);
-                    return `
-                    <!-- GAMIFICACIÓN -->
-                    <div class="card" style="background:linear-gradient(135deg,#1e3a8a,#1e40af);color:white;padding:24px;margin-bottom:24px;">
-                        <h3 style="color:white;margin-bottom:16px;">🎮 Progreso del Atleta</h3>
-                        <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
-                            <div><div style="font-size:14px;opacity:0.9;">Nivel</div><div style="font-size:48px;font-weight:bold;">${currentStudent.level || 1}</div></div>
-                            <div style="text-align:right;"><div style="font-size:14px;opacity:0.9;">XP Total</div><div style="font-size:28px;font-weight:bold;">${(currentStudent.totalXP || 0).toLocaleString()}</div></div>
-                        </div>
-                        <div style="background:rgba(255,255,255,0.2);height:12px;border-radius:6px;overflow:hidden;margin-bottom:8px;">
-                            <div style="background:#86efac;height:100%;width:${((currentStudent.totalXP || 0) % 100)}%;"></div>
-                        </div>
-                        <div style="font-size:14px;opacity:0.9;">${100 - ((currentStudent.totalXP || 0) % 100)} XP hasta nivel ${(currentStudent.level || 1) < 100 ? (currentStudent.level || 1) + 1 : 'MAX'}</div>
+
+                <!-- NUEVAS SECCIONES -->
+                <div class="card" style="background:linear-gradient(135deg,#1e3a8a,#1e40af);color:white;padding:24px;margin-bottom:24px;">
+                    <h3 style="color:white;">🎮 Progreso</h3>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
+                        <div><div style="font-size:14px;">Nivel</div><div style="font-size:48px;font-weight:bold;">${currentStudent.level || 1}</div></div>
+                        <div><div style="font-size:14px;">XP</div><div style="font-size:28px;font-weight:bold;">${(currentStudent.totalXP || 0).toLocaleString()}</div></div>
                     </div>
-                    
-                    <!-- BADGES -->
-                    <div class="card" style="margin-bottom:24px;">
-                        <h3>🏆 Insignias Desbloqueadas (${(currentStudent.badges || []).length})</h3>
-                        <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;">
-                            ${(currentStudent.badges || []).length > 0 ? (currentStudent.badges || []).map(b => {
-                                const info = getBadgeInfo(b);
-                                return '<div style="background:#f8f9fa;padding:16px;border-radius:12px;text-align:center;min-width:100px;border:2px solid #e0e0e0;"><div style="font-size:40px;margin-bottom:8px;">' + info.icon + '</div><div style="font-size:12px;font-weight:600;color:#1e3a8a;">' + info.name + '</div></div>';
-                            }).join('') : '<p style="color:#999;padding:20px;text-align:center;">Aún no hay insignias. ¡Seguí entrenando!</p>'}
-                        </div>
+                    <div style="background:rgba(255,255,255,0.2);height:12px;border-radius:6px;overflow:hidden;">
+                        <div style="background:#86efac;height:100%;width:${((currentStudent.totalXP || 0) % 100)}%;"></div>
                     </div>
-                    
-                    <!-- INDICADORES COMPLETOS -->
-                    <div class="card" style="margin-bottom:24px;">
-                        <h3>📊 Todos los Indicadores</h3>
-                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px;">
-                            <div style="background:linear-gradient(135deg,#86efac,#22c55e);padding:20px;border-radius:12px;color:white;">
-                                <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">1. Volumen Total</div>
-                                <div style="font-size:28px;font-weight:bold;">${(m.totalVolume / 1000).toFixed(1)} ton</div>
-                                <div style="font-size:13px;margin-top:4px;">Σ(Series × Reps × Peso)</div>
-                            </div>
-                            <div style="background:linear-gradient(135deg,#1e3a8a,#1e40af);padding:20px;border-radius:12px;color:white;">
-                                <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">2. Series Efectivas</div>
-                                <div style="font-size:28px;font-weight:bold;">${m.effectiveSets}/${m.totalSets}</div>
-                                <div style="font-size:13px;margin-top:4px;">${m.effectivePercent}% RPE≥7</div>
-                            </div>
-                            <div style="background:linear-gradient(135deg,#78716c,#57534e);padding:20px;border-radius:12px;color:white;">
-                                <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">3. Tonelaje Mensual</div>
-                                <div style="font-size:28px;font-weight:bold;">${m.monthlyTonnage} ton</div>
-                                <div style="font-size:13px;margin-top:4px;">${parseFloat(m.monthlyTonnage) < 20 ? '🟡 Principiante' : parseFloat(m.monthlyTonnage) < 60 ? '🟢 Intermedio' : '🔥 Avanzado'}</div>
-                            </div>
-                            <div style="background:linear-gradient(135deg,#f59e0b,#d97706);padding:20px;border-radius:12px;color:white;">
-                                <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">6. Records Totales</div>
-                                <div style="font-size:28px;font-weight:bold;">${m.totalPRs} 🏆</div>
-                                <div style="font-size:13px;margin-top:4px;">Total histórico</div>
-                            </div>
-                            <div style="background:linear-gradient(135deg,${m.daysSincePR < 0 ? '#999,#777' : m.daysSincePR < 30 ? '#22c55e,#16a34a' : m.daysSincePR < 45 ? '#f59e0b,#d97706' : '#ef4444,#dc2626'});padding:20px;border-radius:12px;color:white;">
-                                <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">9. Último PR</div>
-                                <div style="font-size:28px;font-weight:bold;">${m.daysSincePR < 0 ? 'Sin PRs' : m.daysSincePR === 0 ? '¡Hoy!' : m.daysSincePR + ' días'}</div>
-                                <div style="font-size:13px;margin-top:4px;">${m.daysSincePR < 0 ? '⚪ Aún sin récords' : m.daysSincePR < 30 ? '🟢 Normal' : m.daysSincePR < 45 ? '🟡 Atención' : '🔴 Estancamiento'}</div>
-                            </div>
-                            <div style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);padding:20px;border-radius:12px;color:white;">
-                                <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">8. Frecuencia PRs</div>
-                                <div style="font-size:28px;font-weight:bold;">${m.prFrequency}</div>
-                                <div style="font-size:13px;margin-top:4px;">PRs por mes</div>
-                            </div>
-                            <div style="background:linear-gradient(135deg,#ec4899,#db2777);padding:20px;border-radius:12px;color:white;">
-                                <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">11. Racha</div>
-                                <div style="font-size:28px;font-weight:bold;">${m.streak} 🔥</div>
-                                <div style="font-size:13px;margin-top:4px;">días seguidos</div>
-                            </div>
-                            <div style="background:linear-gradient(135deg,#06b6d4,#0891b2);padding:20px;border-radius:12px;color:white;">
-                                <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">12. Puntos XP</div>
-                                <div style="font-size:28px;font-weight:bold;">${currentStudent.totalXP || 0}</div>
-                                <div style="font-size:13px;margin-top:4px;">Volumen ÷ 100</div>
-                            </div>
-                        </div>
+                </div>
+                
+                <div class="card" style="margin-bottom:24px;">
+                    <h3>🏆 Insignias (${(currentStudent.badges || []).length})</h3>
+                    <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;">
+                        ${(currentStudent.badges || []).length > 0 ? (currentStudent.badges || []).map(function(b) {
+                            var info = getBadgeInfo(b);
+                            return '<div style="background:#f8f9fa;padding:16px;border-radius:12px;text-align:center;min-width:100px;"><div style="font-size:40px;">' + info.icon + '</div><div style="font-size:12px;font-weight:600;color:#1e3a8a;">' + info.name + '</div></div>';
+                        }).join('') : '<p style="color:#999;padding:20px;">Sin insignias</p>'}
                     </div>
-                    
-                    <!-- OBJETIVOS SMART -->
-                    <div class="card" style="margin-bottom:24px;">
-                        <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
-                            <h3 style="margin:0;">🎯 Objetivos SMART</h3>
-                            <button onclick="openModal('newGoal')" class="btn btn-primary">➕ Nuevo Objetivo</button>
-                        </div>
-                        ${(() => {
-                            const active = (currentStudent.goals || []).filter(g => g.status === 'in_progress');
-                            if (active.length === 0) return '<p style="color:#999;padding:20px;text-align:center;">No hay objetivos activos. ¡Creá uno para motivar al atleta!</p>';
-                            return active.map(g => {
-                                const days = Math.ceil((new Date(g.deadline) - new Date()) / 86400000);
-                                return '<div style="border:2px solid #e0e0e0;padding:20px;border-radius:12px;margin-bottom:16px;background:white;"><div style="display:flex;justify-content:space-between;margin-bottom:12px;"><div style="flex:1;"><div style="font-size:18px;font-weight:bold;color:#1e3a8a;">' + g.description + '</div><div style="font-size:13px;color:#666;">' + (g.type === 'volume' ? '📈 Volumen' : g.type === 'strength' ? '💪 Fuerza' : g.type === 'attendance' ? '📅 Asistencia' : '🏆 Records') + '</div></div><button onclick="deleteGoal(' + g.id + ')" style="background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;">🗑️</button></div><div style="background:#f8f9fa;padding:16px;border-radius:8px;margin-bottom:12px;"><div style="display:flex;justify-content:space-between;margin-bottom:12px;"><span style="font-size:28px;font-weight:bold;color:#1e3a8a;">' + g.currentValue + '</span><span style="font-size:16px;color:#666;">/ ' + g.targetValue + ' ' + g.unit + '</span></div><div style="background:#e0e0e0;height:12px;border-radius:6px;overflow:hidden;"><div style="background:linear-gradient(90deg,#86efac,#22c55e);height:100%;width:' + g.progress + '%;"></div></div><div style="font-size:13px;color:#666;margin-top:8px;text-align:right;">' + Math.round(g.progress) + '%</div></div><div style="display:flex;justify-content:space-between;font-size:13px;color:#666;"><div>📅 ' + (days > 0 ? days + ' días restantes' : days === 0 ? 'Último día' : 'Venció') + '</div>' + (g.reward ? '<div>🎁 ' + g.reward + '</div>' : '') + '</div></div>';
-                            }).join('');
+                </div>
+                
+                <div class="card" style="margin-bottom:24px;">
+                    <h3>📊 Indicadores</h3>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px;">
+                        ${(function() {
+                            var m = calcMetrics(currentStudent);
+                            return '<div style="background:linear-gradient(135deg,#86efac,#22c55e);padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">Volumen Total</div><div style="font-size:28px;font-weight:bold;">' + (m.totalVolume / 1000).toFixed(1) + ' ton</div></div>' +
+                            '<div style="background:linear-gradient(135deg,#1e3a8a,#1e40af);padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">Series Efectivas</div><div style="font-size:28px;font-weight:bold;">' + m.effectiveSets + '/' + m.totalSets + '</div><div style="font-size:13px;">' + m.effectivePercent + '%</div></div>' +
+                            '<div style="background:linear-gradient(135deg,#78716c,#57534e);padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">Tonelaje Mensual</div><div style="font-size:28px;font-weight:bold;">' + m.monthlyTonnage + ' ton</div></div>' +
+                            '<div style="background:linear-gradient(135deg,#f59e0b,#d97706);padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">Records</div><div style="font-size:28px;font-weight:bold;">' + m.totalPRs + ' 🏆</div></div>' +
+                            '<div style="background:linear-gradient(135deg,' + (m.daysSincePR < 0 ? '#999,#777' : m.daysSincePR < 30 ? '#22c55e,#16a34a' : '#f59e0b,#d97706') + ');padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">Último PR</div><div style="font-size:28px;font-weight:bold;">' + (m.daysSincePR < 0 ? 'Sin PRs' : m.daysSincePR + 'd') + '</div></div>' +
+                            '<div style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">Frecuencia PRs</div><div style="font-size:28px;font-weight:bold;">' + m.prFrequency + '</div></div>' +
+                            '<div style="background:linear-gradient(135deg,#ec4899,#db2777);padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">Racha</div><div style="font-size:28px;font-weight:bold;">' + m.streak + ' 🔥</div></div>' +
+                            '<div style="background:linear-gradient(135deg,#06b6d4,#0891b2);padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">XP</div><div style="font-size:28px;font-weight:bold;">' + (currentStudent.totalXP || 0) + '</div></div>';
                         })()}
                     </div>
-                    `;
-                })()}
+                </div>
                 
-                <div class="metrics-grid">
+                <div class="card" style="margin-bottom:24px;">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
+                        <h3 style="margin:0;">🎯 Objetivos</h3>
+                        <button onclick="openModal('newGoal')" class="btn btn-primary">➕</button>
+                    </div>
+                    ${(currentStudent.goals || []).filter(function(g) { return g.status === 'in_progress'; }).length > 0 ? 
+                        (currentStudent.goals || []).filter(function(g) { return g.status === 'in_progress'; }).map(function(g) {
+                            var days = Math.ceil((new Date(g.deadline) - new Date()) / 86400000);
+                            return '<div style="border:2px solid #e0e0e0;padding:20px;border-radius:12px;margin-bottom:16px;"><div style="font-size:18px;font-weight:bold;color:#1e3a8a;">' + g.description + '</div><div style="background:#f8f9fa;padding:16px;border-radius:8px;margin:12px 0;"><div style="font-size:28px;font-weight:bold;color:#1e3a8a;">' + g.currentValue + ' / ' + g.targetValue + ' ' + g.unit + '</div><div style="background:#e0e0e0;height:12px;border-radius:6px;overflow:hidden;margin-top:8px;"><div style="background:linear-gradient(90deg,#86efac,#22c55e);height:100%;width:' + g.progress + '%;"></div></div></div><div style="font-size:13px;color:#666;">📅 ' + days + ' días</div></div>';
+                        }).join('') : '<p style="color:#999;padding:20px;">Sin objetivos</p>'}
+                </div>
+                
+                                <div class="metrics-grid">
                     <div class="metric-card">
                         <div class="metric-label">Volumen Total</div>
                         <div class="metric-value">${currentMonthVolume.toLocaleString()}</div>
@@ -3050,20 +3006,12 @@
     </script>
 <div id="newGoal" class="modal"><div class="modal-content" style="max-width:600px;">
 <span class="close" onclick="closeModal('newGoal')">&times;</span>
-<h2 style="color:#1e3a8a;margin-bottom:24px;">🎯 Nuevo Objetivo SMART</h2>
-<div style="margin-bottom:20px;"><label style="display:block;margin-bottom:8px;font-weight:600;">Tipo</label>
-<select id="goalType" class="form-select" onchange="document.getElementById('exerciseField').style.display=this.value==='strength'?'block':'none';">
-<option value="volume">📈 Volumen (ton/mes)</option><option value="strength">💪 Fuerza (kg)</option>
-<option value="attendance">📅 Asistencia (clases)</option><option value="prs">🏆 Records</option></select></div>
-<div style="margin-bottom:20px;"><label style="display:block;margin-bottom:8px;font-weight:600;">Descripción *</label>
-<input type="text" id="goalDesc" class="form-input" placeholder="Ej: Aumentar de 60 a 70 ton"></div>
-<div id="exerciseField" style="margin-bottom:20px;display:none;"><label style="display:block;margin-bottom:8px;font-weight:600;">Ejercicio</label>
-<input type="text" id="goalExercise" class="form-input" placeholder="Ej: Sentadilla"></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
-<div><label style="display:block;margin-bottom:8px;font-weight:600;">Valor *</label><input type="number" id="goalTarget" class="form-input" placeholder="70" step="0.1"></div>
-<div><label style="display:block;margin-bottom:8px;font-weight:600;">Fecha *</label><input type="date" id="goalDeadline" class="form-input"></div></div>
-<div style="margin-bottom:24px;"><label style="display:block;margin-bottom:8px;font-weight:600;">Recompensa</label>
-<input type="text" id="goalReward" class="form-input" placeholder="Ej: Batido gratis"></div>
-<button onclick="saveGoal()" class="btn btn-primary" style="width:100%;padding:14px;">✅ Crear</button></div></div>
-</body>
+<h2>🎯 Nuevo Objetivo</h2>
+<select id="goalType" class="form-select"><option value="volume">📈 Volumen</option></select>
+<input type="text" id="goalDesc" class="form-input" placeholder="Descripción">
+<input type="number" id="goalTarget" class="form-input" placeholder="Valor objetivo">
+<input type="date" id="goalDeadline" class="form-input">
+<input type="text" id="goalReward" class="form-input" placeholder="Recompensa">
+<button onclick="saveGoal()" class="btn btn-primary">Crear</button>
+</div></div></body>
 </html>
