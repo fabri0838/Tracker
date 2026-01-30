@@ -2748,6 +2748,82 @@
                 renderStudents();
             }
         }
+        
+        // FUNCIONES AUXILIARES PARA MÉTRICAS
+        function calcMetrics(student) {
+            if (!student || !student.sessions || student.sessions.length === 0) {
+                return {
+                    totalSets: 0, effectiveSets: 0, effectivePercent: 0,
+                    monthlyTonnage: '0.0', daysSincePR: -1, prFrequency: '0.0',
+                    totalVolume: 0, totalPRs: 0, streak: 0
+                };
+            }
+            
+            var totalSets = 0, effectiveSets = 0;
+            student.sessions.forEach(function(sess) {
+                if (sess.blocks) {
+                    sess.blocks.forEach(function(b) {
+                        if (b.exercises) {
+                            b.exercises.forEach(function(e) {
+                                totalSets += (e.series || 0);
+                                if ((e.rpe || 0) >= 7) effectiveSets += (e.series || 0);
+                            });
+                        }
+                    });
+                }
+            });
+            
+            var now = new Date();
+            var monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+            var monthVol = student.sessions.filter(function(sess) {
+                return new Date(sess.date) >= monthStart;
+            }).reduce(function(sum, sess) {
+                return sum + (sess.volume || 0);
+            }, 0);
+            
+            var lastPR = null;
+            student.sessions.forEach(function(sess) {
+                if ((sess.prs || 0) > 0) {
+                    if (!lastPR || new Date(sess.date) > new Date(lastPR)) {
+                        lastPR = sess.date;
+                    }
+                }
+            });
+            var daysSincePR = lastPR ? Math.floor((now - new Date(lastPR)) / 86400000) : -1;
+            
+            var totalPRs = student.sessions.reduce(function(sum, sess) {
+                return sum + (sess.prs || 0);
+            }, 0);
+            var firstDate = student.sessions.length > 0 ? new Date(student.sessions[0].date) : now;
+            var months = Math.max(0.5, (now - firstDate) / 2592000000);
+            var totalVol = student.sessions.reduce(function(sum, sess) {
+                return sum + (sess.volume || 0);
+            }, 0);
+            
+            return {
+                totalSets: totalSets,
+                effectiveSets: effectiveSets,
+                effectivePercent: totalSets > 0 ? Math.round((effectiveSets / totalSets) * 100) : 0,
+                monthlyTonnage: (monthVol / 1000).toFixed(1),
+                daysSincePR: daysSincePR,
+                prFrequency: (totalPRs / months).toFixed(1),
+                totalVolume: totalVol,
+                totalPRs: totalPRs,
+                streak: calculateStreak(student.sessions || [])
+            };
+        }
+        
+        function getBadgeInfo(id) {
+            var badges = {
+                'streak_7': { name: '7 días', icon: '🔥' },
+                'vol_100k': { name: '100 ton', icon: '💪' },
+                'pr_10': { name: '10 PRs', icon: '🏆' },
+                'lvl_10': { name: 'Nivel 10', icon: '⭐' },
+                'lvl_50': { name: 'Nivel 50', icon: '⭐⭐⭐' },
+                'lvl_100': { name: 'MAX', icon: '👑' }
+            };
+            return badges[id] || { name: id, icon: '🎖️' };
+        }
 
         // DASHBOARD
         function renderDashboard() {
