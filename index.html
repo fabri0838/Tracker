@@ -863,7 +863,7 @@
             <div class="logo-section">
                 <div class="logo-icon" id="appLogo"></div>
                 <div class="logo-text">
-                    <h1>ITERA</h1>
+                    <h1>TRACKER</h1>
                     <p>Precision Engineered</p>
                 </div>
             </div>
@@ -2283,7 +2283,11 @@
                     trainingDays: data.trainingDays,
                     sessions: [],
                     attendance: {},
-                    createdAt: new Date().toISOString()
+                    createdAt: new Date().toISOString(),
+                    totalXP: 0,
+                    level: 1,
+                    badges: [],
+                    goals: []
                 };
                 
                 student.trainingDays.forEach(day => {
@@ -2813,7 +2817,75 @@
                 }
             });
 
+            // Calcular métricas primero
+            var metrics = calcMetrics(currentStudent);
+            
             let html = `
+                <!-- GAMIFICACIÓN -->
+                <div class="card" style="background:linear-gradient(135deg,#1e3a8a,#1e40af);color:white;padding:24px;margin-bottom:24px;">
+                    <h3 style="color:white;margin-bottom:16px;">🎮 Progreso del Atleta</h3>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
+                        <div><div style="font-size:14px;opacity:0.9;">Nivel</div><div style="font-size:48px;font-weight:bold;">${currentStudent.level || 1}</div></div>
+                        <div style="text-align:right;"><div style="font-size:14px;opacity:0.9;">XP Total</div><div style="font-size:28px;font-weight:bold;">${(currentStudent.totalXP || 0).toLocaleString()}</div></div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.2);height:12px;border-radius:6px;overflow:hidden;margin-bottom:8px;">
+                        <div style="background:#86efac;height:100%;width:${((currentStudent.totalXP || 0) % 100)}%;"></div>
+                    </div>
+                    <div style="font-size:14px;opacity:0.9;">${100 - ((currentStudent.totalXP || 0) % 100)} XP hasta nivel ${(currentStudent.level || 1) < 100 ? (currentStudent.level || 1) + 1 : 'MAX'}</div>
+                </div>
+                
+                <!-- BADGES -->
+                <div class="card" style="margin-bottom:24px;">
+                    <h3>🏆 Insignias (${(currentStudent.badges || []).length})</h3>
+                    <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;">
+                        ${(currentStudent.badges || []).length > 0 ? (currentStudent.badges || []).map(function(b) {
+                            var info = getBadgeInfo(b);
+                            return '<div style="background:#f8f9fa;padding:16px;border-radius:12px;text-align:center;min-width:100px;border:2px solid #e0e0e0;"><div style="font-size:40px;margin-bottom:8px;">' + info.icon + '</div><div style="font-size:12px;font-weight:600;color:#1e3a8a;">' + info.name + '</div></div>';
+                        }).join('') : '<p style="color:#999;padding:20px;text-align:center;">Sin insignias aún</p>'}
+                    </div>
+                </div>
+                
+                <!-- INDICADORES -->
+                <div class="card" style="margin-bottom:24px;">
+                    <h3>📊 Indicadores Clave</h3>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px;">
+                        <div style="background:linear-gradient(135deg,#86efac,#22c55e);padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Volumen Total</div>
+                            <div style="font-size:28px;font-weight:bold;">${(metrics.totalVolume / 1000).toFixed(1)} ton</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,#1e3a8a,#1e40af);padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Series Efectivas</div>
+                            <div style="font-size:28px;font-weight:bold;">${metrics.effectiveSets}/${metrics.totalSets}</div>
+                            <div style="font-size:13px;margin-top:4px;">${metrics.effectivePercent}% RPE≥7</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,#78716c,#57534e);padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Tonelaje Mensual</div>
+                            <div style="font-size:28px;font-weight:bold;">${metrics.monthlyTonnage} ton</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,#f59e0b,#d97706);padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Records Totales</div>
+                            <div style="font-size:28px;font-weight:bold;">${metrics.totalPRs} 🏆</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,${metrics.daysSincePR < 0 ? '#999,#777' : metrics.daysSincePR < 30 ? '#22c55e,#16a34a' : '#f59e0b,#d97706'});padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Último PR</div>
+                            <div style="font-size:28px;font-weight:bold;">${metrics.daysSincePR < 0 ? 'Sin PRs' : metrics.daysSincePR + ' días'}</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Frecuencia PRs</div>
+                            <div style="font-size:28px;font-weight:bold;">${metrics.prFrequency}</div>
+                            <div style="font-size:13px;margin-top:4px;">PRs/mes</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,#ec4899,#db2777);padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Racha</div>
+                            <div style="font-size:28px;font-weight:bold;">${metrics.streak} 🔥</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,#06b6d4,#0891b2);padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Puntos XP</div>
+                            <div style="font-size:28px;font-weight:bold;">${currentStudent.totalXP || 0}</div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="attendance-section">
                     <div class="attendance-header">
                         <div class="attendance-title">📅 Progreso de Asistencia</div>
@@ -2858,59 +2930,7 @@
                     </div>
                 </div>
 
-
-                <!-- NUEVAS SECCIONES -->
-                <div class="card" style="background:linear-gradient(135deg,#1e3a8a,#1e40af);color:white;padding:24px;margin-bottom:24px;">
-                    <h3 style="color:white;">🎮 Progreso</h3>
-                    <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
-                        <div><div style="font-size:14px;">Nivel</div><div style="font-size:48px;font-weight:bold;">${currentStudent.level || 1}</div></div>
-                        <div><div style="font-size:14px;">XP</div><div style="font-size:28px;font-weight:bold;">${(currentStudent.totalXP || 0).toLocaleString()}</div></div>
-                    </div>
-                    <div style="background:rgba(255,255,255,0.2);height:12px;border-radius:6px;overflow:hidden;">
-                        <div style="background:#86efac;height:100%;width:${((currentStudent.totalXP || 0) % 100)}%;"></div>
-                    </div>
-                </div>
-                
-                <div class="card" style="margin-bottom:24px;">
-                    <h3>🏆 Insignias (${(currentStudent.badges || []).length})</h3>
-                    <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;">
-                        ${(currentStudent.badges || []).length > 0 ? (currentStudent.badges || []).map(function(b) {
-                            var info = getBadgeInfo(b);
-                            return '<div style="background:#f8f9fa;padding:16px;border-radius:12px;text-align:center;min-width:100px;"><div style="font-size:40px;">' + info.icon + '</div><div style="font-size:12px;font-weight:600;color:#1e3a8a;">' + info.name + '</div></div>';
-                        }).join('') : '<p style="color:#999;padding:20px;">Sin insignias</p>'}
-                    </div>
-                </div>
-                
-                <div class="card" style="margin-bottom:24px;">
-                    <h3>📊 Indicadores</h3>
-                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px;">
-                        ${(function() {
-                            var m = calcMetrics(currentStudent);
-                            return '<div style="background:linear-gradient(135deg,#86efac,#22c55e);padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">Volumen Total</div><div style="font-size:28px;font-weight:bold;">' + (m.totalVolume / 1000).toFixed(1) + ' ton</div></div>' +
-                            '<div style="background:linear-gradient(135deg,#1e3a8a,#1e40af);padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">Series Efectivas</div><div style="font-size:28px;font-weight:bold;">' + m.effectiveSets + '/' + m.totalSets + '</div><div style="font-size:13px;">' + m.effectivePercent + '%</div></div>' +
-                            '<div style="background:linear-gradient(135deg,#78716c,#57534e);padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">Tonelaje Mensual</div><div style="font-size:28px;font-weight:bold;">' + m.monthlyTonnage + ' ton</div></div>' +
-                            '<div style="background:linear-gradient(135deg,#f59e0b,#d97706);padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">Records</div><div style="font-size:28px;font-weight:bold;">' + m.totalPRs + ' 🏆</div></div>' +
-                            '<div style="background:linear-gradient(135deg,' + (m.daysSincePR < 0 ? '#999,#777' : m.daysSincePR < 30 ? '#22c55e,#16a34a' : '#f59e0b,#d97706') + ');padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">Último PR</div><div style="font-size:28px;font-weight:bold;">' + (m.daysSincePR < 0 ? 'Sin PRs' : m.daysSincePR + 'd') + '</div></div>' +
-                            '<div style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">Frecuencia PRs</div><div style="font-size:28px;font-weight:bold;">' + m.prFrequency + '</div></div>' +
-                            '<div style="background:linear-gradient(135deg,#ec4899,#db2777);padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">Racha</div><div style="font-size:28px;font-weight:bold;">' + m.streak + ' 🔥</div></div>' +
-                            '<div style="background:linear-gradient(135deg,#06b6d4,#0891b2);padding:20px;border-radius:12px;color:white;"><div style="font-size:12px;">XP</div><div style="font-size:28px;font-weight:bold;">' + (currentStudent.totalXP || 0) + '</div></div>';
-                        })()}
-                    </div>
-                </div>
-                
-                <div class="card" style="margin-bottom:24px;">
-                    <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
-                        <h3 style="margin:0;">🎯 Objetivos</h3>
-                        <button onclick="openModal('newGoal')" class="btn btn-primary">➕</button>
-                    </div>
-                    ${(currentStudent.goals || []).filter(function(g) { return g.status === 'in_progress'; }).length > 0 ? 
-                        (currentStudent.goals || []).filter(function(g) { return g.status === 'in_progress'; }).map(function(g) {
-                            var days = Math.ceil((new Date(g.deadline) - new Date()) / 86400000);
-                            return '<div style="border:2px solid #e0e0e0;padding:20px;border-radius:12px;margin-bottom:16px;"><div style="font-size:18px;font-weight:bold;color:#1e3a8a;">' + g.description + '</div><div style="background:#f8f9fa;padding:16px;border-radius:8px;margin:12px 0;"><div style="font-size:28px;font-weight:bold;color:#1e3a8a;">' + g.currentValue + ' / ' + g.targetValue + ' ' + g.unit + '</div><div style="background:#e0e0e0;height:12px;border-radius:6px;overflow:hidden;margin-top:8px;"><div style="background:linear-gradient(90deg,#86efac,#22c55e);height:100%;width:' + g.progress + '%;"></div></div></div><div style="font-size:13px;color:#666;">📅 ' + days + ' días</div></div>';
-                        }).join('') : '<p style="color:#999;padding:20px;">Sin objetivos</p>'}
-                </div>
-                
-                                <div class="metrics-grid">
+                <div class="metrics-grid">
                     <div class="metric-card">
                         <div class="metric-label">Volumen Total</div>
                         <div class="metric-value">${currentMonthVolume.toLocaleString()}</div>
@@ -3004,14 +3024,5 @@
         }
 
     </script>
-<div id="newGoal" class="modal"><div class="modal-content" style="max-width:600px;">
-<span class="close" onclick="closeModal('newGoal')">&times;</span>
-<h2>🎯 Nuevo Objetivo</h2>
-<select id="goalType" class="form-select"><option value="volume">📈 Volumen</option></select>
-<input type="text" id="goalDesc" class="form-input" placeholder="Descripción">
-<input type="number" id="goalTarget" class="form-input" placeholder="Valor objetivo">
-<input type="date" id="goalDeadline" class="form-input">
-<input type="text" id="goalReward" class="form-input" placeholder="Recompensa">
-<button onclick="saveGoal()" class="btn btn-primary">Crear</button>
-</div></div></body>
+</body>
 </html>
