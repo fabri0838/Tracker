@@ -1061,7 +1061,62 @@
                 </form>
             </div>
         </div>
+<!-- Add Student Modal -->
+        <div id="modal-addStudent" class="modal">
+            <div class="modal-content">
+                <h3 class="modal-title">➕ Nuevo Atleta</h3>
+                <form onsubmit="addStudent(event)">
+                    <div class="form-group">
+                        <label class="form-label">Nombre Completo</label>
+                        <input type="text" id="studentName" class="form-input" required />
+                    </div>
+                    <!-- ... resto del formulario ... -->
+                </form>
+            </div>
+        </div>
 
+        <!-- ✨ PEGÁ EL NUEVO MODAL ACÁ ✨ -->
+        <!-- Edit Student Modal -->
+        <div id="modal-editStudent" class="modal">
+            <div class="modal-content">
+                <h3 class="modal-title">✏️ Editar Atleta</h3>
+                <form id="editStudentForm" onsubmit="updateStudent(event)">
+                    <div class="form-group">
+                        <label class="form-label">Nombre Completo</label>
+                        <input type="text" id="editStudentName" class="form-input" required />
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label class="form-label">Edad</label>
+                            <input type="number" id="editStudentAge" class="form-input" required min="1" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Peso (kg)</label>
+                            <input type="number" id="editStudentWeight" class="form-input" required step="0.1" min="1" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Objetivo</label>
+                        <input type="text" id="editStudentGoal" class="form-input" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Clases Mensuales</label>
+                        <input type="number" id="editStudentClasses" class="form-input" required min="1" />
+                        <div style="font-size: 12px; color: var(--text-gray); margin-top: 8px;">
+                            💡 Podés cambiar este número cada mes según la cantidad de clases que va a hacer
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 12px; margin-top: 32px;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">✅ Guardar Cambios</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('editStudent')">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Training Day Modal -->
+        <div id="modal-addTrainingDay" class="modal">
+            <!-- ... siguiente modal ... -->
         <!-- Add Training Day Modal -->
         <div id="modal-addTrainingDay" class="modal">
             <div class="modal-content">
@@ -1503,26 +1558,55 @@
             });
         }
 
-        // DELETE STUDENT
-        function deleteStudent(studentId) {
-            const student = students.find(s => s.id === studentId);
-            if (!student) return;
-            
-            if (!confirm(`¿Eliminar a ${student.name} y todas sus sesiones?`)) return;
-            
-            students = students.filter(s => s.id !== studentId);
-            
-            if (currentStudent && currentStudent.id === studentId) {
-                currentStudent = null;
-                currentDay = null;
-            }
-            
-            saveToSheets();
-            renderStudents();
-            
-            alert(`✅ ${student.name} eliminado`);
-        }
+    // EDIT STUDENT
+function editStudent(studentId) {
+    const student = students.find(s => s.id === studentId);
+    if (!student) return;
+    
+    // Llenar el modal con los datos actuales
+    document.getElementById('editStudentName').value = student.name;
+    document.getElementById('editStudentAge').value = student.age;
+    document.getElementById('editStudentWeight').value = student.weight;
+    document.getElementById('editStudentGoal').value = student.goal;
+    document.getElementById('editStudentClasses').value = student.monthlyClasses;
+    
+    // Guardar el ID del estudiante que se está editando
+    document.getElementById('editStudentForm').dataset.studentId = studentId;
+    
+    openModal('editStudent');
+}
 
+function updateStudent(e) {
+    e.preventDefault();
+    
+    const studentId = parseInt(document.getElementById('editStudentForm').dataset.studentId);
+    const studentIndex = students.findIndex(s => s.id === studentId);
+    
+    if (studentIndex === -1) {
+        alert('Error: Estudiante no encontrado');
+        return;
+    }
+    
+    // Actualizar los datos
+    students[studentIndex].name = document.getElementById('editStudentName').value;
+    students[studentIndex].age = parseInt(document.getElementById('editStudentAge').value);
+    students[studentIndex].weight = parseFloat(document.getElementById('editStudentWeight').value);
+    students[studentIndex].goal = document.getElementById('editStudentGoal').value;
+    students[studentIndex].monthlyClasses = parseInt(document.getElementById('editStudentClasses').value);
+    
+    // Si es el estudiante actual, actualizar también
+    if (currentStudent && currentStudent.id === studentId) {
+        currentStudent = students[studentIndex];
+        document.getElementById('currentStudentName').textContent = currentStudent.name;
+        document.getElementById('bodyWeight').value = currentStudent.weight;
+    }
+    
+    saveToSheets();
+    renderStudents();
+    closeModal('editStudent');
+    
+    alert('✅ Datos de ' + students[studentIndex].name + ' actualizados correctamente');
+}
         // STUDENTS
         function addStudent(e) {
             e.preventDefault();
@@ -1561,7 +1645,10 @@
                 
                 return `
                     <div class="student-card" onclick="selectStudent(${student.id})" style="position: relative;">
-                        <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); deleteStudent(${student.id})" style="position: absolute; top: 12px; right: 12px; padding: 6px 10px; background: var(--danger); color: white;">🗑️</button>
+                        <div style="position: absolute; top: 12px; right: 12px; display: flex; gap: 8px;">
+    <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); editStudent(${student.id})" style="padding: 6px 10px; background: var(--primary-blue); color: white;">✏️</button>
+    <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); deleteStudent(${student.id})" style="padding: 6px 10px; background: var(--danger); color: white;">🗑️</button>
+</div>
                         <div class="student-name">${student.name}</div>
                         <div class="student-info">📅 ${student.age} años • ⚖️ ${student.weight}kg</div>
                         <div class="student-info">🎯 ${student.monthlyClasses} clases/mes</div>
