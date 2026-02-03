@@ -689,68 +689,171 @@
            ================================================ */
         
         @media (max-width: 768px) {
-            .app-container { padding: 0; }
-            .header { padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
-            .logo-section { flex: 1 1 100%; justify-content: center; }
-            .nav-tabs { gap: 4px; }
-            .nav-tab { padding: 8px 10px; font-size: 11px; letter-spacing: 0.5px; }
-            .content { padding: 16px; }
-            .students-grid { grid-template-columns: 1fr !important; gap: 12px; }
-            .student-card { padding: 16px; }
-            .metrics-grid { grid-template-columns: 1fr 1fr !important; gap: 12px; }
-            .metric-card { padding: 16px; }
-            .metric-value { font-size: 28px; }
-            .form-input, .form-select { font-size: 16px; }
-            .modal-content { width: 95%; max-width: 95%; margin: 20px auto; max-height: 90vh; overflow-y: auto; }
-            button, .btn { min-height: 44px; font-size: 14px; }
-            .progress-table { font-size: 12px; }
-            .progress-table th, .progress-table td { padding: 8px 4px; }
-            .month-comparison { display: none; }
-            .card { padding: 16px; margin-bottom: 16px; }
-            .config-banner { font-size: 12px; padding: 8px; }
-            #searchStudent { width: 100%; max-width: 100% !important; }
-            .training-day-card { min-height: auto; padding: 16px; }
-            .block { margin-bottom: 16px; }
-            .block-header { padding: 12px; flex-wrap: wrap; }
-            .exercise-inputs { grid-template-columns: 1fr 1fr; }
-            .exercise-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-            .exercise-table input { min-width: 60px; font-size: 16px; }
+            /* Layout móvil */
+            .app-container {
+                padding: 0;
+            }
+            
+            .header {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            
+            .logo-section {
+                flex: 1 1 100%;
+                justify-content: center;
+            }
+            
+            .nav-buttons {
+                flex: 1 1 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .nav-buttons button {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+            
+            /* Contenido principal */
+            .main-content {
+                padding: 16px;
+            }
+            
+            /* Cards de estudiantes */
+            .students-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px;
+            }
+            
+            .student-card {
+                padding: 16px;
+            }
+            
+            .student-name {
+                font-size: 18px;
+            }
+            
+            /* Métricas */
+            .metrics-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 12px;
+            }
+            
+            .metric-card {
+                padding: 16px;
+            }
+            
+            .metric-value {
+                font-size: 28px;
+            }
+            
+            /* Training days */
+            .training-days-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* Formularios */
+            .form-input, .form-select {
+                font-size: 16px; /* Evita zoom en iOS */
+            }
+            
+            /* Modales */
+            .modal-content {
+                width: 95%;
+                max-width: 95%;
+                margin: 20px auto;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            
+            /* Botones más grandes para tocar */
+            button, .btn {
+                min-height: 44px; /* iOS guideline */
+                font-size: 14px;
+            }
+            
+            /* Tablas responsive */
+            .progress-table {
+                font-size: 12px;
+            }
+            
+            .progress-table th,
+            .progress-table td {
+                padding: 8px 4px;
+            }
+            
+            /* Ocultar elementos innecesarios en mobile */
+            .month-comparison {
+                display: none;
+            }
+            
+            /* Dashboard más compacto */
+            .card {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+            
+            /* Attendance section */
+            .attendance-section {
+                padding: 12px;
+            }
+            
+            /* Config banner mobile */
+            .config-banner {
+                font-size: 12px;
+                padding: 8px;
+            }
+            
+            /* Buscador móvil */
+            #searchStudent {
+                width: 100%;
+                max-width: 100% !important;
+            }
+            
+            /* Training day card */
+            .training-day-card {
+                min-height: auto;
+                padding: 16px;
+            }
+            
+            /* Blocks */
+            .block {
+                margin-bottom: 16px;
+            }
+            
+            .block-header {
+                padding: 12px;
+                flex-wrap: wrap;
+            }
+            
+            /* Exercise table responsive */
+            .exercise-table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            /* Inputs en ejercicios más grandes */
+            .exercise-table input {
+                min-width: 60px;
+                font-size: 16px;
+            }
         }
         
+        /* Táctil - áreas más grandes */
         @media (hover: none) and (pointer: coarse) {
-            button, .btn { min-height: 48px; padding: 12px 20px; }
-            .student-card { min-height: 100px; }
+            button, .btn {
+                min-height: 48px;
+                padding: 12px 20px;
+            }
+            
+            .student-card {
+                min-height: 100px;
+            }
         }
-
-        /* UPLOAD BANNER */
-        .upload-banner {
-            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
-            border: 2px solid #93C5FD;
-            border-radius: 12px;
-            padding: 20px 24px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        .upload-banner .upload-icon { font-size: 28px; }
-        .upload-banner .upload-text h3 { font-family: 'Archivo Black', sans-serif; font-size: 15px; margin-bottom: 4px; color: var(--text-dark); }
-        .upload-banner .upload-text p { font-size: 13px; color: var(--text-gray); }
-        .upload-banner .btn-upload {
-            background: var(--primary-blue);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 800;
-            cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
-            text-transform: uppercase;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .upload-banner .btn-upload:hover { background: var(--dark-blue); }
     </style>
 </head>
 <body>
@@ -769,10 +872,10 @@
                     🔄 Sincronizar
                 </button>
                 <nav class="nav-tabs">
-                    <button class="nav-tab active" onclick="switchView('alumnos', this)">👥 ATLETAS</button>
-                    <button class="nav-tab" onclick="switchView('dashboard', this)">📊 MÉTRICAS</button>
-                    <button class="nav-tab" onclick="switchView('plan', this)">📋 PLAN</button>
-                    <button class="nav-tab" onclick="switchView('config', this)">⚙️ CONFIG</button>
+                    <button class="nav-tab active" onclick="switchView('alumnos')">👥 ATLETAS</button>
+                    <button class="nav-tab" onclick="switchView('dashboard')">📊 MÉTRICAS</button>
+                    <button class="nav-tab" onclick="switchView('plan')">📋 PLAN</button>
+                    <button class="nav-tab" onclick="switchView('config')">⚙️ CONFIG</button>
                 </nav>
             </div>
         </div>
@@ -781,15 +884,6 @@
 
         <!-- VIEW: ALUMNOS -->
         <div id="view-alumnos" class="view active content">
-            <!-- Banner de upload aparece solo cuando Sheets está vacía pero localStorage tiene datos -->
-            <div id="uploadBanner" style="display: none;" class="upload-banner">
-                <div class="upload-icon">☁️</div>
-                <div class="upload-text">
-                    <h3>Datos no sincronizados</h3>
-                    <p>Tenés datos locales que no están en la nube. Subite una vez para que otros dispositivos los vean.</p>
-                </div>
-                <button class="btn-upload" onclick="forceUploadToSheets()">⬆️ Subir Ahora</button>
-            </div>
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title">👥 Mis Atletas</h2>
@@ -821,6 +915,7 @@
                         <button class="btn btn-secondary btn-sm" onclick="changeMonth(1)">Mes Siguiente →</button>
                     </div>
                 </div>
+
                 <div id="dashboardContent">
                     <p style="text-align: center; color: var(--text-gray); padding: 40px;">
                         Seleccioná un atleta para ver sus métricas
@@ -835,23 +930,37 @@
                 <div class="card-header">
                     <h2 class="card-title">📋 Plan de <span id="currentStudentName">-</span></h2>
                     <div style="display: flex; gap: 12px;">
-                        <button class="btn btn-secondary btn-sm" onclick="openModal('importPlan')">📥 Importar</button>
-                        <button class="btn btn-secondary btn-sm" onclick="exportAllDays()">📤 Exportar</button>
-                        <button class="btn btn-secondary btn-sm" onclick="switchView('alumnos', document.querySelector('.nav-tab'))">← Volver</button>
+                        <button class="btn btn-secondary btn-sm" onclick="openModal('importPlan')">
+                            📥 Importar
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="exportAllDays()">
+                            📤 Exportar
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="switchView('alumnos')">← Volver</button>
                     </div>
                 </div>
-                <div id="trainingDaysList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; margin-bottom: 24px;"></div>
-                <button class="btn btn-primary" onclick="openModal('addTrainingDay')">➕ Agregar Día de Entrenamiento</button>
+                
+                <div id="trainingDaysList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    <!-- Days will be rendered here -->
+                </div>
+                
+                <button class="btn btn-primary" onclick="openModal('addTrainingDay')">
+                    ➕ Agregar Día de Entrenamiento
+                </button>
             </div>
 
+            <!-- Current Day View -->
             <div class="card" id="currentDayView" style="display: none;">
                 <div class="card-header">
-                    <h2 class="card-title">🏋️ <span id="currentDayTitle">-</span></h2>
+                    <h2 class="card-title">
+                        🏋️ <span id="currentDayTitle">-</span>
+                    </h2>
                     <div style="display: flex; gap: 12px;">
                         <button class="btn btn-secondary btn-sm" onclick="closeDayView()">← Volver a Días</button>
                         <button class="btn btn-primary btn-sm" onclick="saveSession()">💾 Guardar Sesión</button>
                     </div>
                 </div>
+                
                 <div style="margin-bottom: 32px; display: grid; grid-template-columns: 1fr 180px; gap: 16px;">
                     <div class="form-group" style="margin-bottom: 0;">
                         <label class="form-label">📅 Fecha Sesión</label>
@@ -862,8 +971,12 @@
                         <input type="number" id="bodyWeight" class="form-input" placeholder="75" step="0.1" />
                     </div>
                 </div>
+
                 <div id="blocksContainer"></div>
-                <button class="btn btn-secondary" onclick="openModal('addBlock')" style="margin-top: 24px;">➕ Agregar Bloque</button>
+
+                <button class="btn btn-secondary" onclick="openModal('addBlock')" style="margin-top: 24px;">
+                    ➕ Agregar Bloque
+                </button>
             </div>
         </div>
 
@@ -873,6 +986,7 @@
                 <div class="card-header">
                     <h2 class="card-title">⚙️ Configuración</h2>
                 </div>
+
                 <div id="configBanner" class="config-banner">
                     <div class="config-icon">⚠️</div>
                     <div class="config-text">
@@ -880,19 +994,29 @@
                         <p>Conectá tu Google Sheet para guardar datos en la nube</p>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="form-label">🔗 URL de Google Apps Script</label>
                     <input type="text" id="sheetsUrl" class="form-input" placeholder="https://script.google.com/..." />
-                    <div style="font-size: 12px; color: var(--text-gray); margin-top: 8px;">La URL debe terminar en /exec</div>
+                    <div style="font-size: 12px; color: var(--text-gray); margin-top: 8px;">
+                        La URL debe terminar en /exec
+                    </div>
                 </div>
+
                 <button class="btn btn-primary" onclick="saveConfig()">Guardar Configuración</button>
+
                 <hr style="margin: 40px 0; border: none; border-top: 2px solid var(--border);">
+
                 <h3 style="font-family: 'Archivo Black'; font-size: 16px; margin-bottom: 20px; text-transform: uppercase;">🎨 Personalización</h3>
+
                 <div class="form-group">
                     <label class="form-label">Logo Personalizado</label>
                     <input type="file" id="logoUpload" class="form-input" accept="image/*" onchange="handleLogoUpload(event)" />
-                    <div style="font-size: 12px; color: var(--text-gray); margin-top: 8px;">Recomendado: PNG con fondo transparente, 200x200px</div>
+                    <div style="font-size: 12px; color: var(--text-gray); margin-top: 8px;">
+                        Recomendado: PNG con fondo transparente, 200x200px
+                    </div>
                 </div>
+
                 <div id="logoPreview" style="display: none; margin-top: 20px; padding: 20px; background: var(--bg-gray); border-radius: 12px;">
                     <img id="logoPreviewImg" style="max-width: 100px; height: auto; display: block; margin-bottom: 12px;" />
                     <button class="btn btn-secondary btn-sm" onclick="removeLogo()">🗑️ Eliminar Logo</button>
@@ -900,7 +1024,10 @@
             </div>
         </div>
 
+
         <!-- MODALS -->
+        
+        <!-- Add Student Modal -->
         <div id="modal-addStudent" class="modal">
             <div class="modal-content">
                 <h3 class="modal-title">➕ Nuevo Atleta</h3>
@@ -934,7 +1061,63 @@
                 </form>
             </div>
         </div>
+<!-- Add Student Modal -->
+        <div id="modal-addStudent" class="modal">
+            <div class="modal-content">
+                <h3 class="modal-title">➕ Nuevo Atleta</h3>
+                <form onsubmit="addStudent(event)">
+                    <div class="form-group">
+                        <label class="form-label">Nombre Completo</label>
+                        <input type="text" id="studentName" class="form-input" required />
+                    </div>
+                    <!-- ... resto del formulario ... -->
+                </form>
+            </div>
+        </div>
 
+        <!-- ✨ PEGÁ EL NUEVO MODAL ACÁ ✨ -->
+        <!-- Edit Student Modal -->
+        <div id="modal-editStudent" class="modal">
+            <div class="modal-content">
+                <h3 class="modal-title">✏️ Editar Atleta</h3>
+                <form id="editStudentForm" onsubmit="updateStudent(event)">
+                    <div class="form-group">
+                        <label class="form-label">Nombre Completo</label>
+                        <input type="text" id="editStudentName" class="form-input" required />
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label class="form-label">Edad</label>
+                            <input type="number" id="editStudentAge" class="form-input" required min="1" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Peso (kg)</label>
+                            <input type="number" id="editStudentWeight" class="form-input" required step="0.1" min="1" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Objetivo</label>
+                        <input type="text" id="editStudentGoal" class="form-input" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Clases Mensuales</label>
+                        <input type="number" id="editStudentClasses" class="form-input" required min="1" />
+                        <div style="font-size: 12px; color: var(--text-gray); margin-top: 8px;">
+                            💡 Podés cambiar este número cada mes según la cantidad de clases que va a hacer
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 12px; margin-top: 32px;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">✅ Guardar Cambios</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('editStudent')">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Training Day Modal -->
+        <div id="modal-addTrainingDay" class="modal">
+            <!-- ... siguiente modal ... -->
+        <!-- Add Training Day Modal -->
         <div id="modal-addTrainingDay" class="modal">
             <div class="modal-content">
                 <h3 class="modal-title">➕ Nuevo Día de Entrenamiento</h3>
@@ -942,7 +1125,9 @@
                     <div class="form-group">
                         <label class="form-label">Nombre del Día</label>
                         <input type="text" id="dayName" class="form-input" placeholder="ej: Día A - Tren Superior" required />
-                        <div style="font-size: 12px; color: var(--text-gray); margin-top: 8px;">Ejemplos: "Día A", "Día 1 - Tren Superior", "Lunes - Push"</div>
+                        <div style="font-size: 12px; color: var(--text-gray); margin-top: 8px;">
+                            Ejemplos: "Día A", "Día 1 - Tren Superior", "Lunes - Push"
+                        </div>
                     </div>
                     <div style="display: flex; gap: 12px; margin-top: 32px;">
                         <button type="submit" class="btn btn-primary" style="flex: 1;">Crear Día</button>
@@ -952,6 +1137,7 @@
             </div>
         </div>
 
+        <!-- Add Block Modal -->
         <div id="modal-addBlock" class="modal">
             <div class="modal-content">
                 <h3 class="modal-title">➕ Nuevo Bloque</h3>
@@ -977,9 +1163,10 @@
             </div>
         </div>
 
+        <!-- Add Exercise Modal -->
         <div id="modal-addExercise" class="modal">
             <div class="modal-content">
-                <h3 class="modal-title" id="exerciseModalTitle">➕ Nuevo Ejercicio</h3>
+                <h3 class="modal-title">➕ Nuevo Ejercicio</h3>
                 <form onsubmit="addExercise(event)">
                     <div class="form-group">
                         <label class="form-label">Nombre del Ejercicio</label>
@@ -1010,19 +1197,34 @@
             </div>
         </div>
 
+        <!-- Import Complete Modal -->
         <div id="modal-importComplete" class="modal">
             <div class="modal-content" style="max-width: 900px;">
                 <h3 class="modal-title">📥 Importación Completa - Alumnos + Días + Planes</h3>
+                
                 <div style="background: var(--bg-gray); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
                     <h4 style="font-family: 'Archivo Black'; font-size: 14px; text-transform: uppercase; margin-bottom: 12px;">📋 Formato Requerido</h4>
+                    <p style="font-size: 13px; color: var(--text-gray); margin-bottom: 12px; line-height: 1.6;">
+                        Tu archivo CSV debe tener estas columnas:
+                    </p>
                     <div style="background: white; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 10px; overflow-x: auto;">
                         <strong>Alumno,Edad,Peso,Objetivo,Clases,Dia,Bloque,TipoBloque,Ejercicio,Series,Reps,Principal</strong>
                     </div>
+                    <p style="font-size: 12px; color: var(--text-gray); margin-top: 12px;">
+                        <strong>Ejemplo:</strong><br>
+                        <span style="font-family: monospace; font-size: 10px;">
+                        Juan,25,75,Masa,12,Día A,Movilidad,movilidad,Rotaciones,2,10,NO<br>
+                        Juan,25,75,Masa,12,Día A,Core,core,Plancha,3,30,NO<br>
+                        Juan,25,75,Masa,12,Día B,Fuerza,fuerza-inferior,Sentadilla,4,6,SI
+                        </span>
+                    </p>
                 </div>
+
                 <div class="form-group">
                     <label class="form-label">Seleccionar Archivo CSV</label>
                     <input type="file" id="importCompleteFile" class="form-input" accept=".csv" onchange="handleCompleteImport(event)" />
                 </div>
+
                 <div id="completeImportPreview" style="display: none; margin-top: 20px;">
                     <h4 style="font-family: 'Archivo Black'; font-size: 14px; text-transform: uppercase; margin-bottom: 12px;">Vista Previa</h4>
                     <div style="max-height: 300px; overflow-y: auto; background: var(--bg-gray); padding: 16px; border-radius: 8px;">
@@ -1030,55 +1232,62 @@
                     </div>
                     <p id="completeImportCount" style="font-size: 13px; font-weight: 700; color: var(--primary-blue); margin-top: 12px;"></p>
                 </div>
+
                 <div style="display: flex; gap: 12px; margin-top: 32px;">
-                    <button type="button" class="btn btn-primary" style="flex: 1;" onclick="processCompleteImport()" id="btnImportComplete" disabled>✓ Importar Todo</button>
+                    <button type="button" class="btn btn-primary" style="flex: 1;" onclick="processCompleteImport()" id="btnImportComplete" disabled>
+                        ✓ Importar Todo
+                    </button>
                     <button type="button" class="btn btn-secondary" onclick="closeModal('importComplete')">Cancelar</button>
                 </div>
             </div>
         </div>
 
+        <!-- Import Plan Modal -->
         <div id="modal-importPlan" class="modal">
             <div class="modal-content" style="max-width: 800px;">
                 <h3 class="modal-title">📥 Importar Días + Planes</h3>
+                
                 <div style="background: var(--bg-gray); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
                     <div style="background: white; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 11px; overflow-x: auto;">
                         <strong>Dia,Bloque,TipoBloque,Ejercicio,Series,Reps,Principal</strong>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="form-label">Seleccionar Archivo CSV</label>
                     <input type="file" id="importPlanFile" class="form-input" accept=".csv" onchange="handlePlanImport(event)" />
                 </div>
+
                 <div id="planImportPreview" style="display: none; margin-top: 20px;">
                     <div id="planImportPreviewBody"></div>
                     <p id="planImportCount" style="font-size: 13px; font-weight: 700; color: var(--primary-blue); margin-top: 12px;"></p>
                 </div>
+
                 <div style="display: flex; gap: 12px; margin-top: 32px;">
-                    <button type="button" class="btn btn-primary" style="flex: 1;" onclick="processPlanImport()" id="btnImportPlan" disabled>✓ Importar</button>
+                    <button type="button" class="btn btn-primary" style="flex: 1;" onclick="processPlanImport()" id="btnImportPlan" disabled>
+                        ✓ Importar
+                    </button>
                     <button type="button" class="btn btn-secondary" onclick="closeModal('importPlan')">Cancelar</button>
                 </div>
             </div>
         </div>
+
     </div>
 
     <script>
-        // ================================================
         // GLOBAL STATE
-        // ================================================
         let students = [];
         let exerciseDatabase = JSON.parse(localStorage.getItem('gymTracker_exercises')) || [];
         let currentStudent = null;
-        let currentDay = null;
+        let currentDay = null; // Current training day being viewed/edited
         let currentBlockForExercise = null;
-        let editingExercise = null;
         let lastSyncTimestamp = null;
+        let isSyncing = false;
         let sheetsUrl = localStorage.getItem('gymTracker_sheetsUrl') || '';
         let currentMonth = new Date();
         let customLogo = localStorage.getItem('gymTracker_customLogo') || null;
 
-        // ================================================
         // INITIALIZE
-        // ================================================
         function initialize() {
             loadLogo();
             
@@ -1087,36 +1296,66 @@
                 sheetsUrl = savedUrl;
                 document.getElementById('sheetsUrl').value = savedUrl;
                 updateConfigBanner(true);
-                loadFromSheetsAuto(); // Intenta cargar desde Sheets
+                // AUTO-SYNC: Cargar automáticamente
+                loadFromSheetsAuto();
             } else {
                 updateConfigBanner(false);
-                loadFromLocalStorageFallback();
+                const localData = localStorage.getItem('gymTracker_students');
+                if (localData) {
+                    students = JSON.parse(localData);
+                    // Migrate old data to new structure if needed
+                    students = students.map(s => {
+                        if (!s.trainingDays && s.blocks) {
+                            // Old format - convert to new
+                            return {
+                                ...s,
+                                trainingDays: [{
+                                    id: Date.now(),
+                                    name: "Plan Principal",
+                                    blocks: s.blocks
+                                }],
+                                blocks: undefined
+                            };
+                        }
+                        return s;
+                    });
+                    renderStudents();
+                }
             }
             
             updateExercisesList();
             updateMonthDisplay();
+            
+            // Set today's date
             document.getElementById('sessionDate').valueAsDate = new Date();
         }
         
         initialize();
 
-        // ================================================
-        // LOGO
-        // ================================================
+        // LOGO MANAGEMENT
         function loadLogo() {
             const logoContainer = document.getElementById('appLogo');
+            
             if (customLogo) {
-                logoContainer.innerHTML = '<img src="' + customLogo + '" alt="Logo" style="width: 64px; height: 64px; object-fit: contain;" />';
+                logoContainer.innerHTML = `<img src="${customLogo}" alt="Logo" style="width: 64px; height: 64px; object-fit: contain;" />`;
                 document.getElementById('logoPreview').style.display = 'block';
                 document.getElementById('logoPreviewImg').src = customLogo;
             } else {
-                logoContainer.innerHTML = '<div style="width: 64px; height: 64px; background: var(--primary-blue); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: Archivo Black; font-size: 32px; color: white; letter-spacing: -2px;">T</div>';
+                logoContainer.innerHTML = `
+                    <div style="width: 64px; height: 64px; background: var(--primary-blue); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: 'Archivo Black'; font-size: 32px; color: white; letter-spacing: -2px;">T</div>
+                `;
             }
         }
 
         function handleLogoUpload(event) {
             const file = event.target.files[0];
-            if (!file || !file.type.startsWith('image/')) { alert('Seleccioná una imagen válida'); return; }
+            if (!file) return;
+            
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor seleccioná una imagen válida');
+                return;
+            }
+            
             const reader = new FileReader();
             reader.onload = function(e) {
                 customLogo = e.target.result;
@@ -1128,41 +1367,50 @@
         }
 
         function removeLogo() {
-            if (!confirm('¿Eliminar logo personalizado?')) return;
-            customLogo = null;
-            localStorage.removeItem('gymTracker_customLogo');
-            document.getElementById('logoPreview').style.display = 'none';
-            document.getElementById('logoUpload').value = '';
-            loadLogo();
+            if (confirm('¿Eliminar logo personalizado?')) {
+                customLogo = null;
+                localStorage.removeItem('gymTracker_customLogo');
+                document.getElementById('logoPreview').style.display = 'none';
+                document.getElementById('logoUpload').value = '';
+                loadLogo();
+                alert('✅ Logo eliminado');
+            }
         }
 
-        // ================================================
         // MONTH NAVIGATION
-        // ================================================
         function updateMonthDisplay() {
-            const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-            document.getElementById('currentMonthDisplay').textContent = months[currentMonth.getMonth()] + ' ' + currentMonth.getFullYear();
+            const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            document.getElementById('currentMonthDisplay').textContent = 
+                `${months[currentMonth.getMonth()]} ${currentMonth.getFullYear()}`;
         }
 
         function changeMonth(delta) {
             currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + delta, 1);
             updateMonthDisplay();
-            if (currentStudent) renderDashboard();
+            if (currentStudent) {
+                renderDashboard();
+            }
         }
 
-        // ================================================
         // CONFIG
-        // ================================================
         function saveConfig() {
             const url = document.getElementById('sheetsUrl').value.trim();
-            if (!url) { alert('Ingresá la URL de Google Apps Script'); return; }
-            if (!url.includes('script.google.com') || !url.includes('/exec')) { alert('La URL debe ser de Google Apps Script y terminar en /exec'); return; }
+            if (!url) {
+                alert('Por favor ingresá la URL de Google Apps Script');
+                return;
+            }
+            
+            if (!url.includes('script.google.com') || !url.includes('/exec')) {
+                alert('La URL debe ser de Google Apps Script y terminar en /exec');
+                return;
+            }
             
             sheetsUrl = url;
             localStorage.setItem('gymTracker_sheetsUrl', url);
             updateConfigBanner(true);
+            document.getElementById('syncBtn').style.display = 'block';
             
-            // Al guardar config, intentar cargar. Si Sheets está vacía y hay datos locales, ofrecer subir.
             loadFromSheets().then(() => {
                 alert('✅ Configuración guardada!');
             });
@@ -1172,99 +1420,1543 @@
             const banner = document.getElementById('configBanner');
             if (configured) {
                 banner.className = 'config-banner configured';
-                banner.innerHTML = '<div class="config-icon">✅</div><div class="config-text"><h3>Conectado a Google Sheets</h3><p>Los datos se guardan automáticamente en la nube</p></div>';
+                banner.innerHTML = `
+                    <div class="config-icon">✅</div>
+                    <div class="config-text">
+                        <h3>Conectado a Google Sheets</h3>
+                        <p>Los datos se guardan automáticamente en la nube</p>
+                    </div>
+                `;
                 document.getElementById('syncBtn').style.display = 'block';
             } else {
                 banner.className = 'config-banner';
-                banner.innerHTML = '<div class="config-icon">⚠️</div><div class="config-text"><h3>Configuración Requerida</h3><p>Conectá tu Google Sheet para guardar datos en la nube</p></div>';
+                banner.innerHTML = `
+                    <div class="config-icon">⚠️</div>
+                    <div class="config-text">
+                        <h3>Configuración Requerida</h3>
+                        <p>Conectá tu Google Sheet para guardar datos en la nube</p>
+                    </div>
+                `;
                 document.getElementById('syncBtn').style.display = 'none';
             }
         }
         
         async function syncFromSheets() {
-            if (!sheetsUrl) { alert('No hay URL configurada'); return; }
+            if (!sheetsUrl) {
+                alert('No hay URL de Sheets configurada');
+                return;
+            }
+            
             if (confirm('¿Cargar datos desde Google Sheets? Esto sobrescribirá los datos locales.')) {
                 await loadFromSheets();
                 alert('✅ Datos sincronizados');
             }
         }
 
-        // ================================================
-        // SYNC: LOAD / SAVE
-        // ================================================
         async function loadFromSheets() {
             if (!sheetsUrl) return;
+
             showLoading(true);
             try {
-                const response = await fetch(sheetsUrl + '?action=loadStudents', { method: 'GET', redirect: 'follow' });
-                if (!response.ok) throw new Error('HTTP ' + response.status);
+                const response = await fetch(sheetsUrl + '?action=loadStudents', {
+                    method: 'GET',
+                    redirect: 'follow'
+                });
+                
+                if (!response.ok) throw new Error('Error en respuesta');
+                
                 const data = await response.json();
                 
-                if (data.students && data.students.length > 0) {
+                if (data.students && Array.isArray(data.students)) {
                     students = data.students;
                     localStorage.setItem('gymTracker_students', JSON.stringify(students));
                     renderStudents();
-                    hideUploadBanner();
                     console.log('✅ Datos cargados:', students.length, 'atletas');
                 } else {
-                    // Sheets está vacía — verificar si hay datos locales para subir
-                    console.log('⚠️ Sheets vacía');
-                    loadFromLocalStorageFallback();
-                    checkAndShowUploadBanner();
+                    students = [];
+                    renderStudents();
                 }
             } catch (error) {
-                console.error('❌ Error cargando:', error);
-                loadFromLocalStorageFallback();
-                checkAndShowUploadBanner();
+                console.error('❌ Error:', error);
+                const localData = localStorage.getItem('gymTracker_students');
+                if (localData) {
+                    students = JSON.parse(localData);
+                    renderStudents();
+                } else {
+                    alert('No se pudo conectar con Google Sheets');
+                }
             }
             showLoading(false);
         }
 
         async function saveToSheets() {
             localStorage.setItem('gymTracker_students', JSON.stringify(students));
-            if (!sheetsUrl) { console.log('💾 Guardado en localStorage'); return; }
+            
+            if (!sheetsUrl) {
+                console.log('💾 Guardado en localStorage');
+                return;
+            }
 
+            showLoading(true);
             try {
                 await fetch(sheetsUrl, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'saveStudents', students: students })
+                    body: JSON.stringify({
+                        action: 'saveStudents',
+                        students: students
+                    })
                 });
                 console.log('✅ Guardado en Sheets + localStorage');
-                hideUploadBanner(); // Ya se subió, ocultar banner
             } catch (error) {
-                console.error('⚠️ Error guardando:', error);
+                console.error('⚠️ Error guardando en Sheets:', error);
+            }
+            showLoading(false);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').className = show ? 'loading active' : 'loading';
+        }
+
+        // NAVIGATION
+        function switchView(viewName) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(`view-${viewName}`).classList.add('active');
+            event.target.classList.add('active');
+
+            if (viewName === 'dashboard' && currentStudent) {
+                renderDashboard();
             }
         }
 
+        // MODAL
+        function openModal(modalName) {
+            document.getElementById(`modal-${modalName}`).classList.add('active');
+        }
+
+        function closeModal(modalName) {
+            document.getElementById(`modal-${modalName}`).classList.remove('active');
+        }
+
+
+
+        // FILTER STUDENTS
+        function filterStudents() {
+            const searchTerm = document.getElementById('searchStudent').value.toLowerCase();
+            const cards = document.querySelectorAll('.student-card');
+            
+            cards.forEach(card => {
+                const studentName = card.querySelector('.student-name').textContent.toLowerCase();
+                if (studentName.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+    // EDIT STUDENT
+function editStudent(studentId) {
+    const student = students.find(s => s.id === studentId);
+    if (!student) return;
+    
+    // Llenar el modal con los datos actuales
+    document.getElementById('editStudentName').value = student.name;
+    document.getElementById('editStudentAge').value = student.age;
+    document.getElementById('editStudentWeight').value = student.weight;
+    document.getElementById('editStudentGoal').value = student.goal;
+    document.getElementById('editStudentClasses').value = student.monthlyClasses;
+    
+    // Guardar el ID del estudiante que se está editando
+    document.getElementById('editStudentForm').dataset.studentId = studentId;
+    
+    openModal('editStudent');
+}
+
+function updateStudent(e) {
+    e.preventDefault();
+    
+    const studentId = parseInt(document.getElementById('editStudentForm').dataset.studentId);
+    const studentIndex = students.findIndex(s => s.id === studentId);
+    
+    if (studentIndex === -1) {
+        alert('Error: Estudiante no encontrado');
+        return;
+    }
+    
+    // Actualizar los datos
+    students[studentIndex].name = document.getElementById('editStudentName').value;
+    students[studentIndex].age = parseInt(document.getElementById('editStudentAge').value);
+    students[studentIndex].weight = parseFloat(document.getElementById('editStudentWeight').value);
+    students[studentIndex].goal = document.getElementById('editStudentGoal').value;
+    students[studentIndex].monthlyClasses = parseInt(document.getElementById('editStudentClasses').value);
+    
+    // Si es el estudiante actual, actualizar también
+    if (currentStudent && currentStudent.id === studentId) {
+        currentStudent = students[studentIndex];
+        document.getElementById('currentStudentName').textContent = currentStudent.name;
+        document.getElementById('bodyWeight').value = currentStudent.weight;
+    }
+    
+    saveToSheets();
+    renderStudents();
+    closeModal('editStudent');
+    
+    alert('✅ Datos de ' + students[studentIndex].name + ' actualizados correctamente');
+}
+        // STUDENTS
+        function addStudent(e) {
+            e.preventDefault();
+            
+            const student = {
+                id: Date.now(),
+                name: document.getElementById('studentName').value,
+                age: parseInt(document.getElementById('studentAge').value),
+                weight: parseFloat(document.getElementById('studentWeight').value),
+                goal: document.getElementById('studentGoal').value,
+                monthlyClasses: parseInt(document.getElementById('studentClasses').value),
+                trainingDays: [], // Array of training days
+                sessions: [],
+                attendance: {},
+                createdAt: new Date().toISOString()
+            };
+
+            students.push(student);
+            saveToSheets();
+            renderStudents();
+            closeModal('addStudent');
+            e.target.reset();
+        }
+
+        function renderStudents() {
+            const container = document.getElementById('studentsContainer');
+            
+            if (students.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 40px;">No hay atletas. Agregá uno nuevo o importá desde CSV.</p>';
+                return;
+            }
+
+            container.innerHTML = students.map(student => {
+                const daysCount = student.trainingDays ? student.trainingDays.length : 0;
+                const sessionsCount = student.sessions ? student.sessions.length : 0;
+                
+                return `
+                    <div class="student-card" onclick="selectStudent(${student.id})" style="position: relative;">
+                        <div style="position: absolute; top: 12px; right: 12px; display: flex; gap: 8px;">
+    <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); editStudent(${student.id})" style="padding: 6px 10px; background: var(--primary-blue); color: white;">✏️</button>
+    <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); deleteStudent(${student.id})" style="padding: 6px 10px; background: var(--danger); color: white;">🗑️</button>
+</div>
+                        <div class="student-name">${student.name}</div>
+                        <div class="student-info">📅 ${student.age} años • ⚖️ ${student.weight}kg</div>
+                        <div class="student-info">🎯 ${student.monthlyClasses} clases/mes</div>
+                        <div class="student-info">🏋️ ${daysCount} día${daysCount !== 1 ? 's' : ''} de entrenamiento</div>
+                        <div class="student-info">📊 ${sessionsCount} sesiones guardadas</div>
+                        <div class="student-goal">${student.goal}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectStudent(studentId) {
+            currentStudent = students.find(s => s.id === studentId);
+            currentDay = null;
+            
+            document.getElementById('currentStudentName').textContent = currentStudent.name;
+            document.getElementById('bodyWeight').value = currentStudent.weight;
+            
+            switchView('plan');
+            renderTrainingDays();
+        }
+
+
+        // DUPLICATE TRAINING DAY
+        function duplicateTrainingDay(dayId) {
+            const originalDay = currentStudent.trainingDays.find(function(d) { return d.id === dayId; });
+            if (!originalDay) return;
+            
+            const newDayName = prompt('Nombre del nuevo día:', originalDay.name + ' (copia)');
+            if (!newDayName) return;
+            
+            // Clonar día completo
+            const newDay = {
+                id: Date.now(),
+                name: newDayName,
+                blocks: JSON.parse(JSON.stringify(originalDay.blocks)) // Deep clone
+            };
+            
+            currentStudent.trainingDays.push(newDay);
+            
+            const studentIndex = students.findIndex(function(s) { return s.id === currentStudent.id; });
+            if (studentIndex !== -1) {
+                students[studentIndex] = currentStudent;
+            }
+            
+            saveToSheets();
+            renderTrainingDays();
+            
+            alert('✅ Día "' + newDayName + '" creado con ' + newDay.blocks.length + ' bloques copiados!');
+        }
+
+        // EDIT TRAINING DAY
+        function editTrainingDay(dayId) {
+            const day = currentStudent.trainingDays.find(function(d) { return d.id === dayId; });
+            if (!day) return;
+            
+            const newName = prompt('Nuevo nombre del día:', day.name);
+            if (!newName || newName === day.name) return;
+            
+            day.name = newName;
+            
+            const dayIndex = currentStudent.trainingDays.findIndex(function(d) { return d.id === dayId; });
+            if (dayIndex !== -1) {
+                currentStudent.trainingDays[dayIndex] = day;
+            }
+            
+            const studentIndex = students.findIndex(function(s) { return s.id === currentStudent.id; });
+            if (studentIndex !== -1) {
+                students[studentIndex] = currentStudent;
+            }
+            
+            saveToSheets();
+            renderTrainingDays();
+            
+            alert('✅ Día renombrado a "' + newName + '"');
+        }
+
+        // EDIT BLOCK
+        function editBlock(blockIndex) {
+            if (!currentDay || !currentDay.blocks[blockIndex]) return;
+            
+            const block = currentDay.blocks[blockIndex];
+            
+            const newName = prompt('Nuevo nombre del bloque:', block.name);
+            if (!newName) return;
+            
+            block.name = newName;
+            
+            const dayIndex = currentStudent.trainingDays.findIndex(function(d) { return d.id === currentDay.id; });
+            if (dayIndex !== -1) {
+                currentStudent.trainingDays[dayIndex] = currentDay;
+            }
+            
+            const studentIndex = students.findIndex(function(s) { return s.id === currentStudent.id; });
+            if (studentIndex !== -1) {
+                students[studentIndex] = currentStudent;
+            }
+            
+            saveToSheets();
+            loadTrainingDay();
+            
+            alert('✅ Bloque renombrado a "' + newName + '"');
+        }
+
+        // EDIT EXERCISE
+        let editingExercise = null;
+
+        function editExercise(blockIndex, exIndex) {
+            if (!currentDay || !currentDay.blocks[blockIndex]) return;
+            
+            const exercise = currentDay.blocks[blockIndex].exercises[exIndex];
+            editingExercise = { blockIndex: blockIndex, exIndex: exIndex };
+            
+            // Llenar modal con datos actuales
+            document.getElementById('exerciseName').value = exercise.name;
+            document.getElementById('exerciseSeries').value = exercise.series;
+            document.getElementById('exerciseReps').value = exercise.reps;
+            document.getElementById('exerciseIsPrincipal').checked = exercise.isPrincipal;
+            
+            // Cambiar el título del modal
+            document.querySelector('#modal-addExercise .modal-title').textContent = '✏️ Editar Ejercicio';
+            
+            openModal('addExercise');
+        }
+
+        // TRAINING DAYS
+        function addTrainingDay(e) {
+            e.preventDefault();
+            
+            if (!currentStudent) {
+                alert('Primero seleccioná un atleta');
+                return;
+            }
+
+            const day = {
+                id: Date.now(),
+                name: document.getElementById('dayName').value,
+                blocks: []
+            };
+
+            if (!currentStudent.trainingDays) {
+                currentStudent.trainingDays = [];
+            }
+
+            currentStudent.trainingDays.push(day);
+            
+            // Update student in array
+            const studentIndex = students.findIndex(s => s.id === currentStudent.id);
+            if (studentIndex !== -1) {
+                students[studentIndex] = currentStudent;
+            }
+
+            saveToSheets();
+            renderTrainingDays();
+            closeModal('addTrainingDay');
+            e.target.reset();
+        }
+
+        function renderTrainingDays() {
+            const container = document.getElementById('trainingDaysList');
+            
+            if (!currentStudent || !currentStudent.trainingDays || currentStudent.trainingDays.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 20px; grid-column: 1/-1;">No hay días de entrenamiento. Agregá uno nuevo o importá un plan.</p>';
+                document.getElementById('planDaysCard').style.display = 'block';
+                document.getElementById('currentDayView').style.display = 'none';
+                return;
+            }
+
+            container.innerHTML = currentStudent.trainingDays.map(day => {
+                const blocksCount = day.blocks ? day.blocks.length : 0;
+                const exercisesCount = day.blocks ? day.blocks.reduce((sum, b) => sum + (b.exercises ? b.exercises.length : 0), 0) : 0;
+                
+                return `
+                    <div class="training-day-card" onclick="selectTrainingDay(${day.id})" style="position: relative;">
+                        <div style="position: absolute; top: 12px; right: 12px; display: flex; gap: 8px;">
+                            <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); editTrainingDay(${day.id})" style="padding: 6px 10px; font-size: 11px;">✏️</button>
+                            <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); duplicateTrainingDay(${day.id})" style="padding: 6px 10px; font-size: 11px; background: var(--success); color: white;">📋</button>
+                            <button class="delete-day-btn" onclick="event.stopPropagation(); deleteTrainingDay(${day.id})">🗑️</button>
+                        </div>
+                        <h3>${day.name}</h3>
+                        <p>${blocksCount} bloque${blocksCount !== 1 ? 's' : ''} • ${exercisesCount} ejercicios</p>
+                        <span class="training-day-badge">Click para entrenar</span>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('planDaysCard').style.display = 'block';
+            document.getElementById('currentDayView').style.display = 'none';
+        }
+
+        function selectTrainingDay(dayId) {
+            currentDay = currentStudent.trainingDays.find(d => d.id === dayId);
+            if (!currentDay) return;
+
+            document.getElementById('currentDayTitle').textContent = currentDay.name;
+            document.getElementById('planDaysCard').style.display = 'none';
+            document.getElementById('currentDayView').style.display = 'block';
+            
+            loadTrainingDay();
+        }
+
+        function closeDayView() {
+            currentDay = null;
+            renderTrainingDays();
+        }
+
+        function deleteTrainingDay(dayId) {
+            if (!confirm('¿Eliminar este día de entrenamiento?')) return;
+
+            const dayIndex = currentStudent.trainingDays.findIndex(d => d.id === dayId);
+            if (dayIndex !== -1) {
+                currentStudent.trainingDays.splice(dayIndex, 1);
+                
+                const studentIndex = students.findIndex(s => s.id === currentStudent.id);
+                if (studentIndex !== -1) {
+                    students[studentIndex] = currentStudent;
+                }
+
+                saveToSheets();
+                renderTrainingDays();
+            }
+        }
+
+        function loadTrainingDay() {
+            if (!currentDay) return;
+
+            const container = document.getElementById('blocksContainer');
+            
+            if (!currentDay.blocks || currentDay.blocks.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 40px;">No hay bloques. Agregá uno nuevo.</p>';
+                return;
+            }
+
+            container.innerHTML = currentDay.blocks.map((block, blockIndex) => {
+                const iconMap = {
+                    'movilidad': '📱',
+                    'core': '🟡',
+                    'fuerza-inferior': '🔵',
+                    'fuerza-superior': '🟣'
+                };
+
+                const exercises = block.exercises.map((ex, exIndex) => `
+                    <div class="exercise">
+                        <div class="exercise-header">
+                            <div class="exercise-name">
+                                ${ex.isPrincipal ? '⭐ ' : ''}${ex.name}
+                            </div>
+                            <button class="btn btn-secondary btn-sm" onclick="editExercise(${blockIndex}, ${exIndex})" style="padding: 4px 8px;">✏️</button>
+                            <button class="btn btn-secondary btn-sm" onclick="deleteExercise(${blockIndex}, ${exIndex})" style="padding: 4px 8px;">🗑️</button>
+                        </div>
+                        <div class="exercise-inputs">
+                            <div class="exercise-input-group">
+                                <label class="exercise-input-label">Series</label>
+                                <input type="number" class="exercise-input" value="${ex.series || ''}" 
+                                       onchange="updateExercise(${blockIndex}, ${exIndex}, 'series', this.value)" min="1" />
+                            </div>
+                            <div class="exercise-input-group">
+                                <label class="exercise-input-label">Reps</label>
+                                <input type="text" class="exercise-input" value="${ex.reps || ''}" 
+                                       onchange="updateExercise(${blockIndex}, ${exIndex}, 'reps', this.value)" />
+                            </div>
+                            <div class="exercise-input-group">
+                                <label class="exercise-input-label">Peso (kg)</label>
+                                <input type="number" class="exercise-input" value="${ex.weight || ''}" 
+                                       onchange="updateExercise(${blockIndex}, ${exIndex}, 'weight', this.value)" step="0.5" />
+                            </div>
+                            <div class="exercise-input-group">
+                                <label class="exercise-input-label">RPE (1-10)</label>
+                                <input type="number" class="exercise-input" value="${ex.rpe || ''}" 
+                                       onchange="updateExercise(${blockIndex}, ${exIndex}, 'rpe', this.value)" min="1" max="10" step="0.5" />
+                            </div>
+                        </div>
+                        ${ex.isPrincipal ? `
+                            <div style="margin-top: 12px;">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--primary-blue);">
+                                    <input type="checkbox" ${ex.isPR ? 'checked' : ''} 
+                                           onchange="updateExercise(${blockIndex}, ${exIndex}, 'isPR', this.checked)" />
+                                    🏆 Récord Personal
+                                </label>
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+
+                return `
+                    <div class="block block-type-${block.type}">
+                        <div class="block-header">
+                            <div class="block-title">
+                                <div class="block-icon">${iconMap[block.type] || '📋'}</div>
+                                ${block.name}
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn btn-secondary btn-sm" onclick="currentBlockForExercise = ${blockIndex}; editingExercise = null; document.querySelector('#modal-addExercise .modal-title').textContent = '➕ Nuevo Ejercicio'; openModal('addExercise')">
+                                    ➕ Ejercicio
+                                </button>
+                                <button class="btn btn-secondary btn-sm" onclick="editBlock(${blockIndex})">
+                                    ✏️
+                                </button>
+                                <button class="btn btn-secondary btn-sm" onclick="deleteBlock(${blockIndex})">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+                        ${exercises}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // BLOCKS
+        function addBlock(e) {
+            e.preventDefault();
+            
+            if (!currentDay) {
+                alert('Primero seleccioná un día de entrenamiento');
+                return;
+            }
+
+            const block = {
+                name: document.getElementById('blockName').value,
+                type: document.getElementById('blockType').value,
+                exercises: []
+            };
+
+            if (!currentDay.blocks) {
+                currentDay.blocks = [];
+            }
+
+            currentDay.blocks.push(block);
+            
+            // Update day in student
+            const dayIndex = currentStudent.trainingDays.findIndex(d => d.id === currentDay.id);
+            if (dayIndex !== -1) {
+                currentStudent.trainingDays[dayIndex] = currentDay;
+            }
+
+            // Update student in array
+            const studentIndex = students.findIndex(s => s.id === currentStudent.id);
+            if (studentIndex !== -1) {
+                students[studentIndex] = currentStudent;
+            }
+
+            saveToSheets();
+            loadTrainingDay();
+            closeModal('addBlock');
+            e.target.reset();
+        }
+
+        function deleteBlock(blockIndex) {
+            if (!confirm('¿Eliminar este bloque y todos sus ejercicios?')) return;
+
+            currentDay.blocks.splice(blockIndex, 1);
+            
+            const dayIndex = currentStudent.trainingDays.findIndex(d => d.id === currentDay.id);
+            if (dayIndex !== -1) {
+                currentStudent.trainingDays[dayIndex] = currentDay;
+            }
+
+            const studentIndex = students.findIndex(s => s.id === currentStudent.id);
+            if (studentIndex !== -1) {
+                students[studentIndex] = currentStudent;
+            }
+
+            saveToSheets();
+            loadTrainingDay();
+        }
+
+        // EXERCISES
+        function addExercise(e) {
+            e.preventDefault();
+            
+            if (currentBlockForExercise === null) {
+                alert('Error: no hay bloque seleccionado');
+                return;
+            }
+
+            const exercise = {
+                name: document.getElementById('exerciseName').value,
+                series: parseInt(document.getElementById('exerciseSeries').value),
+                reps: document.getElementById('exerciseReps').value,
+                isPrincipal: document.getElementById('exerciseIsPrincipal').checked,
+                weight: null,
+                rpe: null,
+                isPR: false
+            };
+
+            // Add to exercise database
+            if (!exerciseDatabase.includes(exercise.name)) {
+                exerciseDatabase.push(exercise.name);
+                localStorage.setItem('gymTracker_exercises', JSON.stringify(exerciseDatabase));
+                updateExercisesList();
+            }
+
+            currentDay.blocks[currentBlockForExercise].exercises.push(exercise);
+            
+            const dayIndex = currentStudent.trainingDays.findIndex(d => d.id === currentDay.id);
+            if (dayIndex !== -1) {
+                currentStudent.trainingDays[dayIndex] = currentDay;
+            }
+
+            const studentIndex = students.findIndex(s => s.id === currentStudent.id);
+            if (studentIndex !== -1) {
+                students[studentIndex] = currentStudent;
+            }
+
+            saveToSheets();
+            loadTrainingDay();
+            closeModal('addExercise');
+            e.target.reset();
+            currentBlockForExercise = null;
+        }
+
+        function updateExercise(blockIndex, exIndex, field, value) {
+            if (field === 'isPR') {
+                currentDay.blocks[blockIndex].exercises[exIndex][field] = value;
+            } else {
+                const numValue = parseFloat(value);
+                currentDay.blocks[blockIndex].exercises[exIndex][field] = isNaN(numValue) ? value : numValue;
+            }
+
+            const dayIndex = currentStudent.trainingDays.findIndex(d => d.id === currentDay.id);
+            if (dayIndex !== -1) {
+                currentStudent.trainingDays[dayIndex] = currentDay;
+            }
+
+            const studentIndex = students.findIndex(s => s.id === currentStudent.id);
+            if (studentIndex !== -1) {
+                students[studentIndex] = currentStudent;
+            }
+        }
+
+        function deleteExercise(blockIndex, exIndex) {
+            if (!confirm('¿Eliminar este ejercicio?')) return;
+
+            currentDay.blocks[blockIndex].exercises.splice(exIndex, 1);
+            
+            const dayIndex = currentStudent.trainingDays.findIndex(d => d.id === currentDay.id);
+            if (dayIndex !== -1) {
+                currentStudent.trainingDays[dayIndex] = currentDay;
+            }
+
+            const studentIndex = students.findIndex(s => s.id === currentStudent.id);
+            if (studentIndex !== -1) {
+                students[studentIndex] = currentStudent;
+            }
+
+            saveToSheets();
+            loadTrainingDay();
+        }
+
+        function updateExercisesList() {
+            const datalist = document.getElementById('exercisesList');
+            datalist.innerHTML = exerciseDatabase.map(ex => `<option value="${ex}">`).join('');
+        }
+
+        // SAVE SESSION
+        function updateStudentMetrics(s) {
+    if (!s || !s.sessions) return;
+    
+    if (!s.totalXP) s.totalXP = 0;
+    if (!s.level) s.level = 1;
+    if (!s.badges) s.badges = [];
+    if (!s.goals) s.goals = [];
+    
+    // CALCULAR XP
+    s.totalXP = s.sessions.reduce(function(sum, sess) {
+        return sum + Math.floor((sess.volume || 0) / 100);
+    }, 0);
+    s.level = Math.min(Math.floor(s.totalXP / 100), 100);
+    
+    checkBadges(s);
+    if (s.goals) updateGoals(s);
+}
+
+function checkBadges(s) {
+    if (!s.badges) s.badges = [];
+    var vol = s.sessions.reduce(function(sum, sess) { return sum + (sess.volume || 0); }, 0);
+    var prs = s.sessions.reduce(function(sum, sess) { return sum + (sess.prs || 0); }, 0);
+    var str = calculateStreak(s.sessions || []);
+    
+    if (str >= 7 && s.badges.indexOf('streak_7') === -1) s.badges.push('streak_7');
+    if (vol >= 100000 && s.badges.indexOf('vol_100k') === -1) s.badges.push('vol_100k');
+    if (prs >= 10 && s.badges.indexOf('pr_10') === -1) s.badges.push('pr_10');
+    if (s.level >= 10 && s.badges.indexOf('lvl_10') === -1) s.badges.push('lvl_10');
+    if (s.level >= 50 && s.badges.indexOf('lvl_50') === -1) s.badges.push('lvl_50');
+    if (s.level >= 100 && s.badges.indexOf('lvl_100') === -1) s.badges.push('lvl_100');
+}
+
+function updateGoals(s) {
+    if (!s.goals) s.goals = [];
+    const now = new Date();
+    
+    s.goals.forEach(function(g) {
+        if (g.status === 'completed' || g.status === 'failed') return;
+        if (now > new Date(g.deadline)) { g.status = 'failed'; return; }
+        
+        let curr = 0;
+        
+        if (g.type === 'volume') {
+            const ms = new Date(now.getFullYear(), now.getMonth(), 1);
+            curr = Math.floor(s.sessions.filter(function(sess) {
+                return new Date(sess.date) >= ms;
+            }).reduce(function(sum, sess) { return sum + (sess.volume || 0); }, 0) / 1000);
+            
+        } else if (g.type === 'strength') {
+            s.sessions.forEach(function(sess) {
+                if (sess.blocks) sess.blocks.forEach(function(b) {
+                    if (b.exercises) b.exercises.forEach(function(e) {
+                        if (e.name === g.exerciseName && e.weight > curr) curr = e.weight;
+                    });
+                });
+            });
+            
+        } else if (g.type === 'attendance') {
+            const ms = new Date(now.getFullYear(), now.getMonth(), 1);
+            curr = s.sessions.filter(function(sess) { return new Date(sess.date) >= ms; }).length;
+            
+        } else if (g.type === 'prs') {
+            const start = new Date(g.startDate || g.deadline);
+            curr = s.sessions.filter(function(sess) { return new Date(sess.date) >= start; })
+                .reduce(function(sum, sess) { return sum + (sess.prs || 0); }, 0);
+        }
+        
+        g.currentValue = curr;
+        g.progress = Math.min((curr / g.targetValue) * 100, 100);
+        
+        if (g.progress >= 100 && g.status !== 'completed') {
+            g.status = 'completed';
+            setTimeout(function() {
+                alert('🏆 ¡OBJETIVO CUMPLIDO!\n\n' + s.name + ' completó:\n' + g.description + '\n\n🎁 Recompensa: ' + (g.reward || 'Sin recompensa') + '\n\n💡 RECORDATORIO: Entregá la recompensa al alumno');
+            }, 1500);
+        } else if (g.progress >= 75 && !g.alert75) {
+            g.alert75 = true;
+            setTimeout(function() { alert('🎉 ' + s.name + ' al 75%: ' + g.description); }, 500);
+        } else if (g.progress >= 50 && !g.alert50) {
+            g.alert50 = true;
+        }
+    });
+}
+        function saveGoal() {
+    if (!currentStudent) return;
+    if (!currentStudent.goals) currentStudent.goals = [];
+    
+    const active = currentStudent.goals.filter(function(g) { return g.status === 'in_progress'; });
+    if (active.length >= 5) { alert('⚠️ Máximo 5 objetivos activos'); return; }
+    
+    const type = document.getElementById('goalType').value;
+    const desc = document.getElementById('goalDesc').value;
+    const target = parseFloat(document.getElementById('goalTarget').value);
+    const deadline = document.getElementById('goalDeadline').value;
+    const reward = document.getElementById('goalReward').value;
+    
+    if (!desc || !target || !deadline) {
+        alert('⚠️ Completá descripción, valor objetivo y fecha límite');
+        return;
+    }
+    
+    const g = {
+        id: Date.now(),
+        type: type,
+        description: desc,
+        targetValue: target,
+        currentValue: 0,
+        deadline: deadline,
+        startDate: new Date().toISOString(),
+        reward: reward,
+        status: 'in_progress',
+        progress: 0,
+        unit: type === 'volume' ? 'ton' : type === 'strength' ? 'kg' : type === 'attendance' ? 'clases' : 'PRs',
+        alert50: false,
+        alert75: false
+    };
+    
+    if (type === 'strength') {
+        g.exerciseName = document.getElementById('goalExercise').value;
+        if (!g.exerciseName) { alert('⚠️ Especificá el ejercicio'); return; }
+    }
+    
+    currentStudent.goals.push(g);
+    updateGoals(currentStudent);
+    
+    const studentIndex = students.findIndex(function(s) { return s.id === currentStudent.id; });
+    if (studentIndex !== -1) students[studentIndex] = currentStudent;
+    
+    saveToSheets();
+    closeModal('newGoal');
+    renderDashboard();
+    alert('✅ Objetivo creado!');
+}
+
+function deleteGoal(goalId) {
+    if (!confirm('¿Eliminar objetivo?')) return;
+    currentStudent.goals = currentStudent.goals.filter(function(g) { return g.id !== goalId; });
+    
+    const studentIndex = students.findIndex(function(s) { return s.id === currentStudent.id; });
+    if (studentIndex !== -1) students[studentIndex] = currentStudent;
+    
+    saveToSheets();
+    renderDashboard();
+}
+        function saveSession() {
+            if (!currentStudent || !currentDay) {
+                alert('Seleccioná un atleta y un día de entrenamiento');
+                return;
+            }
+
+            const date = document.getElementById('sessionDate').value;
+            const bodyWeight = parseFloat(document.getElementById('bodyWeight').value);
+            
+            if (!date) {
+                alert('Por favor ingresá la fecha de la sesión');
+                return;
+            }
+
+            let totalVolume = 0;
+            let totalRPE = 0;
+            let rpeCount = 0;
+            let prsCount = 0;
+
+            const sessionBlocks = JSON.parse(JSON.stringify(currentDay.blocks));
+            
+            sessionBlocks.forEach(block => {
+                block.exercises.forEach(ex => {
+                    if (ex.weight && ex.series && ex.reps) {
+                        const reps = parseFloat(ex.reps) || 0;
+                        totalVolume += ex.weight * ex.series * reps;
+                    }
+                    if (ex.rpe) {
+                        totalRPE += parseFloat(ex.rpe);
+                        rpeCount++;
+                    }
+                    if (ex.isPR) {
+                        prsCount++;
+                    }
+                });
+            });
+
+            const avgRPE = rpeCount > 0 ? (totalRPE / rpeCount).toFixed(1) : 0;
+
+            const session = {
+                date: date,
+                dayId: currentDay.id,
+                dayName: currentDay.name,
+                bodyWeight: bodyWeight,
+                blocks: sessionBlocks,
+                volume: Math.round(totalVolume),
+                avgRPE: parseFloat(avgRPE),
+                prs: prsCount,
+                timestamp: new Date().toISOString()
+            };
+
+            if (!currentStudent.sessions) {
+                currentStudent.sessions = [];
+            }
+            currentStudent.sessions.push(session);
+            
+            const studentIndex = students.findIndex(s => s.id === currentStudent.id);
+            if (studentIndex !== -1) {
+                students[studentIndex] = currentStudent;
+            }
+            // Actualizar métricas de gamificación
+updateStudentMetrics(currentStudent);
+            saveToSheets();
+            
+            alert(`✅ Sesión de "${currentDay.name}" guardada!\n\n📊 Volumen: ${session.volume}kg\n⭐ RPE: ${avgRPE}\n🏆 PRs: ${prsCount}`);
+            
+            // Clear PRs
+            currentDay.blocks.forEach(block => {
+                block.exercises.forEach(ex => ex.isPR = false);
+            });
+            loadTrainingDay();
+            
+            renderStudents();
+        }
+
+        // IMPORT/EXPORT
+        let importedCompleteData = [];
+
+        function handleCompleteImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                parseCompleteData(text);
+            };
+            reader.readAsText(file);
+        }
+
+
+        // FUNCIÓN PARA PARSEAR CSV CORRECTAMENTE (maneja comillas)
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current.trim());
+            return result;
+        }
+
+        function parseCompleteData(text) {
+            importedCompleteData = [];
+            const lines = text.split('\n').filter(line => line.trim());
+            
+            const startIndex = lines[0].toLowerCase().includes('alumno') ? 1 : 0;
+            
+            const studentsMap = {};
+            
+            for (let i = startIndex; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                const parts = parseCSVLine(line);
+                
+                if (parts.length >= 12) {
+                    const studentName = parts[0];
+                    const age = parseInt(parts[1]) || 25;
+                    const weight = parseFloat(parts[2]) || 70;
+                    const goal = parts[3];
+                    const monthlyClasses = parseInt(parts[4]) || 12;
+                    const dayName = parts[5];
+                    const blockName = parts[6];
+                    const blockType = parts[7];
+                    const exerciseName = parts[8];
+                    const series = parseInt(parts[9]) || 3;
+                    const reps = parts[10];
+                    const isPrincipal = parts[11].toUpperCase() === 'SI';
+                    
+                    if (!studentsMap[studentName]) {
+                        studentsMap[studentName] = {
+                            name: studentName,
+                            age: age,
+                            weight: weight,
+                            goal: goal,
+                            monthlyClasses: monthlyClasses,
+                            days: {}
+                        };
+                    }
+                    
+                    const student = studentsMap[studentName];
+                    
+                    if (!student.days[dayName]) {
+                        student.days[dayName] = {
+                            name: dayName,
+                            blocks: {}
+                        };
+                    }
+                    
+                    const day = student.days[dayName];
+                    
+                    if (!day.blocks[blockName]) {
+                        day.blocks[blockName] = {
+                            name: blockName,
+                            type: blockType,
+                            exercises: []
+                        };
+                    }
+                    
+                    day.blocks[blockName].exercises.push({
+                        name: exerciseName,
+                        series: series,
+                        reps: reps,
+                        isPrincipal: isPrincipal,
+                        weight: null,
+                        rpe: null,
+                        isPR: false
+                    });
+                }
+            }
+            
+            importedCompleteData = Object.values(studentsMap).map(student => ({
+                ...student,
+                trainingDays: Object.values(student.days).map((day, idx) => ({
+                    id: Date.now() + idx,
+                    name: day.name,
+                    blocks: Object.values(day.blocks)
+                })),
+                days: undefined
+            }));
+            
+            if (importedCompleteData.length > 0) {
+                showCompleteImportPreview();
+                document.getElementById('btnImportComplete').disabled = false;
+            } else {
+                alert('❌ No se pudieron leer datos. Verificá el formato.');
+            }
+        }
+
+        function showCompleteImportPreview() {
+            document.getElementById('completeImportPreview').style.display = 'block';
+            
+            let totalStudents = importedCompleteData.length;
+            let totalDays = 0;
+            let totalBlocks = 0;
+            let totalExercises = 0;
+            
+            importedCompleteData.forEach(student => {
+                totalDays += student.trainingDays.length;
+                student.trainingDays.forEach(day => {
+                    totalBlocks += day.blocks.length;
+                    day.blocks.forEach(block => {
+                        totalExercises += block.exercises.length;
+                    });
+                });
+            });
+            
+            document.getElementById('completeImportCount').textContent = 
+                `${totalStudents} alumno${totalStudents > 1 ? 's' : ''}, ${totalDays} días, ${totalBlocks} bloques, ${totalExercises} ejercicios`;
+            
+            const container = document.getElementById('completeImportPreviewBody');
+            let html = '';
+            
+            importedCompleteData.forEach(student => {
+                html += `
+                    <div style="margin-bottom: 20px; padding: 16px; background: white; border-radius: 8px; border-left: 4px solid var(--primary-blue);">
+                        <h4 style="font-family: 'Archivo Black'; font-size: 16px; margin-bottom: 8px;">${student.name}</h4>
+                        <p style="font-size: 12px; color: var(--text-gray); margin-bottom: 12px;">
+                            ${student.age} años · ${student.weight}kg · ${student.monthlyClasses} clases/mes<br>
+                            🎯 ${student.goal}
+                        </p>
+                        <div style="font-size: 12px;">
+                            <strong>${student.trainingDays.length} día${student.trainingDays.length > 1 ? 's' : ''}:</strong>
+                            ${student.trainingDays.map(d => `
+                                <div style="margin-top: 8px; padding: 8px; background: var(--bg-gray); border-radius: 4px;">
+                                    <strong>${d.name}</strong> - ${d.blocks.length} bloque${d.blocks.length > 1 ? 's' : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function processCompleteImport() {
+            if (importedCompleteData.length === 0) {
+                alert('No hay datos para importar');
+                return;
+            }
+            
+            let imported = 0;
+            importedCompleteData.forEach(data => {
+                const student = {
+                    id: Date.now() + imported,
+                    name: data.name,
+                    age: data.age,
+                    weight: data.weight,
+                    goal: data.goal,
+                    monthlyClasses: data.monthlyClasses,
+                    trainingDays: data.trainingDays,
+                    sessions: [],
+                    attendance: {},
+                    createdAt: new Date().toISOString(),
+                    totalXP: 0,
+                    level: 1,
+                    badges: [],
+                    goals: []
+                };
+                
+                student.trainingDays.forEach(day => {
+                    day.blocks.forEach(block => {
+                        block.exercises.forEach(ex => {
+                            if (!exerciseDatabase.includes(ex.name)) {
+                                exerciseDatabase.push(ex.name);
+                            }
+                        });
+                    });
+                });
+                
+                students.push(student);
+                imported++;
+            });
+            
+            localStorage.setItem('gymTracker_exercises', JSON.stringify(exerciseDatabase));
+            updateExercisesList();
+            
+            saveToSheets();
+            renderStudents();
+            closeModal('importComplete');
+            
+            importedCompleteData = [];
+            document.getElementById('importCompleteFile').value = '';
+            document.getElementById('completeImportPreview').style.display = 'none';
+            document.getElementById('btnImportComplete').disabled = true;
+            
+            alert(`✅ ${imported} alumno${imported > 1 ? 's' : ''} con sus planes importados!`);
+        }
+
+        // Import Plan (for current student)
+        let importedPlanData = [];
+
+        function handlePlanImport(event) {
+            if (!currentStudent) {
+                alert('Primero seleccioná un atleta');
+                return;
+            }
+
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                parsePlanData(text);
+            };
+            reader.readAsText(file);
+        }
+
+        function parsePlanData(text) {
+            importedPlanData = [];
+            const lines = text.split('\n').filter(line => line.trim());
+            
+            const startIndex = lines[0].toLowerCase().includes('dia') ? 1 : 0;
+            
+            const daysMap = {};
+            
+            for (let i = startIndex; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                const parts = parseCSVLine(line);
+                
+                if (parts.length >= 7) {
+                    const dayName = parts[0];
+                    const blockName = parts[1];
+                    const blockType = parts[2];
+                    const exerciseName = parts[3];
+                    const series = parseInt(parts[4]) || 3;
+                    const reps = parts[5];
+                    const isPrincipal = parts[6].toUpperCase() === 'SI';
+                    
+                    if (!daysMap[dayName]) {
+                        daysMap[dayName] = {
+                            name: dayName,
+                            blocks: {}
+                        };
+                    }
+                    
+                    const day = daysMap[dayName];
+                    
+                    if (!day.blocks[blockName]) {
+                        day.blocks[blockName] = {
+                            name: blockName,
+                            type: blockType,
+                            exercises: []
+                        };
+                    }
+                    
+                    day.blocks[blockName].exercises.push({
+                        name: exerciseName,
+                        series: series,
+                        reps: reps,
+                        isPrincipal: isPrincipal,
+                        weight: null,
+                        rpe: null,
+                        isPR: false
+                    });
+                }
+            }
+            
+            importedPlanData = Object.values(daysMap).map((day, idx) => ({
+                id: Date.now() + idx,
+                name: day.name,
+                blocks: Object.values(day.blocks)
+            }));
+            
+            if (importedPlanData.length > 0) {
+                showPlanImportPreview();
+                document.getElementById('btnImportPlan').disabled = false;
+            } else {
+                alert('❌ No se pudieron leer datos. Verificá el formato.');
+            }
+        }
+
+        function showPlanImportPreview() {
+            document.getElementById('planImportPreview').style.display = 'block';
+            
+            let totalBlocks = 0;
+            let totalExercises = 0;
+            
+            importedPlanData.forEach(day => {
+                totalBlocks += day.blocks.length;
+                day.blocks.forEach(block => {
+                    totalExercises += block.exercises.length;
+                });
+            });
+            
+            document.getElementById('planImportCount').textContent = 
+                `${importedPlanData.length} día${importedPlanData.length > 1 ? 's' : ''}, ${totalBlocks} bloques, ${totalExercises} ejercicios`;
+            
+            const container = document.getElementById('planImportPreviewBody');
+            let html = '';
+            
+            importedPlanData.forEach(day => {
+                html += `
+                    <div style="margin-bottom: 16px; padding: 16px; background: var(--bg-gray); border-radius: 8px;">
+                        <h4 style="font-family: 'Archivo Black'; font-size: 14px; margin-bottom: 8px;">${day.name}</h4>
+                        <div style="font-size: 12px;">
+                            ${day.blocks.map(b => `
+                                <div style="margin-top: 8px; padding: 8px; background: white; border-radius: 4px;">
+                                    <strong>${b.name}</strong> - ${b.exercises.length} ejercicio${b.exercises.length > 1 ? 's' : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function processPlanImport() {
+            if (!currentStudent) {
+                alert('No hay alumno seleccionado');
+                return;
+            }
+            
+            if (importedPlanData.length === 0) {
+                alert('No hay datos para importar');
+                return;
+            }
+            
+            const confirmMsg = currentStudent.trainingDays && currentStudent.trainingDays.length > 0 
+                ? '¿Agregar estos días al plan actual?' 
+                : '¿Importar estos días?';
+            
+            if (!confirm(confirmMsg)) return;
+            
+            if (!currentStudent.trainingDays) {
+                currentStudent.trainingDays = [];
+            }
+
+            importedPlanData.forEach(day => {
+                currentStudent.trainingDays.push(day);
+                
+                day.blocks.forEach(block => {
+                    block.exercises.forEach(ex => {
+                        if (!exerciseDatabase.includes(ex.name)) {
+                            exerciseDatabase.push(ex.name);
+                        }
+                    });
+                });
+            });
+            
+            const studentIndex = students.findIndex(s => s.id === currentStudent.id);
+            if (studentIndex !== -1) {
+                students[studentIndex] = currentStudent;
+            }
+            
+            localStorage.setItem('gymTracker_exercises', JSON.stringify(exerciseDatabase));
+            updateExercisesList();
+            
+            saveToSheets();
+            renderTrainingDays();
+            closeModal('importPlan');
+            
+            importedPlanData = [];
+            document.getElementById('importPlanFile').value = '';
+            document.getElementById('planImportPreview').style.display = 'none';
+            document.getElementById('btnImportPlan').disabled = true;
+            
+            alert(`✅ ${currentStudent.trainingDays.length} día${currentStudent.trainingDays.length > 1 ? 's' : ''} importado${currentStudent.trainingDays.length > 1 ? 's' : ''}!`);
+        }
+
+        // Export
+        function exportAllDays() {
+            if (!currentStudent || !currentStudent.trainingDays || currentStudent.trainingDays.length === 0) {
+                alert('No hay días para exportar');
+                return;
+            }
+
+            let csvContent = "Dia,Bloque,TipoBloque,Ejercicio,Series,Reps,Principal\n";
+            
+            currentStudent.trainingDays.forEach(day => {
+                day.blocks.forEach(block => {
+                    block.exercises.forEach(ex => {
+                        const row = [
+                            day.name,
+                            block.name,
+                            block.type,
+                            ex.name,
+                            ex.series || '',
+                            ex.reps || '',
+                            ex.isPrincipal ? 'SI' : 'NO'
+                        ];
+                        csvContent += row.join(',') + '\n';
+                    });
+                });
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `plan_${currentStudent.name.replace(/\s+/g, '_')}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+
+        // FUNCIONES AUXILIARES PARA MÉTRICAS
+        function calculateStreak(sessions) {
+            if (!sessions || sessions.length === 0) return 0;
+            
+            const sortedSessions = sessions.slice().sort(function(a, b) { 
+                return new Date(b.date) - new Date(a.date); 
+            });
+            let streak = 0;
+            let lastDate = new Date();
+            
+            for (let i = 0; i < sortedSessions.length; i++) {
+                const sessionDate = new Date(sortedSessions[i].date);
+                const diffDays = Math.floor((lastDate - sessionDate) / (1000 * 60 * 60 * 24));
+                
+                if (diffDays <= 3) {
+                    streak++;
+                    lastDate = sessionDate;
+                } else {
+                    break;
+                }
+            }
+            
+            return streak;
+        }
+
+        function getMostTrainedDay(dayStats) {
+            if (!dayStats || Object.keys(dayStats).length === 0) return '-';
+            
+            let maxDay = '';
+            let maxCount = 0;
+            
+            for (let day in dayStats) {
+                if (dayStats[day] > maxCount) {
+                    maxCount = dayStats[day];
+                    maxDay = day;
+                }
+            }
+            
+            return maxDay || '-';
+        }
+
+        function generateWeeklySummary(sessions, student) {
+            if (!sessions || sessions.length === 0) {
+                return '<p style="opacity: 0.8;">No hay sesiones registradas para generar insights.</p>';
+            }
+
+            const today = new Date();
+            const weekAgo = new Date(today.getTime() - (7 * 24 * 60 * 60 * 1000));
+            const weekSessions = sessions.filter(function(s) { 
+                return new Date(s.date) >= weekAgo; 
+            });
+
+            if (weekSessions.length === 0) {
+                return '<p style="opacity: 0.8;">No hay sesiones en los últimos 7 días.</p>';
+            }
+
+            const weekVolume = weekSessions.reduce(function(sum, s) { 
+                return sum + (s.volume || 0); 
+            }, 0);
+            const weekPRs = weekSessions.reduce(function(sum, s) { 
+                return sum + (s.prs || 0); 
+            }, 0);
+            const avgRPE = weekSessions.length > 0 ? 
+                (weekSessions.reduce(function(sum, s) { 
+                    return sum + (s.avgRPE || 0); 
+                }, 0) / weekSessions.length).toFixed(1) : 0;
+
+            const twoWeeksAgo = new Date(today.getTime() - (14 * 24 * 60 * 60 * 1000));
+            const prevWeekSessions = sessions.filter(function(s) {
+                const d = new Date(s.date);
+                return d >= twoWeeksAgo && d < weekAgo;
+            });
+            const prevWeekVolume = prevWeekSessions.reduce(function(sum, s) { 
+                return sum + (s.volume || 0); 
+            }, 0);
+
+            let summary = '<div style="line-height: 2;">';
+            
+            // Frecuencia
+            summary += '<div>✓ <strong>' + weekSessions.length + ' sesiones</strong> completadas esta semana';
+            if (weekSessions.length >= 3) {
+                summary += ' - <strong style="color: #10B981;">Excelente consistencia</strong>, mantené este ritmo</div>';
+            } else if (weekSessions.length === 2) {
+                summary += ' - Buen trabajo, intentá agregar una sesión más</div>';
+            } else {
+                summary += ' - Intentá entrenar más seguido</div>';
+            }
+
+            // Volumen
+            if (prevWeekVolume > 0) {
+                const volumeChange = ((weekVolume - prevWeekVolume) / prevWeekVolume * 100).toFixed(0);
+                if (weekVolume > prevWeekVolume) {
+                    summary += '<div>📈 <strong>+' + volumeChange + '%</strong> de volumen vs semana anterior (' + (weekVolume/1000).toFixed(1) + ' ton)</div>';
+                } else if (weekVolume < prevWeekVolume) {
+                    summary += '<div>📉 <strong>' + volumeChange + '%</strong> de volumen - considerá más recuperación</div>';
+                }
+            } else {
+                summary += '<div>📦 <strong>' + (weekVolume/1000).toFixed(1) + ' toneladas</strong> movidas esta semana</div>';
+            }
+
+            // Records
+            if (weekPRs > 0) {
+                summary += '<div>🏆 <strong>' + weekPRs + ' nuevo' + (weekPRs > 1 ? 's' : '') + ' récord' + (weekPRs > 1 ? 's' : '') + '</strong> - ¡Excelente progreso!</div>';
+            }
+
+            // PRs destacados
+            const exercisesWithPRs = [];
+            weekSessions.forEach(function(session) {
+                if (session.blocks) {
+                    session.blocks.forEach(function(block) {
+                        if (block.exercises) {
+                            block.exercises.forEach(function(ex) {
+                                if (ex.isPR && ex.weight) {
+                                    exercisesWithPRs.push({
+                                        name: ex.name,
+                                        weight: ex.weight
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+            if (exercisesWithPRs.length > 0) {
+                const top2 = exercisesWithPRs.slice(0, 2);
+                top2.forEach(function(ex) {
+                    summary += '<div>💪 <strong>' + ex.name + '</strong>: nuevo PR con ' + ex.weight + 'kg</div>';
+                });
+            }
+
+            // Intensidad
+            if (avgRPE >= 8.5) {
+                summary += '<div>🔥 Intensidad alta (RPE ' + avgRPE + ') - considerá descanso activo</div>';
+            } else if (avgRPE >= 7 && avgRPE < 8.5) {
+                summary += '<div>✓ Intensidad óptima (RPE ' + avgRPE + ') - seguí así</div>';
+            } else if (avgRPE < 7 && avgRPE > 0) {
+                summary += '<div>💡 Intensidad moderada (RPE ' + avgRPE + ') - podés aumentar gradualmente</div>';
+            }
+
+            // Días entrenados
+            const daysCount = {};
+            weekSessions.forEach(function(s) {
+                if (s.dayName) {
+                    daysCount[s.dayName] = (daysCount[s.dayName] || 0) + 1;
+                }
+            });
+            if (Object.keys(daysCount).length > 0) {
+                const daysList = Object.keys(daysCount).map(function(day) {
+                    return day + ' (' + daysCount[day] + 'x)';
+                }).join(', ');
+                summary += '<div>📋 Días entrenados: <strong>' + daysList + '</strong></div>';
+            }
+
+            summary += '</div>';
+            return summary;
+        }
+
+
         // ================================================
-        // AUTO-SYNC y FALLBACK
+        // AUTO-SYNC: Sincronización automática
         // ================================================
         async function loadFromSheetsAuto() {
-            if (!sheetsUrl) { loadFromLocalStorageFallback(); return; }
+            if (!sheetsUrl) {
+                loadFromLocalStorageFallback();
+                return;
+            }
             
             try {
-                const response = await fetch(sheetsUrl + '?action=loadStudents', { method: 'GET', redirect: 'follow' });
-                if (!response.ok) throw new Error('HTTP ' + response.status);
+                const response = await fetch(sheetsUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'loadStudents' })
+                });
+                
                 const data = await response.json();
                 
                 if (data.students && data.students.length > 0) {
                     students = data.students;
                     localStorage.setItem('gymTracker_students', JSON.stringify(students));
                     renderStudents();
-                    hideUploadBanner();
-                    console.log('✅ Auto-sync: ' + students.length + ' atletas');
+                    lastSyncTimestamp = Date.now();
+                    localStorage.setItem('lastSync', lastSyncTimestamp);
+                    console.log('✅ Auto-sync: Datos cargados');
                 } else {
-                    // Sheets vacía — usar localStorage y mostrar banner si hay datos
-                    console.log('⚠️ Sheets no tiene datos, usando localStorage');
                     loadFromLocalStorageFallback();
-                    checkAndShowUploadBanner();
                 }
             } catch (error) {
-                console.warn('Auto-sync error:', error.message);
+                console.warn('Auto-sync: Error, usando localStorage');
                 loadFromLocalStorageFallback();
-                checkAndShowUploadBanner();
             }
         }
         
@@ -1275,681 +2967,473 @@
                 students = students.map(function(s) {
                     if (!s.trainingDays && s.blocks) {
                         return Object.assign({}, s, {
-                            trainingDays: [{ id: Date.now(), name: "Plan Principal", blocks: s.blocks }],
+                            trainingDays: [{
+                                id: Date.now(),
+                                name: "Plan Principal",
+                                blocks: s.blocks
+                            }],
                             blocks: undefined
                         });
                     }
                     return s;
                 });
                 renderStudents();
-                console.log('📋 Datos cargados desde localStorage: ' + students.length + ' atletas');
             }
         }
-
-        // ================================================
-        // UPLOAD BANNER — aparece cuando Sheets está vacía pero localStorage tiene datos
-        // ================================================
-        function checkAndShowUploadBanner() {
-            if (sheetsUrl && students && students.length > 0) {
-                document.getElementById('uploadBanner').style.display = 'flex';
-            }
-        }
-
-        function hideUploadBanner() {
-            document.getElementById('uploadBanner').style.display = 'none';
-        }
-
-        // Botón "Subir Ahora" — force POST con los datos actuales
-        async function forceUploadToSheets() {
-            if (!sheetsUrl || students.length === 0) return;
-            showLoading(true);
-            try {
-                await fetch(sheetsUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'saveStudents', students: students })
-                });
-                hideUploadBanner();
-                alert('✅ ' + students.length + ' atletas subidos a Google Sheets. Ahora cualquier dispositivo los va a ver.');
-                console.log('✅ Force upload completado');
-            } catch (error) {
-                alert('❌ Error al subir. Verificá tu conexión.');
-                console.error(error);
-            }
-            showLoading(false);
-        }
-
-        // ================================================
-        // UI HELPERS
-        // ================================================
-        function showLoading(show) {
-            document.getElementById('loading').className = show ? 'loading active' : 'loading';
-        }
-
-        function switchView(viewName, btn) {
-            document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
-            document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
-            document.getElementById('view-' + viewName).classList.add('active');
-            if (btn) btn.classList.add('active');
-            if (viewName === 'dashboard' && currentStudent) renderDashboard();
-        }
-
-        function openModal(modalName) { document.getElementById('modal-' + modalName).classList.add('active'); }
-        function closeModal(modalName) { document.getElementById('modal-' + modalName).classList.remove('active'); }
-
-        // ================================================
-        // STUDENTS
-        // ================================================
-        function filterStudents() {
-            const term = document.getElementById('searchStudent').value.toLowerCase();
-            document.querySelectorAll('.student-card').forEach(function(card) {
-                card.style.display = card.querySelector('.student-name').textContent.toLowerCase().includes(term) ? 'block' : 'none';
-            });
-        }
-
-        function deleteStudent(studentId) {
-            const student = students.find(function(s) { return s.id === studentId; });
-            if (!student || !confirm('¿Eliminar a ' + student.name + ' y todas sus sesiones?')) return;
-            students = students.filter(function(s) { return s.id !== studentId; });
-            if (currentStudent && currentStudent.id === studentId) { currentStudent = null; currentDay = null; }
-            saveToSheets();
-            renderStudents();
-        }
-
-        function addStudent(e) {
-            e.preventDefault();
-            const student = {
-                id: Date.now(),
-                name: document.getElementById('studentName').value,
-                age: parseInt(document.getElementById('studentAge').value),
-                weight: parseFloat(document.getElementById('studentWeight').value),
-                goal: document.getElementById('studentGoal').value,
-                monthlyClasses: parseInt(document.getElementById('studentClasses').value),
-                trainingDays: [],
-                sessions: [],
-                attendance: {},
-                createdAt: new Date().toISOString()
-            };
-            students.push(student);
-            saveToSheets();
-            renderStudents();
-            closeModal('addStudent');
-            e.target.reset();
-        }
-
-        function renderStudents() {
-            const container = document.getElementById('studentsContainer');
-            if (students.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 40px;">No hay atletas. Agregá uno nuevo o importá desde CSV.</p>';
-                return;
-            }
-            container.innerHTML = students.map(function(student) {
-                const daysCount = student.trainingDays ? student.trainingDays.length : 0;
-                const sessionsCount = student.sessions ? student.sessions.length : 0;
-                return '<div class="student-card" onclick="selectStudent(' + student.id + ')" style="position: relative;">' +
-                    '<button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); deleteStudent(' + student.id + ')" style="position: absolute; top: 12px; right: 12px; padding: 6px 10px; background: var(--danger); color: white;">🗑️</button>' +
-                    '<div class="student-name">' + student.name + '</div>' +
-                    '<div class="student-info">📅 ' + student.age + ' años • ⚖️ ' + student.weight + 'kg</div>' +
-                    '<div class="student-info">🎯 ' + student.monthlyClasses + ' clases/mes</div>' +
-                    '<div class="student-info">🏋️ ' + daysCount + ' día' + (daysCount !== 1 ? 's' : '') + ' de entrenamiento</div>' +
-                    '<div class="student-info">📊 ' + sessionsCount + ' sesiones guardadas</div>' +
-                    '<div class="student-goal">' + student.goal + '</div>' +
-                    '</div>';
-            }).join('');
-        }
-
-        function selectStudent(studentId) {
-            currentStudent = students.find(function(s) { return s.id === studentId; });
-            currentDay = null;
-            document.getElementById('currentStudentName').textContent = currentStudent.name;
-            document.getElementById('bodyWeight').value = currentStudent.weight;
-            switchView('plan', document.querySelectorAll('.nav-tab')[2]);
-            renderTrainingDays();
-        }
-
-        // ================================================
-        // SYNC STUDENT DATA (centralizada)
-        // ================================================
-        function syncStudentData() {
-            if (!currentStudent || !currentDay) return;
-            const dIdx = currentStudent.trainingDays.findIndex(function(d) { return d.id === currentDay.id; });
-            if (dIdx !== -1) currentStudent.trainingDays[dIdx] = currentDay;
-            const sIdx = students.findIndex(function(s) { return s.id === currentStudent.id; });
-            if (sIdx !== -1) students[sIdx] = currentStudent;
-        }
-
-        // ================================================
-        // TRAINING DAYS
-        // ================================================
-        function addTrainingDay(e) {
-            e.preventDefault();
-            if (!currentStudent) { alert('Seleccioná un atleta'); return; }
-            const day = { id: Date.now(), name: document.getElementById('dayName').value, blocks: [] };
-            if (!currentStudent.trainingDays) currentStudent.trainingDays = [];
-            currentStudent.trainingDays.push(day);
-            syncStudentData();
-            saveToSheets();
-            renderTrainingDays();
-            closeModal('addTrainingDay');
-            e.target.reset();
-        }
-
-        function renderTrainingDays() {
-            const container = document.getElementById('trainingDaysList');
-            if (!currentStudent || !currentStudent.trainingDays || currentStudent.trainingDays.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 20px; grid-column: 1/-1;">No hay días de entrenamiento.</p>';
-                document.getElementById('planDaysCard').style.display = 'block';
-                document.getElementById('currentDayView').style.display = 'none';
-                return;
-            }
-            container.innerHTML = currentStudent.trainingDays.map(function(day) {
-                const blocksCount = day.blocks ? day.blocks.length : 0;
-                const exercisesCount = day.blocks ? day.blocks.reduce(function(sum, b) { return sum + (b.exercises ? b.exercises.length : 0); }, 0) : 0;
-                return '<div class="training-day-card" onclick="selectTrainingDay(' + day.id + ')" style="position: relative;">' +
-                    '<div style="position: absolute; top: 12px; right: 12px; display: flex; gap: 8px;">' +
-                    '<button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); editTrainingDay(' + day.id + ')" style="padding: 6px 10px;">✏️</button>' +
-                    '<button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); duplicateTrainingDay(' + day.id + ')" style="padding: 6px 10px; background: var(--success); color: white;">📋</button>' +
-                    '<button class="delete-day-btn" onclick="event.stopPropagation(); deleteTrainingDay(' + day.id + ')">🗑️</button></div>' +
-                    '<h3>' + day.name + '</h3>' +
-                    '<p>' + blocksCount + ' bloque' + (blocksCount !== 1 ? 's' : '') + ' • ' + exercisesCount + ' ejercicios</p>' +
-                    '<span class="training-day-badge">Click para entrenar</span></div>';
-            }).join('');
-            document.getElementById('planDaysCard').style.display = 'block';
-            document.getElementById('currentDayView').style.display = 'none';
-        }
-
-        function selectTrainingDay(dayId) {
-            currentDay = currentStudent.trainingDays.find(function(d) { return d.id === dayId; });
-            if (!currentDay) return;
-            document.getElementById('currentDayTitle').textContent = currentDay.name;
-            document.getElementById('planDaysCard').style.display = 'none';
-            document.getElementById('currentDayView').style.display = 'block';
-            loadTrainingDay();
-        }
-
-        function closeDayView() { currentDay = null; renderTrainingDays(); }
-
-        function deleteTrainingDay(dayId) {
-            if (!confirm('¿Eliminar este día?')) return;
-            currentStudent.trainingDays = currentStudent.trainingDays.filter(function(d) { return d.id !== dayId; });
-            syncStudentData();
-            saveToSheets();
-            renderTrainingDays();
-        }
-
-        function editTrainingDay(dayId) {
-            const day = currentStudent.trainingDays.find(function(d) { return d.id === dayId; });
-            if (!day) return;
-            const newName = prompt('Nuevo nombre:', day.name);
-            if (!newName || newName === day.name) return;
-            day.name = newName;
-            syncStudentData();
-            saveToSheets();
-            renderTrainingDays();
-        }
-
-        function duplicateTrainingDay(dayId) {
-            const original = currentStudent.trainingDays.find(function(d) { return d.id === dayId; });
-            if (!original) return;
-            const newName = prompt('Nombre del nuevo día:', original.name + ' (copia)');
-            if (!newName) return;
-            currentStudent.trainingDays.push({ id: Date.now(), name: newName, blocks: JSON.parse(JSON.stringify(original.blocks)) });
-            syncStudentData();
-            saveToSheets();
-            renderTrainingDays();
-        }
-
-        // ================================================
-        // BLOCKS & EXERCISES
-        // ================================================
-        function loadTrainingDay() {
-            if (!currentDay) return;
-            const container = document.getElementById('blocksContainer');
-            if (!currentDay.blocks || currentDay.blocks.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 40px;">No hay bloques.</p>';
-                return;
-            }
-            const iconMap = { 'movilidad': '📱', 'core': '🟡', 'fuerza-inferior': '🔵', 'fuerza-superior': '🟣' };
-            container.innerHTML = currentDay.blocks.map(function(block, blockIndex) {
-                const exercises = block.exercises.map(function(ex, exIndex) {
-                    return '<div class="exercise">' +
-                        '<div class="exercise-header">' +
-                        '<div class="exercise-name">' + (ex.isPrincipal ? '⭐ ' : '') + ex.name + '</div>' +
-                        '<div style="display:flex;gap:4px;">' +
-                        '<button class="btn btn-secondary btn-sm" onclick="editExercise(' + blockIndex + ',' + exIndex + ')" style="padding:4px 8px;">✏️</button>' +
-                        '<button class="btn btn-secondary btn-sm" onclick="deleteExercise(' + blockIndex + ',' + exIndex + ')" style="padding:4px 8px;">🗑️</button></div></div>' +
-                        '<div class="exercise-inputs">' +
-                        '<div class="exercise-input-group"><label class="exercise-input-label">Series</label><input type="number" class="exercise-input" value="' + (ex.series || '') + '" onchange="updateExercise(' + blockIndex + ',' + exIndex + ',\'series\',this.value)" min="1" /></div>' +
-                        '<div class="exercise-input-group"><label class="exercise-input-label">Reps</label><input type="text" class="exercise-input" value="' + (ex.reps || '') + '" onchange="updateExercise(' + blockIndex + ',' + exIndex + ',\'reps\',this.value)" /></div>' +
-                        '<div class="exercise-input-group"><label class="exercise-input-label">Peso (kg)</label><input type="number" class="exercise-input" value="' + (ex.weight || '') + '" onchange="updateExercise(' + blockIndex + ',' + exIndex + ',\'weight\',this.value)" step="0.5" /></div>' +
-                        '<div class="exercise-input-group"><label class="exercise-input-label">RPE</label><input type="number" class="exercise-input" value="' + (ex.rpe || '') + '" onchange="updateExercise(' + blockIndex + ',' + exIndex + ',\'rpe\',this.value)" min="1" max="10" step="0.5" /></div></div>' +
-                        (ex.isPrincipal ? '<div style="margin-top:12px;"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:700;color:var(--primary-blue);"><input type="checkbox" ' + (ex.isPR ? 'checked' : '') + ' onchange="updateExercise(' + blockIndex + ',' + exIndex + ',\'isPR\',this.checked)" /> 🏆 Récord Personal</label></div>' : '') +
-                        '</div>';
-                }).join('');
-
-                return '<div class="block block-type-' + block.type + '">' +
-                    '<div class="block-header">' +
-                    '<div class="block-title"><div class="block-icon">' + (iconMap[block.type] || '📋') + '</div>' + block.name + '</div>' +
-                    '<div style="display:flex;gap:8px;">' +
-                    '<button class="btn btn-secondary btn-sm" onclick="currentBlockForExercise=' + blockIndex + '; editingExercise=null; document.getElementById(\'exerciseModalTitle\').textContent=\'➕ Nuevo Ejercicio\'; openModal(\'addExercise\')">➕ Ejercicio</button>' +
-                    '<button class="btn btn-secondary btn-sm" onclick="editBlock(' + blockIndex + ')">✏️</button>' +
-                    '<button class="btn btn-secondary btn-sm" onclick="deleteBlock(' + blockIndex + ')">🗑️</button></div></div>' +
-                    exercises + '</div>';
-            }).join('');
-        }
-
-        function addBlock(e) {
-            e.preventDefault();
-            if (!currentDay) { alert('Seleccioná un día'); return; }
-            if (!currentDay.blocks) currentDay.blocks = [];
-            currentDay.blocks.push({ name: document.getElementById('blockName').value, type: document.getElementById('blockType').value, exercises: [] });
-            syncStudentData();
-            saveToSheets();
-            loadTrainingDay();
-            closeModal('addBlock');
-            e.target.reset();
-        }
-
-        function deleteBlock(blockIndex) {
-            if (!confirm('¿Eliminar bloque?')) return;
-            currentDay.blocks.splice(blockIndex, 1);
-            syncStudentData();
-            saveToSheets();
-            loadTrainingDay();
-        }
-
-        function editBlock(blockIndex) {
-            const newName = prompt('Nuevo nombre:', currentDay.blocks[blockIndex].name);
-            if (!newName) return;
-            currentDay.blocks[blockIndex].name = newName;
-            syncStudentData();
-            saveToSheets();
-            loadTrainingDay();
-        }
-
-        function addExercise(e) {
-            e.preventDefault();
-            if (currentBlockForExercise === null) { alert('Error: no hay bloque'); return; }
-
-            const exercise = {
-                name: document.getElementById('exerciseName').value,
-                series: parseInt(document.getElementById('exerciseSeries').value),
-                reps: document.getElementById('exerciseReps').value,
-                isPrincipal: document.getElementById('exerciseIsPrincipal').checked,
-                weight: null, rpe: null, isPR: false
-            };
-
-            if (!exerciseDatabase.includes(exercise.name)) {
-                exerciseDatabase.push(exercise.name);
-                localStorage.setItem('gymTracker_exercises', JSON.stringify(exerciseDatabase));
-                updateExercisesList();
-            }
-
-            if (editingExercise !== null) {
-                // Modo edición
-                currentDay.blocks[editingExercise.blockIndex].exercises[editingExercise.exIndex] = exercise;
-                editingExercise = null;
-            } else {
-                currentDay.blocks[currentBlockForExercise].exercises.push(exercise);
-            }
-
-            syncStudentData();
-            saveToSheets();
-            loadTrainingDay();
-            closeModal('addExercise');
-            e.target.reset();
-            document.getElementById('exerciseIsPrincipal').checked = false;
-            currentBlockForExercise = null;
-        }
-
-        function editExercise(blockIndex, exIndex) {
-            const ex = currentDay.blocks[blockIndex].exercises[exIndex];
-            editingExercise = { blockIndex: blockIndex, exIndex: exIndex };
-            currentBlockForExercise = blockIndex;
-            document.getElementById('exerciseName').value = ex.name;
-            document.getElementById('exerciseSeries').value = ex.series;
-            document.getElementById('exerciseReps').value = ex.reps;
-            document.getElementById('exerciseIsPrincipal').checked = ex.isPrincipal;
-            document.getElementById('exerciseModalTitle').textContent = '✏️ Editar Ejercicio';
-            openModal('addExercise');
-        }
-
-        function updateExercise(blockIndex, exIndex, field, value) {
-            if (field === 'isPR') {
-                currentDay.blocks[blockIndex].exercises[exIndex][field] = value;
-            } else {
-                const num = parseFloat(value);
-                currentDay.blocks[blockIndex].exercises[exIndex][field] = isNaN(num) ? value : num;
-            }
-            syncStudentData();
-        }
-
-        function deleteExercise(blockIndex, exIndex) {
-            if (!confirm('¿Eliminar ejercicio?')) return;
-            currentDay.blocks[blockIndex].exercises.splice(exIndex, 1);
-            syncStudentData();
-            saveToSheets();
-            loadTrainingDay();
-        }
-
-        function updateExercisesList() {
-            document.getElementById('exercisesList').innerHTML = exerciseDatabase.map(function(ex) { return '<option value="' + ex + '">'; }).join('');
-        }
-
-        // ================================================
-        // SAVE SESSION
-        // ================================================
-        function saveSession() {
-            if (!currentStudent || !currentDay) { alert('Seleccioná atleta y día'); return; }
-            const date = document.getElementById('sessionDate').value;
-            if (!date) { alert('Ingresá la fecha'); return; }
-            const bodyWeight = parseFloat(document.getElementById('bodyWeight').value);
-
-            let totalVolume = 0, totalRPE = 0, rpeCount = 0, prsCount = 0;
-            const sessionBlocks = JSON.parse(JSON.stringify(currentDay.blocks));
-            sessionBlocks.forEach(function(block) {
-                block.exercises.forEach(function(ex) {
-                    if (ex.weight && ex.series && ex.reps) {
-                        totalVolume += ex.weight * ex.series * (parseFloat(ex.reps) || 0);
-                    }
-                    if (ex.rpe) { totalRPE += parseFloat(ex.rpe); rpeCount++; }
-                    if (ex.isPR) prsCount++;
-                });
-            });
-
-            const session = {
-                date: date, dayId: currentDay.id, dayName: currentDay.name, bodyWeight: bodyWeight,
-                blocks: sessionBlocks, volume: Math.round(totalVolume),
-                avgRPE: rpeCount > 0 ? parseFloat((totalRPE / rpeCount).toFixed(1)) : 0,
-                prs: prsCount, timestamp: new Date().toISOString()
-            };
-
-            if (!currentStudent.sessions) currentStudent.sessions = [];
-            currentStudent.sessions.push(session);
-            syncStudentData();
-            saveToSheets();
-            
-            alert('✅ Sesión guardada!\n📊 Volumen: ' + session.volume + 'kg\n⭐ RPE: ' + session.avgRPE + '\n🏆 PRs: ' + prsCount);
-            
-            // Reset PRs
-            currentDay.blocks.forEach(function(block) { block.exercises.forEach(function(ex) { ex.isPR = false; }); });
-            syncStudentData();
-            loadTrainingDay();
-            renderStudents();
-        }
-
-        // ================================================
-        // IMPORT / EXPORT
-        // ================================================
-        let importedCompleteData = [];
-
-        function handleCompleteImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) { parseCompleteData(e.target.result); };
-            reader.readAsText(file);
-        }
-
-        function parseCSVLine(line) {
-            const result = []; let current = ''; let inQuotes = false;
-            for (let i = 0; i < line.length; i++) {
-                if (line[i] === '"') { inQuotes = !inQuotes; }
-                else if (line[i] === ',' && !inQuotes) { result.push(current.trim()); current = ''; }
-                else { current += line[i]; }
-            }
-            result.push(current.trim());
-            return result;
-        }
-
-        function parseCompleteData(text) {
-            importedCompleteData = [];
-            const lines = text.split('\n').filter(function(l) { return l.trim(); });
-            const startIndex = lines[0].toLowerCase().includes('alumno') ? 1 : 0;
-            const studentsMap = {};
-            
-            for (let i = startIndex; i < lines.length; i++) {
-                const parts = parseCSVLine(lines[i].trim());
-                if (parts.length < 12) continue;
-                const name = parts[0];
-                if (!studentsMap[name]) {
-                    studentsMap[name] = { name: name, age: parseInt(parts[1]) || 25, weight: parseFloat(parts[2]) || 70, goal: parts[3], monthlyClasses: parseInt(parts[4]) || 12, days: {} };
-                }
-                const student = studentsMap[name];
-                const dayName = parts[5];
-                if (!student.days[dayName]) student.days[dayName] = { name: dayName, blocks: {} };
-                const blockName = parts[6];
-                if (!student.days[dayName].blocks[blockName]) student.days[dayName].blocks[blockName] = { name: blockName, type: parts[7], exercises: [] };
-                student.days[dayName].blocks[blockName].exercises.push({
-                    name: parts[8], series: parseInt(parts[9]) || 3, reps: parts[10],
-                    isPrincipal: parts[11].toUpperCase() === 'SI', weight: null, rpe: null, isPR: false
-                });
-            }
-            
-            importedCompleteData = Object.values(studentsMap).map(function(s) {
+        
+        // FUNCIONES AUXILIARES PARA MÉTRICAS
+        function calcMetrics(student) {
+            if (!student || !student.sessions || student.sessions.length === 0) {
                 return {
-                    name: s.name, age: s.age, weight: s.weight, goal: s.goal, monthlyClasses: s.monthlyClasses,
-                    trainingDays: Object.values(s.days).map(function(day, idx) {
-                        return { id: Date.now() + idx, name: day.name, blocks: Object.values(day.blocks) };
-                    })
+                    totalSets: 0, effectiveSets: 0, effectivePercent: 0,
+                    monthlyTonnage: '0.0', daysSincePR: -1, prFrequency: '0.0',
+                    totalVolume: 0, totalPRs: 0, streak: 0
                 };
+            }
+            
+            var totalSets = 0, effectiveSets = 0;
+            student.sessions.forEach(function(sess) {
+                if (sess.blocks) {
+                    sess.blocks.forEach(function(b) {
+                        if (b.exercises) {
+                            b.exercises.forEach(function(e) {
+                                totalSets += (e.series || 0);
+                                if ((e.rpe || 0) >= 7) effectiveSets += (e.series || 0);
+                            });
+                        }
+                    });
+                }
             });
             
-            if (importedCompleteData.length > 0) { showCompleteImportPreview(); document.getElementById('btnImportComplete').disabled = false; }
-            else alert('❌ No se pudieron leer datos.');
-        }
-
-        function showCompleteImportPreview() {
-            document.getElementById('completeImportPreview').style.display = 'block';
-            let td = 0, tb = 0, te = 0;
-            importedCompleteData.forEach(function(s) { td += s.trainingDays.length; s.trainingDays.forEach(function(d) { tb += d.blocks.length; d.blocks.forEach(function(b) { te += b.exercises.length; }); }); });
-            document.getElementById('completeImportCount').textContent = importedCompleteData.length + ' alumno(s), ' + td + ' días, ' + tb + ' bloques, ' + te + ' ejercicios';
-            document.getElementById('completeImportPreviewBody').innerHTML = importedCompleteData.map(function(s) {
-                return '<div style="margin-bottom:12px;padding:12px;background:white;border-radius:8px;border-left:4px solid var(--primary-blue);"><strong>' + s.name + '</strong> — ' + s.trainingDays.length + ' día(s)</div>';
-            }).join('');
-        }
-
-        function processCompleteImport() {
-            let imported = 0;
-            importedCompleteData.forEach(function(data) {
-                const student = { id: Date.now() + imported, name: data.name, age: data.age, weight: data.weight, goal: data.goal, monthlyClasses: data.monthlyClasses, trainingDays: data.trainingDays, sessions: [], attendance: {}, createdAt: new Date().toISOString() };
-                student.trainingDays.forEach(function(day) { day.blocks.forEach(function(block) { block.exercises.forEach(function(ex) { if (!exerciseDatabase.includes(ex.name)) exerciseDatabase.push(ex.name); }); }); });
-                students.push(student);
-                imported++;
+            var now = new Date();
+            var monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+            var monthVol = student.sessions.filter(function(sess) {
+                return new Date(sess.date) >= monthStart;
+            }).reduce(function(sum, sess) {
+                return sum + (sess.volume || 0);
+            }, 0);
+            
+            var lastPR = null;
+            student.sessions.forEach(function(sess) {
+                if ((sess.prs || 0) > 0) {
+                    if (!lastPR || new Date(sess.date) > new Date(lastPR)) {
+                        lastPR = sess.date;
+                    }
+                }
             });
-            localStorage.setItem('gymTracker_exercises', JSON.stringify(exerciseDatabase));
-            updateExercisesList();
-            saveToSheets();
-            renderStudents();
-            closeModal('importComplete');
-            importedCompleteData = [];
-            document.getElementById('importCompleteFile').value = '';
-            document.getElementById('completeImportPreview').style.display = 'none';
-            document.getElementById('btnImportComplete').disabled = true;
-            alert('✅ ' + imported + ' alumno(s) importado(s)!');
+            var daysSincePR = lastPR ? Math.floor((now - new Date(lastPR)) / 86400000) : -1;
+            
+            var totalPRs = student.sessions.reduce(function(sum, sess) {
+                return sum + (sess.prs || 0);
+            }, 0);
+            var firstDate = student.sessions.length > 0 ? new Date(student.sessions[0].date) : now;
+            var months = Math.max(0.5, (now - firstDate) / 2592000000);
+            var totalVol = student.sessions.reduce(function(sum, sess) {
+                return sum + (sess.volume || 0);
+            }, 0);
+            
+            return {
+                totalSets: totalSets,
+                effectiveSets: effectiveSets,
+                effectivePercent: totalSets > 0 ? Math.round((effectiveSets / totalSets) * 100) : 0,
+                monthlyTonnage: (monthVol / 1000).toFixed(1),
+                daysSincePR: daysSincePR,
+                prFrequency: (totalPRs / months).toFixed(1),
+                totalVolume: totalVol,
+                totalPRs: totalPRs,
+                streak: calculateStreak(student.sessions || [])
+            };
+        }
+        
+        function getBadgeInfo(id) {
+            var badges = {
+                'streak_7': { name: '7 días', icon: '🔥' },
+                'vol_100k': { name: '100 ton', icon: '💪' },
+                'pr_10': { name: '10 PRs', icon: '🏆' },
+                'lvl_10': { name: 'Nivel 10', icon: '⭐' },
+                'lvl_50': { name: 'Nivel 50', icon: '⭐⭐⭐' },
+                'lvl_100': { name: 'MAX', icon: '👑' }
+            };
+            return badges[id] || { name: id, icon: '🎖️' };
         }
 
-        let importedPlanData = [];
-
-        function handlePlanImport(event) {
-            if (!currentStudent) { alert('Seleccioná un atleta'); return; }
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) { parsePlanData(e.target.result); };
-            reader.readAsText(file);
-        }
-
-        function parsePlanData(text) {
-            importedPlanData = [];
-            const lines = text.split('\n').filter(function(l) { return l.trim(); });
-            const startIndex = lines[0].toLowerCase().includes('dia') ? 1 : 0;
-            const daysMap = {};
-            for (let i = startIndex; i < lines.length; i++) {
-                const parts = parseCSVLine(lines[i].trim());
-                if (parts.length < 7) continue;
-                if (!daysMap[parts[0]]) daysMap[parts[0]] = { name: parts[0], blocks: {} };
-                if (!daysMap[parts[0]].blocks[parts[1]]) daysMap[parts[0]].blocks[parts[1]] = { name: parts[1], type: parts[2], exercises: [] };
-                daysMap[parts[0]].blocks[parts[1]].exercises.push({ name: parts[3], series: parseInt(parts[4]) || 3, reps: parts[5], isPrincipal: parts[6].toUpperCase() === 'SI', weight: null, rpe: null, isPR: false });
-            }
-            importedPlanData = Object.values(daysMap).map(function(day, idx) { return { id: Date.now() + idx, name: day.name, blocks: Object.values(day.blocks) }; });
-            if (importedPlanData.length > 0) { showPlanImportPreview(); document.getElementById('btnImportPlan').disabled = false; }
-            else alert('❌ No se pudieron leer datos.');
-        }
-
-        function showPlanImportPreview() {
-            document.getElementById('planImportPreview').style.display = 'block';
-            let tb = 0, te = 0;
-            importedPlanData.forEach(function(d) { tb += d.blocks.length; d.blocks.forEach(function(b) { te += b.exercises.length; }); });
-            document.getElementById('planImportCount').textContent = importedPlanData.length + ' día(s), ' + tb + ' bloques, ' + te + ' ejercicios';
-            document.getElementById('planImportPreviewBody').innerHTML = importedPlanData.map(function(d) { return '<div style="margin-bottom:8px;padding:10px;background:var(--bg-gray);border-radius:8px;"><strong>' + d.name + '</strong> — ' + d.blocks.length + ' bloque(s)</div>'; }).join('');
-        }
-
-        function processPlanImport() {
-            if (!currentStudent || importedPlanData.length === 0) return;
-            if (!confirm('¿Importar estos días?')) return;
-            if (!currentStudent.trainingDays) currentStudent.trainingDays = [];
-            importedPlanData.forEach(function(day) {
-                currentStudent.trainingDays.push(day);
-                day.blocks.forEach(function(block) { block.exercises.forEach(function(ex) { if (!exerciseDatabase.includes(ex.name)) exerciseDatabase.push(ex.name); }); });
-            });
-            syncStudentData();
-            localStorage.setItem('gymTracker_exercises', JSON.stringify(exerciseDatabase));
-            updateExercisesList();
-            saveToSheets();
-            renderTrainingDays();
-            closeModal('importPlan');
-            importedPlanData = [];
-            document.getElementById('importPlanFile').value = '';
-            document.getElementById('planImportPreview').style.display = 'none';
-            document.getElementById('btnImportPlan').disabled = true;
-            alert('✅ ' + currentStudent.trainingDays.length + ' día(s) importado(s)!');
-        }
-
-        function exportAllDays() {
-            if (!currentStudent || !currentStudent.trainingDays || currentStudent.trainingDays.length === 0) { alert('No hay días para exportar'); return; }
-            let csv = "Dia,Bloque,TipoBloque,Ejercicio,Series,Reps,Principal\n";
-            currentStudent.trainingDays.forEach(function(day) { day.blocks.forEach(function(block) { block.exercises.forEach(function(ex) { csv += [day.name, block.name, block.type, ex.name, ex.series || '', ex.reps || '', ex.isPrincipal ? 'SI' : 'NO'].join(',') + '\n'; }); }); });
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.setAttribute('href', URL.createObjectURL(blob));
-            link.setAttribute('download', 'plan_' + currentStudent.name.replace(/\s+/g, '_') + '.csv');
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        // ================================================
-        // MÉTRICAS HELPERS
-        // ================================================
-        function calculateStreak(sessions) {
-            if (!sessions || sessions.length === 0) return 0;
-            const sorted = sessions.slice().sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
-            let streak = 0, last = new Date();
-            for (let i = 0; i < sorted.length; i++) {
-                const d = new Date(sorted[i].date);
-                if (Math.floor((last - d) / 86400000) <= 3) { streak++; last = d; } else break;
-            }
-            return streak;
-        }
-
-        function getMostTrainedDay(dayStats) {
-            let maxDay = '-', maxCount = 0;
-            for (let day in dayStats) { if (dayStats[day] > maxCount) { maxCount = dayStats[day]; maxDay = day; } }
-            return maxDay;
-        }
-
-        function generateWeeklySummary(sessions) {
-            if (!sessions || sessions.length === 0) return '<p style="opacity:0.8;">No hay sesiones registradas.</p>';
-            const today = new Date();
-            const weekAgo = new Date(today.getTime() - 7 * 86400000);
-            const weekSessions = sessions.filter(function(s) { return new Date(s.date) >= weekAgo; });
-            if (weekSessions.length === 0) return '<p style="opacity:0.8;">No hay sesiones en los últimos 7 días.</p>';
-
-            const weekVolume = weekSessions.reduce(function(sum, s) { return sum + (s.volume || 0); }, 0);
-            const weekPRs = weekSessions.reduce(function(sum, s) { return sum + (s.prs || 0); }, 0);
-            const avgRPE = (weekSessions.reduce(function(sum, s) { return sum + (s.avgRPE || 0); }, 0) / weekSessions.length).toFixed(1);
-
-            const twoWeeksAgo = new Date(today.getTime() - 14 * 86400000);
-            const prevVol = sessions.filter(function(s) { const d = new Date(s.date); return d >= twoWeeksAgo && d < weekAgo; }).reduce(function(sum, s) { return sum + (s.volume || 0); }, 0);
-
-            let summary = '<div style="line-height:2;">';
-            summary += '<div>✓ <strong>' + weekSessions.length + ' sesiones</strong> esta semana';
-            if (weekSessions.length >= 3) summary += ' — <strong style="color:#10B981;">Excelente consistencia</strong>';
-            summary += '</div>';
-            if (prevVol > 0) { const chg = ((weekVolume - prevVol) / prevVol * 100).toFixed(0); summary += '<div>' + (weekVolume >= prevVol ? '📈 +' : '📉 ') + chg + '% volumen vs semana anterior</div>'; }
-            else summary += '<div>📦 <strong>' + (weekVolume / 1000).toFixed(1) + ' ton</strong> esta semana</div>';
-            if (weekPRs > 0) summary += '<div>🏆 <strong>' + weekPRs + ' PR(s)</strong></div>';
-            if (avgRPE >= 8.5) summary += '<div>🔥 Intensidad alta (RPE ' + avgRPE + ')</div>';
-            else if (avgRPE >= 7) summary += '<div>✓ Intensidad óptima (RPE ' + avgRPE + ')</div>';
-            else if (avgRPE > 0) summary += '<div>💡 Intensidad moderada (RPE ' + avgRPE + ')</div>';
-            summary += '</div>';
-            return summary;
-        }
-
-        // ================================================
         // DASHBOARD
-        // ================================================
         function renderDashboard() {
-            if (!currentStudent) { document.getElementById('dashboardContent').innerHTML = '<p style="text-align:center;color:var(--text-gray);padding:40px;">Seleccioná un atleta</p>'; return; }
+            if (!currentStudent) {
+                document.getElementById('dashboardContent').innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 40px;">Seleccioná un atleta para ver sus métricas</p>';
+                return;
+            }
+
             document.getElementById('dashboardStudentName').textContent = currentStudent.name;
 
             const monthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
             const monthEnd = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
-            const monthSessions = currentStudent.sessions ? currentStudent.sessions.filter(function(s) { const d = new Date(s.date); return d >= monthStart && d <= monthEnd; }) : [];
-            const attended = monthSessions.length;
-            const pct = currentStudent.monthlyClasses > 0 ? Math.round((attended / currentStudent.monthlyClasses) * 100) : 0;
+            
+            const monthSessions = currentStudent.sessions ? currentStudent.sessions.filter(s => {
+                const sessionDate = new Date(s.date);
+                return sessionDate >= monthStart && sessionDate <= monthEnd;
+            }) : [];
+
+            const attendedClasses = monthSessions.length;
+            const attendancePercentage = currentStudent.monthlyClasses > 0 ? 
+                Math.round((attendedClasses / currentStudent.monthlyClasses) * 100) : 0;
 
             if (monthSessions.length === 0) {
-                document.getElementById('dashboardContent').innerHTML =
-                    '<div class="attendance-section"><div class="attendance-header"><div class="attendance-title">📅 Progreso de Asistencia</div><div>' + attended + ' / ' + currentStudent.monthlyClasses + ' clases</div></div>' +
-                    '<div style="background:var(--bg-gray);border-radius:12px;padding:24px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-size:13px;font-weight:700;color:var(--text-gray);text-transform:uppercase;">Sesiones Completadas</span><span style="font-family:Archivo Black;font-size:24px;color:var(--primary-blue);">' + pct + '%</span></div>' +
-                    '<div class="goal-progress-bar"><div class="goal-progress-fill" style="width:' + Math.min(pct, 100) + '%"></div></div></div></div>' +
-                    '<div class="card" style="margin-top:24px;"><p style="text-align:center;color:var(--text-gray);padding:40px;">No hay sesiones este mes</p></div>';
+                document.getElementById('dashboardContent').innerHTML = `
+                    <div class="attendance-section">
+                        <div class="attendance-header">
+                            <div class="attendance-title">📅 Progreso de Asistencia</div>
+                            <div class="classes-info">${attendedClasses} / ${currentStudent.monthlyClasses} clases</div>
+                        </div>
+                        <div style="background: var(--bg-gray); border-radius: 12px; padding: 24px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <span style="font-size: 13px; font-weight: 700; color: var(--text-gray); text-transform: uppercase;">Sesiones Completadas</span>
+                                <span style="font-family: 'Archivo Black'; font-size: 24px; color: var(--primary-blue);">${attendancePercentage}%</span>
+                            </div>
+                            <div class="goal-progress-bar">
+                                <div class="goal-progress-fill" style="width: ${Math.min(attendancePercentage, 100)}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-top: 24px;">
+                        <p style="text-align: center; color: var(--text-gray); padding: 40px;">No hay sesiones este mes</p>
+                    </div>
+                `;
                 return;
             }
 
-            const vol = monthSessions.reduce(function(s, x) { return s + (x.volume || 0); }, 0);
-            const prs = monthSessions.reduce(function(s, x) { return s + (x.prs || 0); }, 0);
-            const rpe = (monthSessions.reduce(function(s, x) { return s + (x.avgRPE || 0); }, 0) / monthSessions.length).toFixed(1);
+            // Calculate metrics
+            const currentMonthVolume = monthSessions.reduce((sum, s) => sum + (s.volume || 0), 0);
+            const totalPRs = monthSessions.reduce((sum, s) => sum + (s.prs || 0), 0);
+            const avgRPE = monthSessions.length > 0 ? 
+                (monthSessions.reduce((sum, s) => sum + (s.avgRPE || 0), 0) / monthSessions.length).toFixed(1) : 0;
 
-            const prevStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
-            const prevEnd = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 0);
-            const prevVol = (currentStudent.sessions || []).filter(function(s) { const d = new Date(s.date); return d >= prevStart && d <= prevEnd; }).reduce(function(s, x) { return s + (x.volume || 0); }, 0);
+            // Previous month
+            const prevMonthDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
+            const prevMonthEnd = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 0);
+            const prevMonthSessions = currentStudent.sessions ? currentStudent.sessions.filter(s => {
+                const sessionDate = new Date(s.date);
+                return sessionDate >= prevMonthDate && sessionDate <= prevMonthEnd;
+            }) : [];
+            const prevMonthVolume = prevMonthSessions.reduce((sum, s) => sum + (s.volume || 0), 0);
 
+            // Count sessions by day
             const dayStats = {};
-            monthSessions.forEach(function(s) { if (s.dayName) dayStats[s.dayName] = (dayStats[s.dayName] || 0) + 1; });
+            monthSessions.forEach(s => {
+                if (s.dayName) {
+                    dayStats[s.dayName] = (dayStats[s.dayName] || 0) + 1;
+                }
+            });
 
-            let html = '<div class="attendance-section"><div class="attendance-header"><div class="attendance-title">📅 Progreso de Asistencia</div><div>' + attended + ' / ' + currentStudent.monthlyClasses + ' clases</div></div>' +
-                '<div style="background:var(--bg-gray);border-radius:12px;padding:24px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><span style="font-size:13px;font-weight:700;color:var(--text-gray);text-transform:uppercase;">Sesiones Completadas</span><span style="font-family:Archivo Black;font-size:24px;color:var(--primary-blue);">' + pct + '%</span></div>' +
-                '<div class="goal-progress-bar"><div class="goal-progress-fill" style="width:' + Math.min(pct, 100) + '%"></div></div>' +
-                '<div style="font-size:12px;color:var(--text-gray);margin-top:12px;">' + Object.entries(dayStats).map(function(e) { return e[0] + ': ' + e[1]; }).join(' • ') + '</div></div></div>';
+            // Calcular métricas primero
+            var metrics = calcMetrics(currentStudent);
+            
+            let html = `
+                <!-- GAMIFICACIÓN -->
+                <div class="card" style="background:linear-gradient(135deg,#1e3a8a,#1e40af);color:white;padding:24px;margin-bottom:24px;">
+                    <h3 style="color:white;margin-bottom:16px;">🎮 Progreso del Atleta</h3>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
+                        <div><div style="font-size:14px;opacity:0.9;">Nivel</div><div style="font-size:48px;font-weight:bold;">${currentStudent.level || 1}</div></div>
+                        <div style="text-align:right;"><div style="font-size:14px;opacity:0.9;">XP Total</div><div style="font-size:28px;font-weight:bold;">${(currentStudent.totalXP || 0).toLocaleString()}</div></div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.2);height:12px;border-radius:6px;overflow:hidden;margin-bottom:8px;">
+                        <div style="background:#86efac;height:100%;width:${((currentStudent.totalXP || 0) % 100)}%;"></div>
+                    </div>
+                    <div style="font-size:14px;opacity:0.9;">${100 - ((currentStudent.totalXP || 0) % 100)} XP hasta nivel ${(currentStudent.level || 1) < 100 ? (currentStudent.level || 1) + 1 : 'MAX'}</div>
+                </div>
+                
+                <!-- BADGES -->
+                <div class="card" style="margin-bottom:24px;">
+                    <h3>🏆 Insignias (${(currentStudent.badges || []).length})</h3>
+                    <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;">
+                        ${(currentStudent.badges || []).length > 0 ? (currentStudent.badges || []).map(function(b) {
+                            var info = getBadgeInfo(b);
+                            return '<div style="background:#f8f9fa;padding:16px;border-radius:12px;text-align:center;min-width:100px;border:2px solid #e0e0e0;"><div style="font-size:40px;margin-bottom:8px;">' + info.icon + '</div><div style="font-size:12px;font-weight:600;color:#1e3a8a;">' + info.name + '</div></div>';
+                        }).join('') : '<p style="color:#999;padding:20px;text-align:center;">Sin insignias aún</p>'}
+                    </div>
+                </div>
+                
+                <!-- INDICADORES -->
+                <div class="card" style="margin-bottom:24px;">
+                <!-- OBJETIVOS SMART -->
+<div class="card" style="margin-bottom:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="margin:0;">🎯 Objetivos SMART</h3>
+        <button onclick="openModal('newGoal')" class="btn btn-primary btn-sm">➕ Nuevo Objetivo</button>
+    </div>
+    
+    ${(() => {
+        const active = (currentStudent.goals || []).filter(function(g) { return g.status === 'in_progress'; });
+        if (active.length === 0) {
+            return '<p style="color:#999;padding:20px;text-align:center;">No hay objetivos activos. ¡Creá uno!</p>';
+        }
+        return active.map(function(g) {
+            const days = Math.ceil((new Date(g.deadline) - new Date()) / 86400000);
+            const progressColor = g.progress >= 75 ? '#22c55e' : g.progress >= 50 ? '#f59e0b' : '#3b82f6';
+            return `
+                <div style="border:2px solid #e0e0e0;padding:20px;border-radius:12px;margin-bottom:16px;">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+                        <div style="flex:1;">
+                            <div style="font-size:18px;font-weight:bold;color:#1e3a8a;">${g.description}</div>
+                            <div style="font-size:13px;color:#666;">
+                                ${g.type === 'volume' ? '📈 Volumen' : g.type === 'strength' ? '💪 Fuerza (' + g.exerciseName + ')' : g.type === 'attendance' ? '📅 Asistencia' : '🏆 PRs'}
+                            </div>
+                        </div>
+                        <button onclick="deleteGoal(${g.id})" style="background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;">🗑️</button>
+                    </div>
+                    <div style="background:#f8f9fa;padding:16px;border-radius:8px;margin-bottom:12px;">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+                            <span style="font-size:28px;font-weight:bold;color:#1e3a8a;">${g.currentValue}</span>
+                            <span style="font-size:16px;color:#666;">/ ${g.targetValue} ${g.unit}</span>
+                        </div>
+                        <div style="background:#e0e0e0;height:12px;border-radius:6px;overflow:hidden;">
+                            <div style="background:${progressColor};height:100%;width:${g.progress}%;"></div>
+                        </div>
+                        <div style="font-size:13px;color:#666;margin-top:8px;text-align:right;">${Math.round(g.progress)}%</div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:13px;color:#666;">
+                        <div>📅 ${days > 0 ? days + ' días' : '❌ Venció'}</div>
+                        ${g.reward ? '<div style="color:#22c55e;font-weight:700;">🎁 ' + g.reward + '</div>' : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    })()}
+</div>
+                    <h3>📊 Indicadores Clave</h3>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px;">
+                        <div style="background:linear-gradient(135deg,#86efac,#22c55e);padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Volumen Total</div>
+                            <div style="font-size:28px;font-weight:bold;">${(metrics.totalVolume / 1000).toFixed(1)} ton</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,#1e3a8a,#1e40af);padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Series Efectivas</div>
+                            <div style="font-size:28px;font-weight:bold;">${metrics.effectiveSets}/${metrics.totalSets}</div>
+                            <div style="font-size:13px;margin-top:4px;">${metrics.effectivePercent}% RPE≥7</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,#78716c,#57534e);padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Tonelaje Mensual</div>
+                            <div style="font-size:28px;font-weight:bold;">${metrics.monthlyTonnage} ton</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,#f59e0b,#d97706);padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Records Totales</div>
+                            <div style="font-size:28px;font-weight:bold;">${metrics.totalPRs} 🏆</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,${metrics.daysSincePR < 0 ? '#999,#777' : metrics.daysSincePR < 30 ? '#22c55e,#16a34a' : '#f59e0b,#d97706'});padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Último PR</div>
+                            <div style="font-size:28px;font-weight:bold;">${metrics.daysSincePR < 0 ? 'Sin PRs' : metrics.daysSincePR + ' días'}</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Frecuencia PRs</div>
+                            <div style="font-size:28px;font-weight:bold;">${metrics.prFrequency}</div>
+                            <div style="font-size:13px;margin-top:4px;">PRs/mes</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,#ec4899,#db2777);padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Racha</div>
+                            <div style="font-size:28px;font-weight:bold;">${metrics.streak} 🔥</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,#06b6d4,#0891b2);padding:20px;border-radius:12px;color:white;">
+                            <div style="font-size:12px;opacity:0.9;margin-bottom:8px;">Puntos XP</div>
+                            <div style="font-size:28px;font-weight:bold;">${currentStudent.totalXP || 0}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="attendance-section">
+                    <div class="attendance-header">
+                        <div class="attendance-title">📅 Progreso de Asistencia</div>
+                        <div class="classes-info">${attendedClasses} / ${currentStudent.monthlyClasses} clases</div>
+                    </div>
+                    <div style="background: var(--bg-gray); border-radius: 12px; padding: 24px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <span style="font-size: 13px; font-weight: 700; color: var(--text-gray); text-transform: uppercase;">Sesiones Completadas</span>
+                            <span style="font-family: 'Archivo Black'; font-size: 24px; color: var(--primary-blue);">${attendancePercentage}%</span>
+                        </div>
+                        <div class="goal-progress-bar">
+                            <div class="goal-progress-fill" style="width: ${Math.min(attendancePercentage, 100)}%"></div>
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-gray); margin-top: 12px;">
+                            ${Object.entries(dayStats).map(([day, count]) => `${day}: ${count} sesión${count > 1 ? 'es' : ''}`).join(' • ')}
+                        </div>
+                    </div>
+                </div>
 
-            html += '<div class="card" style="background:linear-gradient(135deg,#2563EB,#1E40AF);color:white;margin-bottom:24px;"><h3 style="font-family:Archivo Black;font-size:18px;margin-bottom:20px;text-transform:uppercase;">💬 Resumen Semanal</h3><div style="background:rgba(255,255,255,0.1);padding:20px;border-radius:12px;">' + generateWeeklySummary(monthSessions) + '</div></div>';
+                <!-- RESUMEN SEMANAL PARA EL PROFESOR -->
+                <div class="card" style="background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%); color: white; margin-bottom: 24px;">
+                    <h3 style="font-family: 'Archivo Black'; font-size: 18px; margin-bottom: 20px; text-transform: uppercase;">
+                        💬 Resumen Semanal - Para el Alumno
+                    </h3>
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; line-height: 1.8; font-size: 14px;">
+                        ${generateWeeklySummary(monthSessions, currentStudent)}
+                    </div>
+                </div>
 
-            html += '<div class="month-comparison"><div class="month-box"><div class="month-label">Mes Anterior</div><div class="month-value">' + (prevVol / 1000).toFixed(1) + ' ton</div></div><div class="month-box current"><div class="month-label">Mes Actual</div><div class="month-value">' + (vol / 1000).toFixed(1) + ' ton</div></div><div class="month-box"><div class="month-label">Próximo</div><div class="month-value">Objetivo</div></div></div>';
+                <div class="month-comparison">
+                    <div class="month-box">
+                        <div class="month-label">Mes Anterior</div>
+                        <div class="month-value">${(prevMonthVolume / 1000).toFixed(1)} ton</div>
+                    </div>
+                    <div class="month-box current">
+                        <div class="month-label">Mes Actual</div>
+                        <div class="month-value">${(currentMonthVolume / 1000).toFixed(1)} ton</div>
+                    </div>
+                    <div class="month-box">
+                        <div class="month-label">Próximo Mes</div>
+                        <div class="month-value">Objetivo</div>
+                    </div>
+                </div>
 
-            html += '<div class="metrics-grid">' +
-                '<div class="metric-card"><div class="metric-label">Volumen Total</div><div class="metric-value">' + vol.toLocaleString() + '</div><div class="metric-detail">kg este mes</div>' + (prevVol > 0 ? '<div class="metric-change ' + (vol >= prevVol ? 'positive' : 'negative') + '">' + (vol >= prevVol ? '+' : '') + ((vol - prevVol) / prevVol * 100).toFixed(1) + '% vs anterior</div>' : '') + '</div>' +
-                '<div class="metric-card"><div class="metric-label">Records Rotos</div><div class="metric-value">' + prs + '</div><div class="metric-detail">PRs este mes</div></div>' +
-                '<div class="metric-card"><div class="metric-label">RPE Promedio</div><div class="metric-value">' + rpe + '</div><div class="metric-detail">' + (rpe < 7 ? 'Suave' : rpe < 8.5 ? 'Óptimo' : 'Intenso') + '</div></div>' +
-                '<div class="metric-card"><div class="metric-label">Consistencia</div><div class="metric-value">' + pct + '%</div><div class="metric-detail">' + (pct >= 90 ? 'Excelente' : pct >= 75 ? 'Bueno' : 'Mejorable') + '</div></div>' +
-                '<div class="metric-card"><div class="metric-label">💪 Volumen/Sesión</div><div class="metric-value">' + (monthSessions.length > 0 ? Math.round(vol / monthSessions.length) : 0) + '</div><div class="metric-detail">kg promedio</div></div>' +
-                '<div class="metric-card"><div class="metric-label">🔥 Racha</div><div class="metric-value">' + calculateStreak(currentStudent.sessions) + '</div><div class="metric-detail">días seguidos</div></div>' +
-                '<div class="metric-card"><div class="metric-label">📊 Día Favorito</div><div class="metric-value">' + getMostTrainedDay(dayStats) + '</div><div class="metric-detail">más entrenado</div></div>' +
-                '<div class="metric-card"><div class="metric-label">⏱️ Última Sesión</div><div class="metric-value">' + new Date(monthSessions[monthSessions.length - 1].date + 'T12:00:00').toLocaleDateString('es-AR', {day:'2-digit',month:'2-digit'}) + '</div><div class="metric-detail">' + (monthSessions[monthSessions.length - 1].dayName || '-') + '</div></div>' +
-                '</div>';
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Volumen Total</div>
+                        <div class="metric-value">${currentMonthVolume.toLocaleString()}</div>
+                        <div class="metric-detail">kg este mes</div>
+                        ${prevMonthVolume > 0 ? `
+                            <div class="metric-change ${currentMonthVolume >= prevMonthVolume ? 'positive' : 'negative'}">
+                                ${currentMonthVolume >= prevMonthVolume ? '+' : ''}${((currentMonthVolume - prevMonthVolume) / prevMonthVolume * 100).toFixed(1)}% vs mes anterior
+                            </div>
+                        ` : ''}
+                    </div>
 
-            html += '<div class="card"><h3 style="font-family:Archivo Black;font-size:18px;margin-bottom:20px;text-transform:uppercase;">📋 Historial de Sesiones</h3>' +
-                '<table class="progress-table"><thead><tr><th>Fecha</th><th>Día</th><th>Volumen</th><th>RPE</th><th>PRs</th></tr></thead><tbody>' +
-                monthSessions.slice().reverse().map(function(s) {
-                    return '<tr><td>' + new Date(s.date + 'T12:00:00').toLocaleDateString('es-AR', {day:'2-digit',month:'2-digit'}) + '</td><td><strong>' + (s.dayName || 'Plan') + '</strong></td><td>' + s.volume.toLocaleString() + ' kg</td><td>' + s.avgRPE + '</td><td>' + (s.prs > 0 ? '🏆 ' + s.prs : '-') + '</td></tr>';
-                }).join('') + '</tbody></table></div>';
+                    <div class="metric-card">
+                        <div class="metric-label">Records Rotos</div>
+                        <div class="metric-value">${totalPRs}</div>
+                        <div class="metric-detail">PRs este mes</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label">RPE Promedio</div>
+                        <div class="metric-value">${avgRPE}</div>
+                        <div class="metric-detail">${avgRPE < 7 ? 'Suave' : avgRPE < 8.5 ? 'Óptimo' : 'Intenso'}</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label">Consistencia</div>
+                        <div class="metric-value">${attendancePercentage}%</div>
+                        <div class="metric-detail">${attendancePercentage >= 90 ? 'Excelente' : attendancePercentage >= 75 ? 'Bueno' : 'Mejorable'}</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label">💪 Volumen/Sesión</div>
+                        <div class="metric-value">${monthSessions.length > 0 ? Math.round(currentMonthVolume / monthSessions.length) : 0}</div>
+                        <div class="metric-detail">kg promedio</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label">🔥 Racha</div>
+                        <div class="metric-value">${calculateStreak(currentStudent.sessions)}</div>
+                        <div class="metric-detail">días seguidos</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label">📊 Día Favorito</div>
+                        <div class="metric-value">${getMostTrainedDay(dayStats)}</div>
+                        <div class="metric-detail">más entrenado</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label">⏱️ Última Sesión</div>
+                        <div class="metric-value">${monthSessions.length > 0 ? new Date(monthSessions[monthSessions.length - 1].date).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit'}) : '-'}</div>
+                        <div class="metric-detail">${monthSessions.length > 0 ? monthSessions[monthSessions.length - 1].dayName : 'Sin datos'}</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="font-family: 'Archivo Black'; font-size: 18px; margin-bottom: 20px; text-transform: uppercase;">📋 Historial de Sesiones</h3>
+                    <table class="progress-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Día</th>
+                                <th>Volumen</th>
+                                <th>RPE</th>
+                                <th>PRs</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${monthSessions.reverse().map(s => {
+                                const dateObj = new Date(s.date + 'T12:00:00');
+                                const formattedDate = dateObj.toLocaleDateString('es-AR', { 
+                                    day: '2-digit', 
+                                    month: '2-digit'
+                                });
+                                
+                                return `
+                                    <tr>
+                                        <td>${formattedDate}</td>
+                                        <td><strong>${s.dayName || 'Plan'}</strong></td>
+                                        <td>${s.volume.toLocaleString()} kg</td>
+                                        <td>${s.avgRPE}</td>
+                                        <td>${s.prs > 0 ? '🏆 ' + s.prs : '-'}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
 
             document.getElementById('dashboardContent').innerHTML = html;
         }
+
     </script>
+<!-- Modal Nuevo Objetivo SMART -->
+<div id="modal-newGoal" class="modal">
+    <div class="modal-content" style="max-width: 700px;">
+        <h3 class="modal-title">🎯 Nuevo Objetivo SMART</h3>
+        
+        <div class="form-group">
+            <label class="form-label">Tipo de Objetivo</label>
+            <select id="goalType" class="form-input" onchange="document.getElementById('exerciseField').style.display = this.value === 'strength' ? 'block' : 'none';">
+                <option value="volume">📈 Aumentar Volumen Mensual (toneladas)</option>
+                <option value="strength">💪 Aumentar Fuerza en Ejercicio (kg)</option>
+                <option value="attendance">📅 Mejorar Asistencia (clases/mes)</option>
+                <option value="prs">🏆 Romper Records Personales</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Descripción del Objetivo *</label>
+            <input type="text" id="goalDesc" class="form-input" placeholder="Ej: Aumentar de 60 a 70 toneladas mensuales" />
+        </div>
+        
+        <div id="exerciseField" class="form-group" style="display: none;">
+            <label class="form-label">Ejercicio Específico</label>
+            <input type="text" id="goalExercise" class="form-input" placeholder="Ej: Sentadilla" list="exercisesList" />
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+                <label class="form-label">Valor Objetivo *</label>
+                <input type="number" id="goalTarget" class="form-input" placeholder="70" step="0.1" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Fecha Límite *</label>
+                <input type="date" id="goalDeadline" class="form-input" />
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Recompensa (opcional)</label>
+            <input type="text" id="goalReward" class="form-input" placeholder="Ej: Batido gratis, Descuento 10%, Remera" />
+        </div>
+        
+        <div style="background: #f0f9ff; border: 2px solid #86efac; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+            <strong style="color: #1e3a8a;">💡 Tips SMART:</strong><br>
+            <ul style="margin-top: 8px; font-size: 13px; color: #666;">
+                <li><strong>Específico:</strong> Definí claramente qué</li>
+                <li><strong>Medible:</strong> Números concretos</li>
+                <li><strong>Alcanzable:</strong> Realista</li>
+                <li><strong>Relevante:</strong> Alineado al objetivo</li>
+                <li><strong>Tiempo:</strong> Fecha límite</li>
+            </ul>
+        </div>
+        
+        <div style="display: flex; gap: 12px;">
+            <button onclick="saveGoal()" class="btn btn-primary" style="flex: 1;">✅ Crear Objetivo</button>
+            <button onclick="closeModal('newGoal')" class="btn btn-secondary">Cancelar</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
