@@ -890,7 +890,7 @@
                     <div style="display: flex; gap: 12px; align-items: center;">
                         <input type="text" id="searchStudent" class="form-input" placeholder="🔍 Buscar atleta..." 
                                style="max-width: 300px; margin: 0;" onkeyup="filterStudents()" />
-                      <button class="btn btn-secondary" type="button" onclick="openModal('importComplete')">📥 Importar Completo (CSV)</button>
+<button class="btn btn-secondary" type="button" id="btnOpenImportCSV">📥 Importar Completo (CSV)</button>
                         <button class="btn btn-primary" onclick="openModal('addStudent')">
                             ➕ Nuevo Atleta
                         </button>
@@ -1314,9 +1314,18 @@
             // Set today's date
             document.getElementById('sessionDate').valueAsDate = new Date();
         }
-        
-        initialize();
+    
+initialize();
 
+// FIX: Botón de importar
+setTimeout(function() {
+    const btn = document.getElementById('btnOpenImportCSV');
+    if (btn) {
+        btn.addEventListener('click', function() {
+            document.getElementById('modal-importComplete').classList.add('active');
+        });
+    }
+}, 100);
         // LOGO MANAGEMENT
         function loadLogo() {
             const logoContainer = document.getElementById('appLogo');
