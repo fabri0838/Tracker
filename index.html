@@ -890,8 +890,7 @@
                     <div style="display: flex; gap: 12px; align-items: center;">
                         <input type="text" id="searchStudent" class="form-input" placeholder="🔍 Buscar atleta..." 
                                style="max-width: 300px; margin: 0;" onkeyup="filterStudents()" />
-                        <button class="btn btn-secondary" type="button" onclick="openModal('importComplete')">
-                            📥 Importar Completo (CSV)
+                      <button class="btn btn-secondary" type="button" onclick="openModal('importComplete')">📥 Importar Completo (CSV)</button>
                         </button>
                         <button class="btn btn-primary" onclick="openModal('addStudent')">
                             ➕ Nuevo Atleta
@@ -1062,7 +1061,6 @@
             </div>
         </div>
 <!-- Add Student Modal -->
-       <div id="modal-editStudent" class="modal">
             <div class="modal-content">
                 <h3 class="modal-title">✏️ Editar Atleta</h3>
                <form id="editStudentForm" onsubmit="updateStudent(event)">
