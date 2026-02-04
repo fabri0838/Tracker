@@ -1557,7 +1557,25 @@
                 }
             });
         }
-
+// DELETE STUDENT
+function deleteStudent(studentId) {
+    const student = students.find(s => s.id === studentId);
+    if (!student) return;
+    
+    if (!confirm('¿Eliminar a ' + student.name + ' y todas sus sesiones?')) return;
+    
+    students = students.filter(s => s.id !== studentId);
+    
+    if (currentStudent && currentStudent.id === studentId) {
+        currentStudent = null;
+        currentDay = null;
+    }
+    
+    saveToSheets();
+    renderStudents();
+    
+    alert('✅ ' + student.name + ' eliminado');
+}
     // EDIT STUDENT
 function editStudent(studentId) {
     const student = students.find(s => s.id === studentId);
