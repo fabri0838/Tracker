@@ -1062,10 +1062,10 @@
             </div>
         </div>
 <!-- Add Student Modal -->
-        <div id="modal-addStudent" class="modal">
+       <div id="modal-editStudent" class="modal">
             <div class="modal-content">
-                <h3 class="modal-title">➕ Nuevo Atleta</h3>
-                <form onsubmit="addStudent(event)">
+                <h3 class="modal-title">✏️ Editar Atleta</h3>
+               <form id="editStudentForm" onsubmit="updateStudent(event)">
                     <div class="form-group">
                         <label class="form-label">Nombre Completo</label>
                         <input type="text" id="studentName" class="form-input" required />
