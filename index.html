@@ -3369,10 +3369,11 @@ updateStudentMetrics(currentStudent);
                                 <th>Volumen</th>
                                 <th>RPE</th>
                                 <th>PRs</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            ${monthSessions.reverse().map(s => {
+                            ${monthSessions.reverse().map((s, idx) => {
                                 const dateObj = new Date(s.date + 'T12:00:00');
                                 const formattedDate = dateObj.toLocaleDateString('es-AR', { 
                                     day: '2-digit', 
@@ -3386,6 +3387,9 @@ updateStudentMetrics(currentStudent);
                                         <td>${s.volume.toLocaleString()} kg</td>
                                         <td>${s.avgRPE}</td>
                                         <td>${s.prs > 0 ? '🏆 ' + s.prs : '-'}</td>
+                                        <td>
+    <button class="btn btn-secondary btn-sm" onclick="editSession(${idx})" style="padding: 4px 8px;">✏️ Editar</button>
+</td>
                                     </tr>
                                 `;
                             }).join('')}
@@ -3396,7 +3400,219 @@ updateStudentMetrics(currentStudent);
 
             document.getElementById('dashboardContent').innerHTML = html;
         }
+// ============================================
+// EDITAR SESIONES GUARDADAS
+// ============================================
 
+let currentEditingSessionIndex = null;
+
+function editSession(sessionIndex) {
+    if (!currentStudent || !currentStudent.sessions) return;
+    
+    // Las sesiones están reverse() en el dashboard, así que necesitamos el índice correcto
+    const monthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+    const monthEnd = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+    
+    const monthSessions = currentStudent.sessions.filter(s => {
+        const sessionDate = new Date(s.date);
+        return sessionDate >= monthStart && sessionDate <= monthEnd;
+    });
+    
+    // Como reverse() no modifica el array original, necesitamos el índice invertido
+    const reversedIndex = monthSessions.length - 1 - sessionIndex;
+    const session = monthSessions[reversedIndex];
+    
+    if (!session) {
+        alert('Sesión no encontrada');
+        return;
+    }
+    
+    // Encontrar el índice real en el array completo de sesiones
+    currentEditingSessionIndex = currentStudent.sessions.findIndex(s => 
+        s.date === session.date && s.dayName === session.dayName && s.timestamp === session.timestamp
+    );
+    
+    if (currentEditingSessionIndex === -1) {
+        alert('Error: no se pudo encontrar la sesión');
+        return;
+    }
+    
+    // Llenar el modal
+    document.getElementById('editSessionDate').value = session.date;
+    document.getElementById('editSessionDay').value = session.dayName || '-';
+    document.getElementById('editSessionBodyWeight').value = session.bodyWeight || currentStudent.weight;
+    
+    // Renderizar bloques y ejercicios
+    renderEditSessionBlocks(session);
+    
+    openModal('editSession');
+}
+
+function renderEditSessionBlocks(session) {
+    const container = document.getElementById('editSessionBlocks');
+    
+    if (!session.blocks || session.blocks.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 20px;">Esta sesión no tiene ejercicios registrados</p>';
+        return;
+    }
+    
+    const iconMap = {
+        'movilidad': '📱',
+        'core': '🟡',
+        'fuerza-inferior': '🔵',
+        'fuerza-superior': '🟣'
+    };
+    
+    container.innerHTML = session.blocks.map((block, blockIdx) => `
+        <div class="block block-type-${block.type}" style="margin-bottom: 16px;">
+            <div class="block-header">
+                <div class="block-title">
+                    <div class="block-icon">${iconMap[block.type] || '📋'}</div>
+                    ${block.name}
+                </div>
+            </div>
+            ${block.exercises.map((ex, exIdx) => `
+                <div class="exercise">
+                    <div class="exercise-header">
+                        <div class="exercise-name">
+                            ${ex.isPrincipal ? '⭐ ' : ''}${ex.name}
+                        </div>
+                    </div>
+                    <div class="exercise-inputs">
+                        <div class="exercise-input-group">
+                            <label class="exercise-input-label">Series</label>
+                            <input type="number" class="form-input" value="${ex.series || ''}" 
+                                   id="editSess_${blockIdx}_${exIdx}_series" min="1" />
+                        </div>
+                        <div class="exercise-input-group">
+                            <label class="exercise-input-label">Reps</label>
+                            <input type="text" class="form-input" value="${ex.reps || ''}" 
+                                   id="editSess_${blockIdx}_${exIdx}_reps" />
+                        </div>
+                        <div class="exercise-input-group">
+                            <label class="exercise-input-label">Peso (kg)</label>
+                            <input type="number" class="form-input" value="${ex.weight || ''}" 
+                                   id="editSess_${blockIdx}_${exIdx}_weight" step="0.5" />
+                        </div>
+                        <div class="exercise-input-group">
+                            <label class="exercise-input-label">RPE (1-10)</label>
+                            <input type="number" class="form-input" value="${ex.rpe || ''}" 
+                                   id="editSess_${blockIdx}_${exIdx}_rpe" min="1" max="10" step="0.5" />
+                        </div>
+                    </div>
+                    ${ex.isPrincipal ? `
+                        <div style="margin-top: 12px;">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--primary-blue);">
+                                <input type="checkbox" ${ex.isPR ? 'checked' : ''} 
+                                       id="editSess_${blockIdx}_${exIdx}_isPR" />
+                                🏆 Récord Personal
+                            </label>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('')}
+        </div>
+    `).join('');
+}
+
+function saveEditedSession() {
+    if (currentEditingSessionIndex === null || !currentStudent) return;
+    
+    const session = currentStudent.sessions[currentEditingSessionIndex];
+    
+    // Actualizar fecha y peso corporal
+    session.date = document.getElementById('editSessionDate').value;
+    session.bodyWeight = parseFloat(document.getElementById('editSessionBodyWeight').value);
+    
+    // Recalcular métricas
+    let totalVolume = 0;
+    let totalRPE = 0;
+    let rpeCount = 0;
+    let prsCount = 0;
+    
+    session.blocks.forEach((block, blockIdx) => {
+        block.exercises.forEach((ex, exIdx) => {
+            // Obtener valores actualizados del DOM
+            const series = parseInt(document.getElementById(`editSess_${blockIdx}_${exIdx}_series`).value) || ex.series;
+            const reps = document.getElementById(`editSess_${blockIdx}_${exIdx}_reps`).value || ex.reps;
+            const weight = parseFloat(document.getElementById(`editSess_${blockIdx}_${exIdx}_weight`).value) || ex.weight;
+            const rpe = parseFloat(document.getElementById(`editSess_${blockIdx}_${exIdx}_rpe`).value) || ex.rpe;
+            const isPRCheckbox = document.getElementById(`editSess_${blockIdx}_${exIdx}_isPR`);
+            const isPR = isPRCheckbox ? isPRCheckbox.checked : ex.isPR;
+            
+            // Actualizar ejercicio
+            ex.series = series;
+            ex.reps = reps;
+            ex.weight = weight;
+            ex.rpe = rpe;
+            ex.isPR = isPR;
+            
+            // Recalcular volumen
+            if (weight && series && reps) {
+                const repsNum = parseFloat(reps) || 0;
+                totalVolume += weight * series * repsNum;
+            }
+            
+            if (rpe) {
+                totalRPE += rpe;
+                rpeCount++;
+            }
+            
+            if (isPR) prsCount++;
+        });
+    });
+    
+    // Actualizar métricas de la sesión
+    session.volume = Math.round(totalVolume);
+    session.avgRPE = rpeCount > 0 ? parseFloat((totalRPE / rpeCount).toFixed(1)) : 0;
+    session.prs = prsCount;
+    
+    // Guardar
+    const studentIndex = students.findIndex(s => s.id === currentStudent.id);
+    if (studentIndex !== -1) {
+        students[studentIndex] = currentStudent;
+    }
+    
+    // Actualizar métricas de gamificación
+    updateStudentMetrics(currentStudent);
+    
+    saveToSheets();
+    closeModal('editSession');
+    renderDashboard();
+    
+    alert(`✅ Sesión actualizada!\n\n📊 Volumen: ${session.volume}kg\n⭐ RPE: ${session.avgRPE}\n🏆 PRs: ${prsCount}`);
+    
+    currentEditingSessionIndex = null;
+}
+
+function deleteEditedSession() {
+    if (currentEditingSessionIndex === null || !currentStudent) return;
+    
+    const session = currentStudent.sessions[currentEditingSessionIndex];
+    
+    if (!confirm(`¿Eliminar la sesión del ${new Date(session.date).toLocaleDateString('es-AR')}?`)) return;
+    
+    // Eliminar sesión
+    currentStudent.sessions.splice(currentEditingSessionIndex, 1);
+    
+    // Guardar
+    const studentIndex = students.findIndex(s => s.id === currentStudent.id);
+    if (studentIndex !== -1) {
+        students[studentIndex] = currentStudent;
+    }
+    
+    // Actualizar métricas
+    updateStudentMetrics(currentStudent);
+    
+    saveToSheets();
+    closeModal('editSession');
+    renderDashboard();
+    renderStudents();
+    
+    alert('✅ Sesión eliminada');
+    
+    currentEditingSessionIndex = null;
+}
     </script>
 <!-- Modal Nuevo Objetivo SMART -->
 <div id="modal-newGoal" class="modal">
@@ -3453,6 +3669,35 @@ updateStudentMetrics(currentStudent);
         <div style="display: flex; gap: 12px;">
             <button onclick="saveGoal()" class="btn btn-primary" style="flex: 1;">✅ Crear Objetivo</button>
             <button onclick="closeModal('newGoal')" class="btn btn-secondary">Cancelar</button>
+        </div>
+    </div>
+</div>
+    <!-- Modal Editar Sesión -->
+<div id="modal-editSession" class="modal">
+    <div class="modal-content" style="max-width: 900px;">
+        <h3 class="modal-title">✏️ Editar Sesión</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; padding: 16px; background: var(--bg-gray); border-radius: 8px;">
+            <div>
+                <label class="form-label">📅 Fecha</label>
+                <input type="date" id="editSessionDate" class="form-input" />
+            </div>
+            <div>
+                <label class="form-label">🏋️ Día</label>
+                <input type="text" id="editSessionDay" class="form-input" readonly />
+            </div>
+            <div>
+                <label class="form-label">⚖️ Peso Corporal (kg)</label>
+                <input type="number" id="editSessionBodyWeight" class="form-input" step="0.1" />
+            </div>
+        </div>
+
+        <div id="editSessionBlocks" style="max-height: 400px; overflow-y: auto;"></div>
+
+        <div style="display: flex; gap: 12px; margin-top: 24px;">
+            <button class="btn btn-primary" style="flex: 1;" onclick="saveEditedSession()">💾 Guardar Cambios</button>
+            <button class="btn btn-secondary" onclick="closeModal('editSession')">Cancelar</button>
+            <button class="btn btn-secondary" onclick="deleteEditedSession()" style="background: var(--danger); color: white;">🗑️ Eliminar Sesión</button>
         </div>
     </div>
 </div>
