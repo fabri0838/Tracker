@@ -1765,22 +1765,25 @@ function updateStudent(e) {
         let editingExercise = null;
 
         function editExercise(blockIndex, exIndex) {
-            if (!currentDay || !currentDay.blocks[blockIndex]) return;
-            
-            const exercise = currentDay.blocks[blockIndex].exercises[exIndex];
-            editingExercise = { blockIndex: blockIndex, exIndex: exIndex };
-            
-            // Llenar modal con datos actuales
-            document.getElementById('exerciseName').value = exercise.name;
-            document.getElementById('exerciseSeries').value = exercise.series;
-            document.getElementById('exerciseReps').value = exercise.reps;
-            document.getElementById('exerciseIsPrincipal').checked = exercise.isPrincipal;
-            
-            // Cambiar el título del modal
-            document.querySelector('#modal-addExercise .modal-title').textContent = '✏️ Editar Ejercicio';
-            
-            openModal('addExercise');
-        }
+    if (!currentDay || !currentDay.blocks[blockIndex]) return;
+    
+    const exercise = currentDay.blocks[blockIndex].exercises[exIndex];
+    
+    // ⭐ IMPORTANTE: Establecer el bloque actual
+    currentBlockForExercise = blockIndex;
+    editingExercise = { blockIndex: blockIndex, exIndex: exIndex };
+    
+    // Llenar modal con datos actuales
+    document.getElementById('exerciseName').value = exercise.name;
+    document.getElementById('exerciseSeries').value = exercise.series;
+    document.getElementById('exerciseReps').value = exercise.reps;
+    document.getElementById('exerciseIsPrincipal').checked = exercise.isPrincipal;
+    
+    // Cambiar el título del modal
+    document.querySelector('#modal-addExercise .modal-title').textContent = '✏️ Editar Ejercicio';
+    
+    openModal('addExercise');
+}
 
         // TRAINING DAYS
         function addTrainingDay(e) {
@@ -2025,49 +2028,59 @@ function updateStudent(e) {
         }
 
         // EXERCISES
-        function addExercise(e) {
-            e.preventDefault();
-            
-            if (currentBlockForExercise === null) {
-                alert('Error: no hay bloque seleccionado');
-                return;
-            }
+       function addExercise(e) {
+    e.preventDefault();
+    
+    if (currentBlockForExercise === null) {
+        alert('Error: no hay bloque seleccionado');
+        return;
+    }
 
-            const exercise = {
-                name: document.getElementById('exerciseName').value,
-                series: parseInt(document.getElementById('exerciseSeries').value),
-                reps: document.getElementById('exerciseReps').value,
-                isPrincipal: document.getElementById('exerciseIsPrincipal').checked,
-                weight: null,
-                rpe: null,
-                isPR: false
-            };
+    const exercise = {
+        name: document.getElementById('exerciseName').value,
+        series: parseInt(document.getElementById('exerciseSeries').value),
+        reps: document.getElementById('exerciseReps').value,
+        isPrincipal: document.getElementById('exerciseIsPrincipal').checked,
+        weight: null,
+        rpe: null,
+        isPR: false
+    };
 
-            // Add to exercise database
-            if (!exerciseDatabase.includes(exercise.name)) {
-                exerciseDatabase.push(exercise.name);
-                localStorage.setItem('gymTracker_exercises', JSON.stringify(exerciseDatabase));
-                updateExercisesList();
-            }
-
-            currentDay.blocks[currentBlockForExercise].exercises.push(exercise);
-            
-            const dayIndex = currentStudent.trainingDays.findIndex(d => d.id === currentDay.id);
-            if (dayIndex !== -1) {
-                currentStudent.trainingDays[dayIndex] = currentDay;
-            }
-
-            const studentIndex = students.findIndex(s => s.id === currentStudent.id);
-            if (studentIndex !== -1) {
-                students[studentIndex] = currentStudent;
-            }
-
-            saveToSheets();
-            loadTrainingDay();
-            closeModal('addExercise');
-            e.target.reset();
-            currentBlockForExercise = null;
+    // ⭐ Si estamos editando, actualizar ejercicio existente
+    if (editingExercise !== null) {
+        currentDay.blocks[editingExercise.blockIndex].exercises[editingExercise.exIndex] = exercise;
+        editingExercise = null;
+        
+        // Restaurar título del modal
+        document.querySelector('#modal-addExercise .modal-title').textContent = '➕ Nuevo Ejercicio';
+    } else {
+        // Si es nuevo, agregarlo
+        // Add to exercise database
+        if (!exerciseDatabase.includes(exercise.name)) {
+            exerciseDatabase.push(exercise.name);
+            localStorage.setItem('gymTracker_exercises', JSON.stringify(exerciseDatabase));
+            updateExercisesList();
         }
+
+        currentDay.blocks[currentBlockForExercise].exercises.push(exercise);
+    }
+    
+    const dayIndex = currentStudent.trainingDays.findIndex(d => d.id === currentDay.id);
+    if (dayIndex !== -1) {
+        currentStudent.trainingDays[dayIndex] = currentDay;
+    }
+
+    const studentIndex = students.findIndex(s => s.id === currentStudent.id);
+    if (studentIndex !== -1) {
+        students[studentIndex] = currentStudent;
+    }
+
+    saveToSheets();
+    loadTrainingDay();
+    closeModal('addExercise');
+    e.target.reset();
+    currentBlockForExercise = null;
+}
 
         function updateExercise(blockIndex, exIndex, field, value) {
             if (field === 'isPR') {
