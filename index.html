@@ -997,12 +997,20 @@
                 <button class="sync-btn" id="syncBtn" onclick="syncFromSheets()" style="display: none;">
                     🔄 Sincronizar
                 </button>
-                <nav class="nav-tabs">
-                    <button class="nav-tab active" onclick="switchView('alumnos')">👥 ATLETAS</button>
-                    <button class="nav-tab" onclick="switchView('dashboard')">📊 MÉTRICAS</button>
-                    <button class="nav-tab" onclick="switchView('plan')">📋 PLAN</button>
-                    <button class="nav-tab" onclick="switchView('config')">⚙️ CONFIG</button>
-                </nav>
+                <nav style="display: flex; gap: 12px; align-items: center;">
+    <button class="nav-tab active" onclick="switchView('alumnos')" style="background: var(--accent-blue); border: 1px solid var(--accent-blue); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">
+        👥 ATLETAS
+    </button>
+    <button class="nav-tab" onclick="switchView('dashboard')" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">
+        📊 MÉTRICAS
+    </button>
+    <button class="nav-tab" onclick="switchView('plan')" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">
+        📋 PLAN
+    </button>
+    <button class="nav-tab" onclick="switchView('config')" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">
+        ⚙️ CONFIG
+    </button>
+</nav>
             </div>
         </div>
 
@@ -1128,6 +1136,12 @@
                 </div>
 
                 <button class="btn btn-primary" onclick="saveConfig()">Guardar Configuración</button>
+                <button class="btn btn-primary" onclick="saveConfig()">Guardar Configuración</button>
+
+<!-- 🔥 NUEVO BOTÓN -->
+<button class="btn btn-secondary" onclick="forceSyncAll()" style="margin-top: 12px;">
+    🔄 Sincronizar Ahora (Forzar)
+</button>
 
                 <hr style="margin: 40px 0; border: none; border-top: 2px solid var(--border);">
 
@@ -1569,67 +1583,107 @@ setTimeout(function() {
             }
         }
 
-        async function loadFromSheets() {
-            if (!sheetsUrl) return;
+       async function loadFromSheets() {
+    if (!sheetsUrl) return;
 
-            showLoading(true);
-            try {
-                const response = await fetch(sheetsUrl + '?action=loadStudents', {
-                    method: 'GET',
-                    redirect: 'follow'
-                });
-                
-                if (!response.ok) throw new Error('Error en respuesta');
-                
-                const data = await response.json();
-                
-                if (data.students && Array.isArray(data.students)) {
-                    students = data.students;
-                    localStorage.setItem('gymTracker_students', JSON.stringify(students));
-                    renderStudents();
-                    console.log('✅ Datos cargados:', students.length, 'atletas');
-                } else {
-                    students = [];
-                    renderStudents();
-                }
-            } catch (error) {
-                console.error('❌ Error:', error);
-                const localData = localStorage.getItem('gymTracker_students');
-                if (localData) {
-                    students = JSON.parse(localData);
-                    renderStudents();
-                } else {
-                    alert('No se pudo conectar con Google Sheets');
-                }
-            }
-            showLoading(false);
-        }
-
-        async function saveToSheets() {
-            localStorage.setItem('gymTracker_students', JSON.stringify(students));
+    showLoading(true);
+    
+    try {
+        const response = await fetch(sheetsUrl + '?action=loadStudents', {
+            method: 'GET',
+            redirect: 'follow'
+        });
+        
+        if (!response.ok) throw new Error('Error en respuesta');
+        
+        const data = await response.json();
+        
+        if (data.students && Array.isArray(data.students)) {
+            // 🔥 CRÍTICO: Asegurar que se cargan TODAS las métricas
+            students = data.students.map(student => ({
+                ...student,
+                totalXP: student.totalXP || 0,
+                level: student.level || 1,
+                badges: student.badges || [],
+                goals: student.goals || [],
+                sessions: student.sessions || [],
+                trainingDays: student.trainingDays || []
+            }));
             
-            if (!sheetsUrl) {
-                console.log('💾 Guardado en localStorage');
-                return;
-            }
-
-            showLoading(true);
-            try {
-                await fetch(sheetsUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'saveStudents',
-                        students: students
-                    })
-                });
-                console.log('✅ Guardado en Sheets + localStorage');
-            } catch (error) {
-                console.error('⚠️ Error guardando en Sheets:', error);
-            }
-            showLoading(false);
+            localStorage.setItem('gymTracker_students', JSON.stringify(students));
+            renderStudents();
+            console.log('✅ Datos cargados desde Sheets:', students.length, 'atletas con métricas');
+            
+            // Mostrar resumen de lo que se cargó
+            students.forEach(s => {
+                console.log(`📊 ${s.name}: XP=${s.totalXP}, Nivel=${s.level}, Badges=${(s.badges || []).length}, Sesiones=${(s.sessions || []).length}`);
+            });
+        } else {
+            students = [];
+            renderStudents();
         }
+    } catch (error) {
+        console.error('❌ Error cargando desde Sheets:', error);
+        
+        // Fallback a localStorage
+        const localData = localStorage.getItem('gymTracker_students');
+        if (localData) {
+            students = JSON.parse(localData);
+            renderStudents();
+            console.log('📂 Cargado desde localStorage como backup');
+        } else {
+            alert('No se pudo conectar con Google Sheets y no hay datos locales');
+        }
+    }
+    
+    showLoading(false);
+}
+
+     async function saveToSheets() {
+    // Guardar en localStorage SIEMPRE (backup)
+    localStorage.setItem('gymTracker_students', JSON.stringify(students));
+    
+    if (!sheetsUrl) {
+        console.log('💾 Guardado solo en localStorage (no hay URL de Sheets)');
+        return;
+    }
+
+    showLoading(true);
+    
+    try {
+        // 🔥 CRÍTICO: Asegurar que TODAS las métricas se incluyen
+        const dataToSave = students.map(student => ({
+            ...student,
+            // Métricas de gamificación
+            totalXP: student.totalXP || 0,
+            level: student.level || 1,
+            badges: student.badges || [],
+            goals: student.goals || [],
+            // Otros datos
+            sessions: student.sessions || [],
+            trainingDays: student.trainingDays || []
+        }));
+
+        console.log('💾 Guardando en Sheets:', dataToSave.length, 'estudiantes con métricas completas');
+        
+        await fetch(sheetsUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'saveStudents',
+                students: dataToSave
+            })
+        });
+        
+        console.log('✅ Guardado en Sheets + localStorage');
+    } catch (error) {
+        console.error('⚠️ Error guardando en Sheets:', error);
+        alert('⚠️ Error al sincronizar con Sheets. Los datos están guardados localmente.');
+    }
+    
+    showLoading(false);
+}
 
         function showLoading(show) {
             document.getElementById('loading').className = show ? 'loading active' : 'loading';
@@ -2268,6 +2322,14 @@ function updateStudent(e) {
     
     checkBadges(s);
     if (s.goals) updateGoals(s);
+    // 🔥 NUEVO: Actualizar el estudiante en el array
+    const studentIndex = students.findIndex(st => st.id === s.id);
+    if (studentIndex !== -1) {
+        students[studentIndex] = s;
+    }
+    
+    console.log('📊 Métricas actualizadas para', s.name, '- XP:', s.totalXP, 'Nivel:', s.level, 'Badges:', s.badges.length);
+}
 }
 
 function checkBadges(s) {
@@ -2396,7 +2458,7 @@ function deleteGoal(goalId) {
     saveToSheets();
     renderDashboard();
 }
-        function saveSession() {
+       async function saveSession() {
             if (!currentStudent || !currentDay) {
                 alert('Seleccioná un atleta y un día de entrenamiento');
                 return;
@@ -2456,9 +2518,11 @@ function deleteGoal(goalId) {
             if (studentIndex !== -1) {
                 students[studentIndex] = currentStudent;
             }
-            // Actualizar métricas de gamificación
-updateStudentMetrics(currentStudent);
-            saveToSheets();
+           // Actualizar métricas de gamificación
+            updateStudentMetrics(currentStudent);
+            
+            // 🔥 CRÍTICO: Guardar en Sheets DESPUÉS de actualizar métricas
+            await saveToSheets();
             
             alert(`✅ Sesión de "${currentDay.name}" guardada!\n\n📊 Volumen: ${session.volume}kg\n⭐ RPE: ${avgRPE}\n🏆 PRs: ${prsCount}`);
             
@@ -3739,6 +3803,58 @@ function deleteEditedSession() {
     
     currentEditingSessionIndex = null;
 }
+        async function forceSyncAll() {
+    if (!sheetsUrl) {
+        alert('⚠️ Primero configurá la URL de Google Sheets');
+        return;
+    }
+    
+    if (!confirm('¿Forzar sincronización completa?\n\nEsto sobrescribirá los datos en Google Sheets con los datos locales actuales.')) {
+        return;
+    }
+    
+    console.log('🔄 Iniciando sincronización forzada...');
+    showLoading(true);
+    
+    // Recalcular métricas de TODOS los estudiantes
+    students.forEach(student => {
+        updateStudentMetrics(student);
+    });
+    
+    // Guardar TODO
+    await saveToSheets();
+    
+    showLoading(false);
+    alert('✅ Sincronización completa exitosa!\n\nTodos los datos y métricas fueron guardados en Google Sheets.');
+}
+```
+
+---
+
+## 🧪 **TESTING PASO A PASO:**
+
+### **En la Compu A (donde ya tenés datos):**
+
+1. Abrí la consola (F12)
+2. Guardá una sesión nueva
+3. Deberías ver en consola:
+```
+   📊 Métricas actualizadas para [Nombre] - XP: 50 Nivel: 1 Badges: 0
+   💾 Guardando en Sheets: 1 estudiantes con métricas completas
+   ✅ Guardado en Sheets + localStorage
+```
+
+4. Si NO ves estos mensajes, hacé click en el nuevo botón **"🔄 Sincronizar Ahora (Forzar)"**
+
+### **En la Compu B (nueva):**
+
+1. Abrí la app
+2. Configurá la URL de Sheets (la misma que en compu A)
+3. Click en "Guardar Configuración"
+4. Deberías ver en consola:
+```
+   ✅ Datos cargados desde Sheets: 1 atletas con métricas
+   📊 [Nombre]: XP=50, Nivel=1, Badges=0, Sesiones=5
     </script>
 <!-- Modal Nuevo Objetivo SMART -->
 <div id="modal-newGoal" class="modal">
