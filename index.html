@@ -2330,7 +2330,7 @@ function updateStudent(e) {
     
     console.log('📊 Métricas actualizadas para', s.name, '- XP:', s.totalXP, 'Nivel:', s.level, 'Badges:', s.badges.length);
 }
-}
+
 
 function checkBadges(s) {
     if (!s.badges) s.badges = [];
@@ -3825,36 +3825,8 @@ function deleteEditedSession() {
     await saveToSheets();
     
     showLoading(false);
-    alert('✅ Sincronización completa exitosa!\n\nTodos los datos y métricas fueron guardados en Google Sheets.');
+alert('✅ Sincronización completa exitosa!\n\nTodos los datos y métricas fueron guardados en Google Sheets.');
 }
-```
-
----
-
-## 🧪 **TESTING PASO A PASO:**
-
-### **En la Compu A (donde ya tenés datos):**
-
-1. Abrí la consola (F12)
-2. Guardá una sesión nueva
-3. Deberías ver en consola:
-```
-   📊 Métricas actualizadas para [Nombre] - XP: 50 Nivel: 1 Badges: 0
-   💾 Guardando en Sheets: 1 estudiantes con métricas completas
-   ✅ Guardado en Sheets + localStorage
-```
-
-4. Si NO ves estos mensajes, hacé click en el nuevo botón **"🔄 Sincronizar Ahora (Forzar)"**
-
-### **En la Compu B (nueva):**
-
-1. Abrí la app
-2. Configurá la URL de Sheets (la misma que en compu A)
-3. Click en "Guardar Configuración"
-4. Deberías ver en consola:
-```
-   ✅ Datos cargados desde Sheets: 1 atletas con métricas
-   📊 [Nombre]: XP=50, Nivel=1, Badges=0, Sesiones=5
     </script>
 <!-- Modal Nuevo Objetivo SMART -->
 <div id="modal-newGoal" class="modal">
