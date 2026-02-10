@@ -149,11 +149,11 @@
             border-radius: 10px;
         }
         
-       .nav-tab {
-    padding: 10px 20px;
-    border: none;
-    background: transparent;
-    color: var(--text-secondary);
+.nav-tab {
+    padding: 12px 24px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     font-size: 13px;
     font-weight: 700;
     cursor: pointer;
@@ -162,11 +162,22 @@
     font-family: 'Inter', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .nav-tab.active {
     background: var(--accent-blue);
+    border-color: var(--accent-blue);
     color: white;
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+}
+
+.nav-tab:hover:not(.active) {
+    background: var(--bg-tertiary);
+    border-color: var(--accent-blue);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .nav-tab:hover:not(.active) {
@@ -219,7 +230,7 @@
         /* BUTTONS */
         .btn {
             padding: 14px 28px;
-            border: none;
+            border: 2px solid var(--border-color);
             border-radius: 10px;
             font-size: 13px;
             font-weight: 800;
@@ -228,21 +239,37 @@
             font-family: 'Inter', sans-serif;
             text-transform: uppercase;
             letter-spacing: 1px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         
         .btn-primary {
-            background: var(--primary-blue);
+            background: var(--accent-blue);
             color: white;
+            border-color: var(--accent-blue);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
         }
         
         .btn-primary:hover {
-            background: var(--dark-blue);
+            background: var(--accent-blue-dark);
+            border-color: var(--accent-blue-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.6);
         }
         
-        .btn-secondary {
-            background: var(--bg-gray);
-            color: var(--text-gray);
-        }
+       .btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--accent-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
         
         .btn-secondary:hover {
             background: var(--border);
@@ -254,44 +281,47 @@
         }
         
         /* TRAINING DAY CARD */
-        .training-day-card {
-            background: var(--bg-white);
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        
-        .training-day-card:hover {
-            border-color: var(--primary-blue);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
-        }
-        
-        .training-day-card h3 {
-            font-family: 'Inter', sans-serif;
-            font-size: 16px;
-            color: var(--text-dark);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-        
-        .training-day-card p {
-            font-size: 12px;
-            color: var(--text-gray);
-            margin-bottom: 12px;
-        }
-        
+      .training-day-card {
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.training-day-card:hover {
+    border-color: var(--accent-blue);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+}
+
+.training-day-card h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.training-day-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
         .training-day-badge {
-            display: inline-block;
-            background: var(--bg-gray);
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-gray);
-        }
+    display: inline-block;
+    background: var(--accent-blue);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
         
         .delete-day-btn {
             position: absolute;
@@ -320,20 +350,21 @@
             gap: 24px;
         }
         
-        .student-card {
+   .student-card {
     background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--border-color);
     border-radius: 12px;
     padding: 24px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s;
     position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .student-card:hover {
     border-color: var(--accent-blue);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
 }
         
             .student-name {
@@ -359,12 +390,14 @@
         }
         
         /* BLOCKS */
-        .block {
-            background: var(--bg-gray);
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 24px;
-        }
+      .block {
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
         
         .block-header {
             display: flex;
@@ -398,12 +431,14 @@
         .block-type-fuerza-inferior .block-icon { background: #DBEAFE; }
         .block-type-fuerza-superior .block-icon { background: #F3E8FF; }
         
-        .exercise {
-            background: var(--bg-white);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 12px;
-        }
+       .exercise {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
         
         .exercise-header {
             display: flex;
@@ -467,22 +502,24 @@
             margin-bottom: 8px;
         }
         
-        .form-input {
+   .form-input {
     width: 100%;
     padding: 12px 16px;
     background: var(--bg-primary);
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--border-color);  /* ← Cambiar de 1px a 2px */
     border-radius: 8px;
     color: var(--text-primary);
     font-size: 14px;
     font-family: 'Inter', sans-serif;
     transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);  /* ← AGREGAR */
 }
 
 .form-input:focus {
     outline: none;
     border-color: var(--accent-blue);
     background: var(--bg-secondary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);  /* ← AGREGAR */
 }
         
         /* MODAL */
@@ -585,11 +622,19 @@
             margin-bottom: 32px;
         }
         
-        .metric-card {
-            background: var(--bg-white);
-            border: 2px solid var(--border);
+     .metric-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .metric-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
         
         .metric-label {
