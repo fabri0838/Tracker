@@ -1349,7 +1349,7 @@
                 
                 <div class="form-group">
                     <label class="form-label">Tipo de Objetivo</label>
-                    <select id="goalType" class="form-input" onchange="document.getElementById('exerciseField').style.display = this.value === 'strength' ? 'block' : 'none';">
+                   <select id="goalType" class="form-input">
                         <option value="volume">📈 Aumentar Volumen Mensual (toneladas)</option>
                         <option value="strength">💪 Aumentar Fuerza en Ejercicio (kg)</option>
                         <option value="attendance">📅 Mejorar Asistencia (clases/mes)</option>
@@ -1362,7 +1362,7 @@
                     <input type="text" id="goalDesc" class="form-input" placeholder="Ej: Aumentar de 60 a 70 toneladas mensuales" />
                 </div>
                 
-                <div id="exerciseField" class="form-group" style="display: none;">
+                <div id="exerciseField" class="form-group">
                     <label class="form-label">Ejercicio Específico</label>
                     <input type="text" id="goalExercise" class="form-input" placeholder="Ej: Sentadilla" list="exercisesList" />
                 </div>
@@ -2630,10 +2630,12 @@
                 alert75: false
             };
             
-            if (type === 'strength') {
-                g.exerciseName = document.getElementById('goalExercise').value;
-                if (!g.exerciseName) { alert('Especificá el ejercicio'); return; }
-            }
+         const exerciseValue = document.getElementById('goalExercise').value;
+
+if (exerciseValue) {
+    g.exerciseName = exerciseValue;
+}
+
             
             currentStudent.goals.push(g);
             updateGoals(currentStudent);
@@ -2810,7 +2812,7 @@
                                         <div style="flex: 1;">
                                             <div style="font-size: 18px; font-weight: bold; color: var(--accent-blue);">${g.description}</div>
                                             <div style="font-size: 13px; color: var(--text-secondary);">
-                                                ${g.type === 'volume' ? '📈 Volumen' : g.type === 'strength' ? '💪 Fuerza (' + g.exerciseName + ')' : g.type === 'attendance' ? '📅 Asistencia' : '🏆 PRs'}
+                                                ${g.type === 'volume' ? '📈 Volumen' : g.type === 'strength' ? '💪 Fuerza' : g.type === 'attendance' ? '📅 Asistencia' : '🏆 PRs'}${g.exerciseName ? ' · 🎯 ' + g.exerciseName : ''}
                                             </div>
                                         </div>
                                         <button onclick="deleteGoal(${g.id})" style="background: var(--danger); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">🗑️</button>
