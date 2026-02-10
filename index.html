@@ -1735,66 +1735,102 @@
             }
         }
 
-        async function loadFromSheets() {
-            if (!sheetsUrl) return;
-
-            showLoading(true);
-            
-            try {
-                const response = await fetch(sheetsUrl + '?action=loadStudents', {
-                    method: 'GET',
-                    redirect: 'follow'
-                });
-                
-                if (!response.ok) throw new Error('Error en respuesta');
-                
-                const data = await response.json();
-                
-                if (data.students && Array.isArray(data.students)) {
-                    students = data.students.map(student => ({
-                        ...student,
-                        totalXP: student.totalXP || 0,
-                        level: student.level || 1,
-                        badges: student.badges || [],
-                        goals: student.goals || [],
-                        sessions: student.sessions || [],
-                        trainingDays: student.trainingDays || []
-                    }));
-                    
-                    localStorage.setItem('gymTracker_students', JSON.stringify(students));
-                    renderStudents();
-                    console.log('✅ Datos cargados desde Sheets:', students.length, 'atletas con métricas');
-                } else {
-                    students = [];
-                    renderStudents();
-                }
-            } catch (error) {
-                console.error('❌ Error cargando desde Sheets:', error);
-                
-                const localData = localStorage.getItem('gymTracker_students');
-                if (localData) {
-                    students = JSON.parse(localData);
-                    renderStudents();
-                    console.log('📂 Cargado desde localStorage como backup');
-                } else {
-                    alert('No se pudo conectar con Google Sheets y no hay datos locales');
-                }
-            }
-            
-            showLoading(false);
-        }
-
-        async function saveToSheets() {
-            localStorage.setItem('gymTracker_students', JSON.stringify(students));
-            
+                async function loadFromSheets() {
             if (!sheetsUrl) {
-                console.log('💾 Guardado solo en localStorage (no hay URL de Sheets)');
+                console.log('No hay URL de Sheets configurada');
+                loadFromLocalStorageFallback();
                 return;
             }
 
             showLoading(true);
             
             try {
+                // Usar JSONP approach con callback
+                const callbackName = 'sheetsCallback_' + Date.now();
+                
+                // Crear script tag para JSONP
+                const script = document.createElement('script');
+                const url = sheetsUrl + '?action=loadStudents&callback=' + callbackName;
+                
+                // Definir el callback global
+                window[callbackName] = function(data) {
+                    console.log('✅ Datos recibidos via JSONP:', data);
+                    
+                    if (data.students && Array.isArray(data.students)) {
+                        students = data.students.map(student => ({
+                            ...student,
+                            totalXP: student.totalXP || 0,
+                            level: student.level || 1,
+                            badges: student.badges || [],
+                            goals: student.goals || [],
+                            sessions: student.sessions || [],
+                            trainingDays: student.trainingDays || []
+                        }));
+                        
+                        localStorage.setItem('gymTracker_students', JSON.stringify(students));
+                        renderStudents();
+                        console.log('✅ Datos cargados desde Sheets:', students.length, 'atletas');
+                    } else {
+                        console.log('⚠️ No se encontraron datos en Sheets, usando localStorage');
+                        loadFromLocalStorageFallback();
+                    }
+                    
+                    // Limpiar
+                    delete window[callbackName];
+                    if (script.parentNode) {
+                        script.parentNode.removeChild(script);
+                    }
+                    
+                    showLoading(false);
+                };
+                
+                // Manejar error de carga
+                script.onerror = function() {
+                    console.error('❌ Error cargando script JSONP');
+                    delete window[callbackName];
+                    if (script.parentNode) {
+                        script.parentNode.removeChild(script);
+                    }
+                    loadFromLocalStorageFallback();
+                    showLoading(false);
+                };
+                
+                // Timeout de seguridad
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        console.warn('⏱️ Timeout esperando respuesta de Sheets');
+                        delete window[callbackName];
+                        if (script.parentNode) {
+                            script.parentNode.removeChild(script);
+                        }
+                        loadFromLocalStorageFallback();
+                        showLoading(false);
+                    }
+                }, 10000);
+                
+                script.src = url;
+                document.head.appendChild(script);
+                
+            } catch (error) {
+                console.error('❌ Error en loadFromSheets:', error);
+                loadFromLocalStorageFallback();
+                showLoading(false);
+            }
+        }
+
+               async function saveToSheets() {
+            // SIEMPRE guardar en localStorage primero (backup)
+            localStorage.setItem('gymTracker_students', JSON.stringify(students));
+            
+            if (!sheetsUrl) {
+                console.log('💾 Guardado solo en localStorage (no hay URL de Sheets)');
+                return true;
+            }
+
+            showLoading(true);
+            
+            try {
+                // Preparar datos completos con todas las métricas
                 const dataToSave = students.map(student => ({
                     ...student,
                     totalXP: student.totalXP || 0,
@@ -1805,29 +1841,68 @@
                     trainingDays: student.trainingDays || []
                 }));
 
-                console.log('💾 Guardando en Sheets:', dataToSave.length, 'estudiantes con métricas completas');
+                console.log('💾 Guardando en Sheets:', dataToSave.length, 'estudiantes');
                 
-                // FIX: Usar POST normal sin no-cors para poder leer respuesta
-                const response = await fetch(sheetsUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'saveStudents',
-                        students: dataToSave
-                    })
+                // USAR GET con parámetros en lugar de POST para evitar CORS
+                const jsonString = JSON.stringify({
+                    action: 'saveStudents',
+                    students: dataToSave
                 });
                 
-                const result = await response.json();
-                console.log('✅ Respuesta de Sheets:', result);
+                // Usar un iframe oculto para enviar los datos (técnica para evitar CORS)
+                await sendDataViaForm(jsonString);
+                
+                console.log('✅ Datos enviados a Sheets');
+                showLoading(false);
+                return true;
                 
             } catch (error) {
-                console.error('⚠️ Error guardando en Sheets:', error);
-                alert('⚠️ Error al sincronizar con Sheets. Los datos están guardados localmente.');
+                console.error('⚠️ Error enviando a Sheets:', error);
+                showLoading(false);
+                // No mostrar alerta, solo log, porque ya guardamos en localStorage
+                return false;
             }
-            
-            showLoading(false);
         }
 
+        // Función auxiliar para enviar datos sin CORS usando un form
+        function sendDataViaForm(jsonData) {
+            return new Promise((resolve, reject) => {
+                // Crear un formulario oculto
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = sheetsUrl;
+                form.target = 'hidden-iframe';
+                form.style.display = 'none';
+                
+                // Crear campo con los datos
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'data';
+                input.value = jsonData;
+                
+                form.appendChild(input);
+                document.body.appendChild(form);
+                
+                // Crear iframe oculto para recibir la respuesta
+                let iframe = document.getElementById('hidden-iframe');
+                if (!iframe) {
+                    iframe = document.createElement('iframe');
+                    iframe.name = 'hidden-iframe';
+                    iframe.id = 'hidden-iframe';
+                    iframe.style.display = 'none';
+                    document.body.appendChild(iframe);
+                }
+                
+                // Enviar formulario
+                form.submit();
+                
+                // Limpiar después de un tiempo
+                setTimeout(() => {
+                    document.body.removeChild(form);
+                    resolve();
+                }, 2000);
+            });
+        }
         function showLoading(show) {
             document.getElementById('loading').className = show ? 'loading active' : 'loading';
         }
@@ -3244,65 +3319,44 @@
             summary += '</div>';
             return summary;
         }
-
-        // AUTO-SYNC
+        // ================================================
+        // AUTO-SYNC: Sincronización automática
+        // ================================================
         async function loadFromSheetsAuto() {
-            if (!sheetsUrl) {
-                loadFromLocalStorageFallback();
-                return;
-            }
-            
-            try {
-                const response = await fetch(sheetsUrl + '?action=loadStudents', {
-                    method: 'GET',
-                    redirect: 'follow'
-                });
-                
-                const data = await response.json();
-                
-                if (data.students && data.students.length > 0) {
-                    students = data.students.map(s => ({
-                        ...s,
-                        totalXP: s.totalXP || 0,
-                        level: s.level || 1,
-                        badges: s.badges || [],
-                        goals: s.goals || [],
-                        sessions: s.sessions || [],
-                        trainingDays: s.trainingDays || []
-                    }));
-                    localStorage.setItem('gymTracker_students', JSON.stringify(students));
-                    renderStudents();
-                    lastSyncTimestamp = Date.now();
-                    localStorage.setItem('lastSync', lastSyncTimestamp);
-                    console.log('✅ Auto-sync: Datos cargados');
-                } else {
-                    loadFromLocalStorageFallback();
-                }
-            } catch (error) {
-                console.warn('Auto-sync: Error, usando localStorage');
-                loadFromLocalStorageFallback();
-            }
+            // Intentar cargar desde Sheets, pero si falla, usar localStorage
+            await loadFromSheets();
         }
         
-        function loadFromLocalStorageFallback() {
+             function loadFromLocalStorageFallback() {
+            console.log('📂 Cargando desde localStorage...');
             const localData = localStorage.getItem('gymTracker_students');
             if (localData) {
-                students = JSON.parse(localData);
-                students = students.map(s => {
-                    if (!s.trainingDays && s.blocks) {
-                        return {
-                            ...s,
-                            trainingDays: [{
-                                id: Date.now(),
-                                name: "Plan Principal",
-                                blocks: s.blocks
-                            }],
-                            blocks: undefined
-                        };
-                    }
-                    return s;
-                });
-                renderStudents();
+                try {
+                    students = JSON.parse(localData);
+                    // Migrar datos antiguos si es necesario
+                    students = students.map(s => {
+                        if (!s.trainingDays && s.blocks) {
+                            return {
+                                ...s,
+                                trainingDays: [{
+                                    id: Date.now(),
+                                    name: "Plan Principal",
+                                    blocks: s.blocks
+                                }],
+                                blocks: undefined
+                            };
+                        }
+                        return s;
+                    });
+                    renderStudents();
+                    console.log('✅ Cargados', students.length, 'atletas desde localStorage');
+                } catch (e) {
+                    console.error('❌ Error parseando localStorage:', e);
+                    students = [];
+                }
+            } else {
+                console.log('ℹ️ No hay datos en localStorage');
+                students = [];
             }
         }
         
