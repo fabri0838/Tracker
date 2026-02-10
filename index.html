@@ -123,8 +123,8 @@
         
         .sync-btn {
             background: transparent;
-            border: 2px solid var(--border-color);
-            color: var(--text-secondary);
+            border: 2px solid var(--border);
+            color: var(--text-gray);
             padding: 10px 20px;
             border-radius: 8px;
             font-size: 13px;
@@ -137,23 +137,23 @@
         }
         
         .sync-btn:hover {
-            border-color: var(--accent-blue);
-            color: var(--accent-blue);
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
         }
         
         .nav-tabs {
             display: flex;
             gap: 8px;
-            background: var(--bg-tertiary);
+            background: var(--bg-gray);
             padding: 4px;
             border-radius: 10px;
         }
         
-.nav-tab {
-    padding: 12px 24px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
+       .nav-tab {
+    padding: 10px 20px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
     font-size: 13px;
     font-weight: 700;
     cursor: pointer;
@@ -162,22 +162,11 @@
     font-family: 'Inter', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .nav-tab.active {
     background: var(--accent-blue);
-    border-color: var(--accent-blue);
     color: white;
-    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
-}
-
-.nav-tab:hover:not(.active) {
-    background: var(--bg-tertiary);
-    border-color: var(--accent-blue);
-    color: var(--text-primary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .nav-tab:hover:not(.active) {
@@ -230,7 +219,7 @@
         /* BUTTONS */
         .btn {
             padding: 14px 28px;
-            border: 2px solid var(--border-color);
+            border: none;
             border-radius: 10px;
             font-size: 13px;
             font-weight: 800;
@@ -239,40 +228,24 @@
             font-family: 'Inter', sans-serif;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         
         .btn-primary {
-            background: var(--accent-blue);
+            background: var(--primary-blue);
             color: white;
-            border-color: var(--accent-blue);
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
         }
         
         .btn-primary:hover {
-            background: var(--accent-blue-dark);
-            border-color: var(--accent-blue-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.6);
+            background: var(--dark-blue);
         }
         
-       .btn-secondary {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    border: 2px solid var(--border-color);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: all 0.2s;
-}
-
-.btn-secondary:hover {
-    background: var(--bg-tertiary);
-    border-color: var(--accent-blue);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
+        .btn-secondary {
+            background: var(--bg-gray);
+            color: var(--text-gray);
+        }
         
         .btn-secondary:hover {
-            background: var(--border-color);
+            background: var(--border);
         }
         
         .btn-sm {
@@ -281,47 +254,44 @@
         }
         
         /* TRAINING DAY CARD */
-      .training-day-card {
-    background: var(--bg-card);
-    border: 2px solid var(--border-color);
-    border-radius: 12px;
-    padding: 24px;
-    cursor: pointer;
-    transition: all 0.3s;
-    position: relative;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.training-day-card:hover {
-    border-color: var(--accent-blue);
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
-}
-
-.training-day-card h3 {
-    font-family: 'Inter', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-    text-transform: uppercase;
-}
-
-.training-day-card p {
-    font-size: 13px;
-    color: var(--text-secondary);
-    margin-bottom: 12px;
-}
+        .training-day-card {
+            background: var(--bg-white);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .training-day-card:hover {
+            border-color: var(--primary-blue);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+        
+        .training-day-card h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .training-day-card p {
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-bottom: 12px;
+        }
+        
         .training-day-badge {
-    display: inline-block;
-    background: var(--accent-blue);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 700;
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
-}
+            display: inline-block;
+            background: var(--bg-gray);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-gray);
+        }
         
         .delete-day-btn {
             position: absolute;
@@ -350,54 +320,51 @@
             gap: 24px;
         }
         
-   .student-card {
+        .student-card {
     background: var(--bg-card);
-    border: 2px solid var(--border-color);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 24px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.2s;
     position: relative;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .student-card:hover {
     border-color: var(--accent-blue);
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
 }
         
             .student-name {
     font-family: 'Inter', sans-serif;
     font-size: 18px;
     font-weight: 700;
-            color: var(--text-primary);
+            color: var(--text-dark);
             margin-bottom: 8px;
             text-transform: uppercase;
         }
         
         .student-info {
             font-size: 13px;
-            color: var(--text-secondary);
+            color: var(--text-gray);
             margin-bottom: 4px;
         }
         
         .student-goal {
             font-size: 12px;
-            color: var(--accent-blue);
+            color: var(--primary-blue);
             font-weight: 700;
             margin-top: 12px;
         }
         
         /* BLOCKS */
-      .block {
-    background: var(--bg-card);
-    border: 2px solid var(--border-color);
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 24px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
+        .block {
+            background: var(--bg-gray);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
         
         .block-header {
             display: flex;
@@ -409,7 +376,7 @@
         .block-title {
             font-family: 'Inter', sans-serif;
             font-size: 16px;
-            color: var(--text-primary);
+            color: var(--text-dark);
             text-transform: uppercase;
             display: flex;
             align-items: center;
@@ -431,14 +398,12 @@
         .block-type-fuerza-inferior .block-icon { background: #DBEAFE; }
         .block-type-fuerza-superior .block-icon { background: #F3E8FF; }
         
-       .exercise {
-    background: var(--bg-secondary);
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 12px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-}
+        .exercise {
+            background: var(--bg-white);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
         
         .exercise-header {
             display: flex;
@@ -450,7 +415,7 @@
         .exercise-name {
             font-size: 14px;
             font-weight: 700;
-            color: var(--text-primary);
+            color: var(--text-dark);
         }
         
         .exercise-inputs {
@@ -467,7 +432,7 @@
         .exercise-input-label {
             font-size: 10px;
             font-weight: 700;
-            color: var(--text-secondary);
+            color: var(--text-gray);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 4px;
@@ -475,7 +440,7 @@
         
         .exercise-input {
             padding: 8px 12px;
-            border: 2px solid var(--border-color);
+            border: 2px solid var(--border);
             border-radius: 6px;
             font-size: 14px;
             font-weight: 600;
@@ -484,7 +449,7 @@
         
         .exercise-input:focus {
             outline: none;
-            border-color: var(--accent-blue);
+            border-color: var(--primary-blue);
         }
         
         /* FORMS */
@@ -496,30 +461,28 @@
             display: block;
             font-size: 12px;
             font-weight: 700;
-            color: var(--text-secondary);
+            color: var(--text-gray);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
         }
         
-   .form-input {
+        .form-input {
     width: 100%;
     padding: 12px 16px;
     background: var(--bg-primary);
-    border: 2px solid var(--border-color);  /* ← Cambiar de 1px a 2px */
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     color: var(--text-primary);
     font-size: 14px;
     font-family: 'Inter', sans-serif;
     transition: all 0.2s;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);  /* ← AGREGAR */
 }
 
 .form-input:focus {
     outline: none;
     border-color: var(--accent-blue);
     background: var(--bg-secondary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);  /* ← AGREGAR */
 }
         
         /* MODAL */
@@ -557,7 +520,7 @@
         .modal-title {
             font-family: 'Inter', sans-serif;
             font-size: 20px;
-            color: var(--text-primary);
+            color: var(--text-dark);
             text-transform: uppercase;
             margin-bottom: 24px;
         }
@@ -569,13 +532,13 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: var(--bg-card);
+            background: var(--bg-white);
             padding: 24px 40px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             z-index: 2000;
             font-weight: 700;
-            color: var(--accent-blue);
+            color: var(--primary-blue);
         }
         
         .loading.active {
@@ -611,7 +574,7 @@
         
         .config-text p {
             font-size: 13px;
-            color: var(--text-secondary);
+            color: var(--text-gray);
         }
         
         /* METRICS */
@@ -622,25 +585,17 @@
             margin-bottom: 32px;
         }
         
-     .metric-card {
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
+        .metric-card {
+            background: var(--bg-white);
+            border: 2px solid var(--border);
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s;
-        }
-        
-        .metric-card:hover {
-            border-color: var(--accent-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
         
         .metric-label {
             font-size: 11px;
             font-weight: 700;
-            color: var(--text-secondary);
+            color: var(--text-gray);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
@@ -649,13 +604,13 @@
         .metric-value {
             font-family: 'Inter', sans-serif;
             font-size: 32px;
-            color: var(--accent-blue);
+            color: var(--primary-blue);
             margin-bottom: 4px;
         }
         
         .metric-detail {
             font-size: 12px;
-            color: var(--text-secondary);
+            color: var(--text-gray);
         }
         
         .metric-change {
@@ -676,14 +631,14 @@
         }
         
         .month-box {
-            background: var(--bg-tertiary);
+            background: var(--bg-gray);
             border-radius: 12px;
             padding: 24px;
             text-align: center;
         }
         
         .month-box.current {
-            background: var(--accent-blue);
+            background: var(--primary-blue);
             color: white;
         }
         
@@ -721,14 +676,14 @@
         .goal-progress-bar {
             width: 100%;
             height: 24px;
-            background: var(--border-color);
+            background: var(--border);
             border-radius: 12px;
             overflow: hidden;
         }
         
         .goal-progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--accent-blue), var(--light-blue));
+            background: linear-gradient(90deg, var(--primary-blue), var(--light-blue));
             transition: width 0.3s;
         }
         
@@ -1084,17 +1039,17 @@
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title">
-                        📊 MÉTRICAS DE <span id="dashboardStudentName" style="color: var(--accent-blue);">-</span>
+                        📊 MÉTRICAS DE <span id="dashboardStudentName" style="color: var(--primary-blue);">-</span>
                     </h2>
                     <div style="display: flex; align-items: center; gap: 16px;">
                         <button class="btn btn-secondary btn-sm" onclick="changeMonth(-1)">← Mes Anterior</button>
-                        <span id="currentMonthDisplay" style="font-size: 14px; font-weight: 700; color: var(--text-secondary); min-width: 150px; text-align: center;">-</span>
+                        <span id="currentMonthDisplay" style="font-size: 14px; font-weight: 700; color: var(--text-gray); min-width: 150px; text-align: center;">-</span>
                         <button class="btn btn-secondary btn-sm" onclick="changeMonth(1)">Mes Siguiente →</button>
                     </div>
                 </div>
 
                 <div id="dashboardContent">
-                    <p style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                    <p style="text-align: center; color: var(--text-gray); padding: 40px;">
                         Seleccioná un atleta para ver sus métricas
                     </p>
                 </div>
@@ -1175,7 +1130,7 @@
                 <div class="form-group">
                     <label class="form-label">🔗 URL de Google Apps Script</label>
                     <input type="text" id="sheetsUrl" class="form-input" placeholder="https://script.google.com/..." />
-                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
+                    <div style="font-size: 12px; color: var(--text-gray); margin-top: 8px;">
                         La URL debe terminar en /exec
                     </div>
                 </div>
@@ -1188,19 +1143,19 @@
     🔄 Sincronizar Ahora (Forzar)
 </button>
 
-                <hr style="margin: 40px 0; border: none; border-top: 2px solid var(--border-color);">
+                <hr style="margin: 40px 0; border: none; border-top: 2px solid var(--border);">
 
                 <h3 style="font-family: 'Inter'; font-size: 16px; margin-bottom: 20px; text-transform: uppercase;">🎨 Personalización</h3>
 
                 <div class="form-group">
                     <label class="form-label">Logo Personalizado</label>
                     <input type="file" id="logoUpload" class="form-input" accept="image/*" onchange="handleLogoUpload(event)" />
-                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
+                    <div style="font-size: 12px; color: var(--text-gray); margin-top: 8px;">
                         Recomendado: PNG con fondo transparente, 200x200px
                     </div>
                 </div>
 
-                <div id="logoPreview" style="display: none; margin-top: 20px; padding: 20px; background: var(--bg-tertiary); border-radius: 12px;">
+                <div id="logoPreview" style="display: none; margin-top: 20px; padding: 20px; background: var(--bg-gray); border-radius: 12px;">
                     <img id="logoPreviewImg" style="max-width: 100px; height: auto; display: block; margin-bottom: 12px;" />
                     <button class="btn btn-secondary btn-sm" onclick="removeLogo()">🗑️ Eliminar Logo</button>
                 </div>
@@ -1272,7 +1227,7 @@
                     <div class="form-group">
                         <label class="form-label">Clases Mensuales</label>
                         <input type="number" id="editStudentClasses" class="form-input" required min="1" />
-                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
+                        <div style="font-size: 12px; color: var(--text-gray); margin-top: 8px;">
                             💡 Podés cambiar este número cada mes según la cantidad de clases que va a hacer
                         </div>
                     </div>
@@ -1291,7 +1246,7 @@
                     <div class="form-group">
                         <label class="form-label">Nombre del Día</label>
                         <input type="text" id="dayName" class="form-input" placeholder="ej: Día A - Tren Superior" required />
-                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
+                        <div style="font-size: 12px; color: var(--text-gray); margin-top: 8px;">
                             Ejemplos: "Día A", "Día 1 - Tren Superior", "Lunes - Push"
                         </div>
                     </div>
@@ -1368,15 +1323,15 @@
             <div class="modal-content" style="max-width: 900px;">
                 <h3 class="modal-title">📥 Importación Completa - Alumnos + Días + Planes</h3>
                 
-                <div style="background: var(--bg-tertiary); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
+                <div style="background: var(--bg-gray); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
                     <h4 style="font-family: 'Inter'; font-size: 14px; text-transform: uppercase; margin-bottom: 12px;">📋 Formato Requerido</h4>
-                    <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.6;">
+                    <p style="font-size: 13px; color: var(--text-gray); margin-bottom: 12px; line-height: 1.6;">
                         Tu archivo CSV debe tener estas columnas:
                     </p>
                     <div style="background: white; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 10px; overflow-x: auto;">
                         <strong>Alumno,Edad,Peso,Objetivo,Clases,Dia,Bloque,TipoBloque,Ejercicio,Series,Reps,Principal</strong>
                     </div>
-                    <p style="font-size: 12px; color: var(--text-secondary); margin-top: 12px;">
+                    <p style="font-size: 12px; color: var(--text-gray); margin-top: 12px;">
                         <strong>Ejemplo:</strong><br>
                         <span style="font-family: monospace; font-size: 10px;">
                         Juan,25,75,Masa,12,Día A,Movilidad,movilidad,Rotaciones,2,10,NO<br>
@@ -1393,10 +1348,10 @@
 
                 <div id="completeImportPreview" style="display: none; margin-top: 20px;">
                     <h4 style="font-family: 'Inter'; font-size: 14px; text-transform: uppercase; margin-bottom: 12px;">Vista Previa</h4>
-                    <div style="max-height: 300px; overflow-y: auto; background: var(--bg-tertiary); padding: 16px; border-radius: 8px;">
+                    <div style="max-height: 300px; overflow-y: auto; background: var(--bg-gray); padding: 16px; border-radius: 8px;">
                         <div id="completeImportPreviewBody" style="font-size: 13px;"></div>
                     </div>
-                    <p id="completeImportCount" style="font-size: 13px; font-weight: 700; color: var(--accent-blue); margin-top: 12px;"></p>
+                    <p id="completeImportCount" style="font-size: 13px; font-weight: 700; color: var(--primary-blue); margin-top: 12px;"></p>
                 </div>
 
                 <div style="display: flex; gap: 12px; margin-top: 32px;">
@@ -1413,7 +1368,7 @@
             <div class="modal-content" style="max-width: 800px;">
                 <h3 class="modal-title">📥 Importar Días + Planes</h3>
                 
-                <div style="background: var(--bg-tertiary); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
+                <div style="background: var(--bg-gray); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
                     <div style="background: white; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 11px; overflow-x: auto;">
                         <strong>Dia,Bloque,TipoBloque,Ejercicio,Series,Reps,Principal</strong>
                     </div>
@@ -1426,7 +1381,7 @@
 
                 <div id="planImportPreview" style="display: none; margin-top: 20px;">
                     <div id="planImportPreviewBody"></div>
-                    <p id="planImportCount" style="font-size: 13px; font-weight: 700; color: var(--accent-blue); margin-top: 12px;"></p>
+                    <p id="planImportCount" style="font-size: 13px; font-weight: 700; color: var(--primary-blue); margin-top: 12px;"></p>
                 </div>
 
                 <div style="display: flex; gap: 12px; margin-top: 32px;">
@@ -1517,7 +1472,7 @@ setTimeout(function() {
                 document.getElementById('logoPreviewImg').src = customLogo;
             } else {
                 logoContainer.innerHTML = `
-                    <div style="width: 64px; height: 64px; background: var(--accent-blue); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: 'Inter'; font-size: 32px; color: white; letter-spacing: -2px;">T</div>
+                    <div style="width: 64px; height: 64px; background: var(--primary-blue); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: 'Inter'; font-size: 32px; color: white; letter-spacing: -2px;">T</div>
                 `;
             }
         }
@@ -1868,7 +1823,7 @@ function updateStudent(e) {
             const container = document.getElementById('studentsContainer');
             
             if (students.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 40px;">No hay atletas. Agregá uno nuevo o importá desde CSV.</p>';
+                container.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 40px;">No hay atletas. Agregá uno nuevo o importá desde CSV.</p>';
                 return;
             }
 
@@ -1879,7 +1834,7 @@ function updateStudent(e) {
                 return `
                     <div class="student-card" onclick="selectStudent(${student.id})" style="position: relative;">
                         <div style="position: absolute; top: 12px; right: 12px; display: flex; gap: 8px;">
-    <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); editStudent(${student.id})" style="padding: 6px 10px; background: var(--accent-blue); color: white;">✏️</button>
+    <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); editStudent(${student.id})" style="padding: 6px 10px; background: var(--primary-blue); color: white;">✏️</button>
     <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); deleteStudent(${student.id})" style="padding: 6px 10px; background: var(--danger); color: white;">🗑️</button>
 </div>
                         <div class="student-name">${student.name}</div>
@@ -2047,7 +2002,7 @@ function updateStudent(e) {
             const container = document.getElementById('trainingDaysList');
             
             if (!currentStudent || !currentStudent.trainingDays || currentStudent.trainingDays.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 20px; grid-column: 1/-1;">No hay días de entrenamiento. Agregá uno nuevo o importá un plan.</p>';
+                container.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 20px; grid-column: 1/-1;">No hay días de entrenamiento. Agregá uno nuevo o importá un plan.</p>';
                 document.getElementById('planDaysCard').style.display = 'block';
                 document.getElementById('currentDayView').style.display = 'none';
                 return;
@@ -2114,7 +2069,7 @@ function updateStudent(e) {
             const container = document.getElementById('blocksContainer');
             
             if (!currentDay.blocks || currentDay.blocks.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 40px;">No hay bloques. Agregá uno nuevo.</p>';
+                container.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 40px;">No hay bloques. Agregá uno nuevo.</p>';
                 return;
             }
 
@@ -2159,7 +2114,7 @@ function updateStudent(e) {
                         </div>
                         ${ex.isPrincipal ? `
                             <div style="margin-top: 12px;">
-                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--accent-blue);">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--primary-blue);">
                                     <input type="checkbox" ${ex.isPR ? 'checked' : ''} 
                                            onchange="updateExercise(${blockIndex}, ${exIndex}, 'isPR', this.checked)" />
                                     🏆 Récord Personal
@@ -2732,16 +2687,16 @@ function deleteGoal(goalId) {
             
             importedCompleteData.forEach(student => {
                 html += `
-                    <div style="margin-bottom: 20px; padding: 16px; background: white; border-radius: 8px; border-left: 4px solid var(--accent-blue);">
+                    <div style="margin-bottom: 20px; padding: 16px; background: white; border-radius: 8px; border-left: 4px solid var(--primary-blue);">
                         <h4 style="font-family: 'Inter'; font-size: 16px; margin-bottom: 8px;">${student.name}</h4>
-                        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
+                        <p style="font-size: 12px; color: var(--text-gray); margin-bottom: 12px;">
                             ${student.age} años · ${student.weight}kg · ${student.monthlyClasses} clases/mes<br>
                             🎯 ${student.goal}
                         </p>
                         <div style="font-size: 12px;">
                             <strong>${student.trainingDays.length} día${student.trainingDays.length > 1 ? 's' : ''}:</strong>
                             ${student.trainingDays.map(d => `
-                                <div style="margin-top: 8px; padding: 8px; background: var(--bg-tertiary); border-radius: 4px;">
+                                <div style="margin-top: 8px; padding: 8px; background: var(--bg-gray); border-radius: 4px;">
                                     <strong>${d.name}</strong> - ${d.blocks.length} bloque${d.blocks.length > 1 ? 's' : ''}
                                 </div>
                             `).join('')}
@@ -2914,7 +2869,7 @@ function deleteGoal(goalId) {
             
             importedPlanData.forEach(day => {
                 html += `
-                    <div style="margin-bottom: 16px; padding: 16px; background: var(--bg-tertiary); border-radius: 8px;">
+                    <div style="margin-bottom: 16px; padding: 16px; background: var(--bg-gray); border-radius: 8px;">
                         <h4 style="font-family: 'Inter'; font-size: 14px; margin-bottom: 8px;">${day.name}</h4>
                         <div style="font-size: 12px;">
                             ${day.blocks.map(b => `
@@ -3316,7 +3271,7 @@ function deleteGoal(goalId) {
         // DASHBOARD
         function renderDashboard() {
             if (!currentStudent) {
-                document.getElementById('dashboardContent').innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 40px;">Seleccioná un atleta para ver sus métricas</p>';
+                document.getElementById('dashboardContent').innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 40px;">Seleccioná un atleta para ver sus métricas</p>';
                 return;
             }
 
@@ -3341,10 +3296,10 @@ function deleteGoal(goalId) {
                             <div class="attendance-title">📅 Progreso de Asistencia</div>
                             <div class="classes-info">${attendedClasses} / ${currentStudent.monthlyClasses} clases</div>
                         </div>
-                        <div style="background: var(--bg-tertiary); border-radius: 12px; padding: 24px;">
+                        <div style="background: var(--bg-gray); border-radius: 12px; padding: 24px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                                <span style="font-size: 13px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Sesiones Completadas</span>
-                                <span style="font-family: 'Inter'; font-size: 24px; color: var(--accent-blue);">${attendancePercentage}%</span>
+                                <span style="font-size: 13px; font-weight: 700; color: var(--text-gray); text-transform: uppercase;">Sesiones Completadas</span>
+                                <span style="font-family: 'Inter'; font-size: 24px; color: var(--primary-blue);">${attendancePercentage}%</span>
                             </div>
                             <div class="goal-progress-bar">
                                 <div class="goal-progress-fill" style="width: ${Math.min(attendancePercentage, 100)}%"></div>
@@ -3352,7 +3307,7 @@ function deleteGoal(goalId) {
                         </div>
                     </div>
                     <div class="card" style="margin-top: 24px;">
-                        <p style="text-align: center; color: var(--text-secondary); padding: 40px;">No hay sesiones este mes</p>
+                        <p style="text-align: center; color: var(--text-gray); padding: 40px;">No hay sesiones este mes</p>
                     </div>
                 `;
                 return;
@@ -3500,15 +3455,15 @@ function deleteGoal(goalId) {
                         <div class="attendance-title">📅 Progreso de Asistencia</div>
                         <div class="classes-info">${attendedClasses} / ${currentStudent.monthlyClasses} clases</div>
                     </div>
-                    <div style="background: var(--bg-tertiary); border-radius: 12px; padding: 24px;">
+                    <div style="background: var(--bg-gray); border-radius: 12px; padding: 24px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <span style="font-size: 13px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Sesiones Completadas</span>
-                            <span style="font-family: 'Inter'; font-size: 24px; color: var(--accent-blue);">${attendancePercentage}%</span>
+                            <span style="font-size: 13px; font-weight: 700; color: var(--text-gray); text-transform: uppercase;">Sesiones Completadas</span>
+                            <span style="font-family: 'Inter'; font-size: 24px; color: var(--primary-blue);">${attendancePercentage}%</span>
                         </div>
                         <div class="goal-progress-bar">
                             <div class="goal-progress-fill" style="width: ${Math.min(attendancePercentage, 100)}%"></div>
                         </div>
-                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 12px;">
+                        <div style="font-size: 12px; color: var(--text-gray); margin-top: 12px;">
                             ${Object.entries(dayStats).map(([day, count]) => `${day}: ${count} sesión${count > 1 ? 'es' : ''}`).join(' • ')}
                         </div>
                     </div>
@@ -3687,7 +3642,7 @@ function renderEditSessionBlocks(session) {
     const container = document.getElementById('editSessionBlocks');
     
     if (!session.blocks || session.blocks.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 20px;">Esta sesión no tiene ejercicios registrados</p>';
+        container.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 20px;">Esta sesión no tiene ejercicios registrados</p>';
         return;
     }
     
@@ -3737,7 +3692,7 @@ function renderEditSessionBlocks(session) {
                     </div>
                     ${ex.isPrincipal ? `
                         <div style="margin-top: 12px;">
-                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--accent-blue);">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--primary-blue);">
                                 <input type="checkbox" ${ex.isPR ? 'checked' : ''} 
                                        id="editSess_${blockIdx}_${exIdx}_isPR" />
                                 🏆 Récord Personal
@@ -3936,7 +3891,7 @@ alert('✅ Sincronización completa exitosa!\n\nTodos los datos y métricas fuer
     <div class="modal-content" style="max-width: 900px;">
         <h3 class="modal-title">✏️ Editar Sesión</h3>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; padding: 16px; background: var(--bg-tertiary); border-radius: 8px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; padding: 16px; background: var(--bg-gray); border-radius: 8px;">
             <div>
                 <label class="form-label">📅 Fecha</label>
                 <input type="date" id="editSessionDate" class="form-input" />
