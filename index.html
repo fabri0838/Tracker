@@ -2549,7 +2549,14 @@
             if (s.level >= 50 && !s.badges.includes('lvl_50')) s.badges.push('lvl_50');
             if (s.level >= 100 && !s.badges.includes('lvl_100')) s.badges.push('lvl_100');
         }
-
+function normalizeExerciseName(name) {
+    if (!name) return '';
+    return name
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
+}
         function updateGoals(s) {
             if (!s.goals) s.goals = [];
             const now = new Date();
@@ -2566,15 +2573,14 @@
                         .reduce((sum, sess) => sum + (sess.volume || 0), 0) / 1000);
                     
                 } else if (g.type === 'strength') {
-                    s.sessions.forEach(sess => {
-                        if (sess.blocks) sess.blocks.forEach(b => {
-                            if (b.exercises) b.exercises.forEach(e => {
-                                if (e.name === g.exerciseName && e.weight > curr) curr = e.weight;
-                            });
-                        });
-                    });
-                    
-                } else if (g.type === 'attendance') {
+    s.sessions.forEach(sess => {
+        if (sess.blocks) sess.blocks.forEach(b => {
+            if (b.exercises) b.exercises.forEach(e => {
+                if (e.name === g.exerciseName && e.weight > curr) curr = e.weight;
+            });
+        });
+    });
+} else if (g.type === 'attendance') {
                     const ms = new Date(now.getFullYear(), now.getMonth(), 1);
                     curr = s.sessions.filter(sess => new Date(sess.date) >= ms).length;
                     
