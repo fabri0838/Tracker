@@ -3755,7 +3755,6 @@ async function cleanAllDuplicatesAndGarbage() {
     showLoading(true);
     
     try {
-        // 1. Cargar TODOS los documentos de Firebase
         const snapshot = await window.firebaseGetDocs(studentsCollection);
         const allDocs = [];
         
@@ -3768,8 +3767,8 @@ async function cleanAllDuplicatesAndGarbage() {
         
         console.log('📦 Documentos encontrados en Firebase:', allDocs.length);
         
-        // 2. Identificar válidos vs basura
         const validStudents = new Map();
+        const seenNames = new Map(); // ← DETECTAR POR NOMBRE
         const garbageDocIds = [];
         
         allDocs.forEach(item => {
@@ -3782,51 +3781,64 @@ async function cleanAllDuplicatesAndGarbage() {
                 student.name.trim() === '' ||
                 student.name.includes('no se modificaron') ||
                 student.name.toLowerCase().includes('undefined') ||
-                student.name.toLowerCase().includes('null')) {
+                student.name.toLowerCase().includes('null') ||
+                student._deleted) {
                 
-                console.log('🗑️ Basura detectada:', student.name || 'Sin nombre');
+                console.log('🗑️ Basura detectada:', student?.name || 'Sin nombre');
                 garbageDocIds.push(item.docId);
                 return;
             }
             
-            // DUPLICADO: Ya existe otro con mismo ID
-            if (validStudents.has(student.id)) {
-                console.log('🔁 Duplicado detectado:', student.name);
-                garbageDocIds.push(item.docId);
-                return;
-            }
+            const nameLower = student.name.toLowerCase().trim();
             
-            // VÁLIDO
-            validStudents.set(student.id, student);
+            // ✅ DETECTAR DUPLICADOS POR NOMBRE
+            if (seenNames.has(nameLower)) {
+                const existing = seenNames.get(nameLower);
+                const existingSessionsCount = (existing.data.sessions || []).length;
+                const currentSessionsCount = (student.sessions || []).length;
+                
+                if (currentSessionsCount > existingSessionsCount) {
+                    // Este tiene más datos, eliminar el anterior
+                    console.log('🔁 Duplicado detectado:', student.name, `- MANTENER este (${currentSessionsCount} sesiones) vs anterior (${existingSessionsCount} sesiones)`);
+                    garbageDocIds.push(existing.docId);
+                    validStudents.delete(existing.data.id);
+                    
+                    validStudents.set(student.id, student);
+                    seenNames.set(nameLower, { data: student, docId: item.docId });
+                } else {
+                    // El anterior tiene más datos, eliminar este
+                    console.log('🔁 Duplicado detectado:', student.name, `- ELIMINAR este (${currentSessionsCount} sesiones) vs anterior (${existingSessionsCount} sesiones)`);
+                    garbageDocIds.push(item.docId);
+                }
+            } else {
+                // Primera vez que vemos este nombre
+                validStudents.set(student.id, student);
+                seenNames.set(nameLower, { data: student, docId: item.docId });
+            }
         });
         
-        console.log('✅ Estudiantes válidos:', validStudents.size);
-        console.log('🗑️ Documentos basura:', garbageDocIds.length);
+        console.log('✅ Estudiantes válidos únicos:', validStudents.size);
+        console.log('🗑️ Total a eliminar:', garbageDocIds.length);
         
-        // 3. ELIMINAR BASURA DE FIREBASE
+        // ELIMINAR BASURA Y DUPLICADOS DE FIREBASE
         if (garbageDocIds.length > 0) {
             for (const docId of garbageDocIds) {
                 try {
                     const docRef = window.firebaseDoc(db, 'students', docId);
                     await window.firebaseSetDoc(docRef, { _deleted: true, deletedAt: new Date().toISOString() }, { merge: true });
-                    console.log('🗑️ Eliminado:', docId);
+                    console.log('🗑️ Marcado para eliminar:', docId);
                 } catch (error) {
                     console.error('❌ Error eliminando:', docId, error);
                 }
             }
         }
         
-        // 4. Actualizar array local
         students = Array.from(validStudents.values());
-        
-        // 5. Guardar en localStorage limpio
         localStorage.setItem('gymTracker_students', JSON.stringify(students));
-        
-        // 6. Renderizar
         renderStudents();
         
         showLoading(false);
-        showNotification(`✅ Limpieza completa: ${validStudents.size} atletas, ${garbageDocIds.length} eliminados`, 'success');
+        showNotification(`✅ Limpieza: ${validStudents.size} únicos, ${garbageDocIds.length} eliminados`, 'success');
         
     } catch (error) {
         console.error('❌ Error en limpieza:', error);
@@ -3834,6 +3846,21 @@ async function cleanAllDuplicatesAndGarbage() {
         cleanLocalOnly();
     }
 }
+```
+
+---
+
+## 🎯 AHORA SÍ - PASOS FINALES:
+
+1. **Guardá** el archivo con la función actualizada
+2. **Recargá** la página
+3. **Mirá la consola**, deberías ver algo como:
+```
+   🔁 Duplicado detectado: Juan Pérez - MANTENER este (5 sesiones) vs anterior (2 sesiones)
+   🔁 Duplicado detectado: María García - ELIMINAR este (1 sesiones) vs anterior (3 sesiones)
+   ...
+   ✅ Estudiantes válidos únicos: 25
+   🗑️ Total a eliminar: 26
 
 function cleanLocalOnly() {
     console.log('🧹 Limpieza solo localStorage...');
