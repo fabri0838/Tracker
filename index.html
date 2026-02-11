@@ -1349,7 +1349,7 @@
                 
                 <div class="form-group">
                     <label class="form-label">Tipo de Objetivo</label>
-                   <select id="goalType" class="form-input">
+                  <select id="goalType" class="form-input" onchange="document.getElementById('exerciseField').style.display = this.value === 'strength' ? 'block' : 'none'">
                         <option value="volume">📈 Aumentar Volumen Mensual (toneladas)</option>
                         <option value="strength">💪 Aumentar Fuerza en Ejercicio (kg)</option>
                         <option value="attendance">📅 Mejorar Asistencia (clases/mes)</option>
@@ -1362,9 +1362,9 @@
                     <input type="text" id="goalDesc" class="form-input" placeholder="Ej: Aumentar de 60 a 70 toneladas mensuales" />
                 </div>
                 
-                <div id="exerciseField" class="form-group">
+               <div id="exerciseField" class="form-group" style="display: block;">
                     <label class="form-label">Ejercicio Específico</label>
-                    <input type="text" id="goalExercise" class="form-input" placeholder="Ej: Sentadilla" list="exercisesList" />
+                    <input type="text" id="goalExercise" class="form-input" placeholder="Ej: Sentadilla (opcional)" list="exercisesList" />
                 </div>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
@@ -2566,13 +2566,17 @@
                         .reduce((sum, sess) => sum + (sess.volume || 0), 0) / 1000);
                     
                 } else if (g.type === 'strength') {
-                    s.sessions.forEach(sess => {
-                        if (sess.blocks) sess.blocks.forEach(b => {
-                            if (b.exercises) b.exercises.forEach(e => {
-                                if (e.name === g.exerciseName && e.weight > curr) curr = e.weight;
-                            });
-                        });
-                    });
+    // Si hay ejercicio específico, buscar ese. Si no, buscar el máximo en cualquier ejercicio
+    s.sessions.forEach(sess => {
+        if (sess.blocks) sess.blocks.forEach(b => {
+            if (b.exercises) b.exercises.forEach(e => {
+                // Si especificó ejercicio, filtrar por ese. Si no, cualquier ejercicio cuenta
+                if ((!g.exerciseName || e.name.toLowerCase().includes(g.exerciseName.toLowerCase())) && e.weight > curr) {
+                    curr = e.weight;
+                }
+            });
+        });
+    });
                     
                 } else if (g.type === 'attendance') {
                     const ms = new Date(now.getFullYear(), now.getMonth(), 1);
