@@ -1700,53 +1700,69 @@
             }
         }
 
-        function mergeStudentsData(firebaseStudents, localStudents) {
-            const mergedMap = new Map();
+       function mergeStudentsData(firebaseStudents, localStudents) {
+    const mergedMap = new Map();
+    
+    // 🔥 PRIMERO: Agregar de Firebase con ID como key
+    firebaseStudents.forEach(s => {
+        if (s && s.id) {  // ← Verificar que existe y tiene ID
+            mergedMap.set(s.id, {...s});
+        }
+    });
+    
+    // 🔥 SEGUNDO: Fusionar con locales (solo si no existe en Firebase)
+    localStudents.forEach(local => {
+        if (!local || !local.id) return; // ← Skip si no tiene ID
+        
+        const existing = mergedMap.get(local.id);
+        
+        if (!existing) {
+            // No existe en Firebase → agregar local
+            mergedMap.set(local.id, {...local});
+        } else {
+            // Ya existe en Firebase → fusionar datos adicionales
             
-            // Agregar de Firebase primero
-            firebaseStudents.forEach(s => mergedMap.set(s.id, {...s}));
-            
-            // Fusionar con locales
-            localStudents.forEach(local => {
-                const existing = mergedMap.get(local.id);
-                
-                if (!existing) {
-                    mergedMap.set(local.id, {...local});
-                } else {
-                    // Fusionar sesiones
-                    const sessionMap = new Map();
-                    (existing.sessions || []).forEach(s => {
-                        sessionMap.set((s.timestamp || '') + '_' + (s.date || ''), s);
-                    });
-                    (local.sessions || []).forEach(s => {
-                        const key = (s.timestamp || '') + '_' + (s.date || '');
-                        if (!sessionMap.has(key)) sessionMap.set(key, s);
-                    });
-                    
-                    const merged = {...existing};
-                    merged.sessions = Array.from(sessionMap.values())
-                        .sort((a, b) => new Date(b.date) - new Date(a.date));
-                    
-                    // Fusionar objetivos
-                    const goalMap = new Map();
-                    (existing.goals || []).forEach(g => goalMap.set(g.id, g));
-                    (local.goals || []).forEach(g => {
-                        if (!goalMap.has(g.id)) goalMap.set(g.id, g);
-                    });
-                    merged.goals = Array.from(goalMap.values());
-                    
-                    // Mantener máximos
-                    merged.totalXP = Math.max(existing.totalXP || 0, local.totalXP || 0);
-                    merged.level = Math.max(existing.level || 1, local.level || 1);
-                    merged.badges = [...new Set([...(existing.badges || []), ...(local.badges || [])])];
-                    
-                    mergedMap.set(local.id, merged);
+            // Fusionar sesiones SIN duplicar
+            const sessionMap = new Map();
+            (existing.sessions || []).forEach(s => {
+                const key = `${s.timestamp}_${s.date}`;
+                sessionMap.set(key, s);
+            });
+            (local.sessions || []).forEach(s => {
+                const key = `${s.timestamp}_${s.date}`;
+                if (!sessionMap.has(key)) {
+                    sessionMap.set(key, s);
                 }
             });
             
-            return Array.from(mergedMap.values());
+            // Fusionar objetivos SIN duplicar
+            const goalMap = new Map();
+            (existing.goals || []).forEach(g => goalMap.set(g.id, g));
+            (local.goals || []).forEach(g => {
+                if (!goalMap.has(g.id)) {
+                    goalMap.set(g.id, g);
+                }
+            });
+            
+            // Actualizar el estudiante con datos fusionados
+            const merged = {...existing};
+            merged.sessions = Array.from(sessionMap.values())
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
+            merged.goals = Array.from(goalMap.values());
+            
+            // Mantener máximos
+            merged.totalXP = Math.max(existing.totalXP || 0, local.totalXP || 0);
+            merged.level = Math.max(existing.level || 1, local.level || 1);
+            merged.badges = [...new Set([...(existing.badges || []), ...(local.badges || [])])];
+            
+            mergedMap.set(local.id, merged);
         }
-
+    });
+    
+    // 🔥 RETORNAR ARRAY SIN DUPLICADOS
+    return Array.from(mergedMap.values());
+}
+          
         // ============================================
         // UI FUNCTIONS (sin cambios principales)
         // ============================================
@@ -1768,7 +1784,27 @@
         }
         
         initialize();
+function cleanDuplicateStudents() {
+    const seen = new Set();
+    const cleaned = [];
+    
+    students.forEach(s => {
+        if (s && s.id && !seen.has(s.id)) {
+            seen.add(s.id);
+            cleaned.push(s);
+        }
+    });
+    
+    if (cleaned.length !== students.length) {
+        console.log(`🧹 Limpiados ${students.length - cleaned.length} duplicados`);
+        students = cleaned;
+        saveData();
+    }
+}
 
+// Llamar después de cargar
+initialize();
+setTimeout(cleanDuplicateStudents, 2000); // Ejecutar 2 segundos después
         function loadLogo() {
             const logoContainer = document.getElementById('appLogo');
             
