@@ -1457,30 +1457,35 @@
             }, 1000);
         });
         
-        function initializeFirebase() {
-            try {
-                db = window.firebaseDB;
-                studentsCollection = window.firebaseCollection(db, 'students');
-                
-                console.log('✅ Firebase Firestore inicializado');
-                
-                // Escuchar cambios en tiempo real
-                setupRealtimeListener();
-                
-                // Detectar estado de conexión
-                setupConnectionListener();
-                
-                // Cargar datos iniciales
-                loadFromFirebase();
-                
-                updateConnectionStatus(true, 'Conectado');
-                
-            } catch (error) {
-                console.error('❌ Error inicializando Firebase:', error);
-                showNotification('❌ Error de conexión', 'error');
-                loadFromLocalStorageFallback();
-            }
-        }
+      function initializeFirebase() {
+    try {
+        db = window.firebaseDB;
+        studentsCollection = window.firebaseCollection(db, 'students');
+        
+        console.log('✅ Firebase Firestore inicializado');
+        
+        // Escuchar cambios en tiempo real
+        setupRealtimeListener();
+        
+        // Detectar estado de conexión
+        setupConnectionListener();
+        
+        // Cargar datos iniciales
+        loadFromFirebase();
+        
+        updateConnectionStatus(true, 'Conectado');
+        
+        // 🧹 EJECUTAR LIMPIEZA DESPUÉS DE CARGAR
+        setTimeout(() => {
+            cleanAllDuplicatesAndGarbage();
+        }, 3000);
+        
+    } catch (error) {
+        console.error('❌ Error inicializando Firebase:', error);
+        showNotification('❌ Error de conexión', 'error');
+        loadFromLocalStorageFallback();
+    }
+}
         
         function setupRealtimeListener() {
             if (!studentsCollection) return;
@@ -2635,28 +2640,7 @@ setTimeout(cleanDuplicateStudents, 2000); // Ejecutar 2 segundos después
         }
     });
 }
-                    
-                } else if (g.type === 'attendance') {
-                    const ms = new Date(now.getFullYear(), now.getMonth(), 1);
-                    curr = s.sessions.filter(sess => new Date(sess.date) >= ms).length;
-                    
-                } else if (g.type === 'prs') {
-                    const start = new Date(g.startDate || g.deadline);
-                    curr = s.sessions.filter(sess => new Date(sess.date) >= start)
-                        .reduce((sum, sess) => sum + (sess.prs || 0), 0);
-                }
                 
-                g.currentValue = curr;
-                g.progress = Math.min((curr / g.targetValue) * 100, 100);
-                
-                if (g.progress >= 100 && g.status !== 'completed') {
-                    g.status = 'completed';
-                    setTimeout(() => {
-                        alert('🏆 ¡OBJETIVO CUMPLIDO!\n\n' + s.name + ' completó:\n' + g.description);
-                    }, 1500);
-                }
-            });
-        }
 
         function saveGoal() {
             if (!currentStudent) return;
@@ -3819,14 +3803,6 @@ function cleanLocalOnly() {
     showNotification(`🧹 Limpieza local: ${cleaned.length} atletas válidos`, 'info');
 }
 
-// Ejecutar limpieza al cargar
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        if (window.firebaseDB) {
-            cleanAllDuplicatesAndGarbage();
-        }
-    }, 3000);
-});
     </script>
 </body>
 </html>
