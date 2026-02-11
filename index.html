@@ -3775,19 +3775,29 @@ if (exerciseValue) {
                 allDocs.forEach(item => {
                     const student = item.data;
                     
-                    if (!student || 
-                        !student.id || 
-                        !student.name || 
-                        student.name.trim() === '' ||
-                        student.name.includes('no se modificaron') ||
-                        student.name.toLowerCase().includes('undefined') ||
-                        student.name.toLowerCase().includes('null') ||
-                        student._deleted) {
-                        
-                        console.log('🗑️ Basura detectada:', student?.name || 'Sin nombre');
-                        garbageDocIds.push(item.docId);
-                        return;
-                    }
+                    // BASURA: Solo rechazar si es realmente basura
+            if (!student || !student.id || !student.name) {
+                console.log('🗑️ Basura: Sin ID o nombre');
+                garbageDocIds.push(item.docId);
+                return;
+            }
+            
+            const nameTrimmed = student.name.trim();
+            
+            // Rechazar solo si:
+            // - Nombre vacío
+            // - Contiene texto de error de importación
+            // - Ya está marcado como eliminado
+            if (nameTrimmed === '' ||
+                nameTrimmed.toLowerCase().startsWith('no se modificaron') ||
+                nameTrimmed.toLowerCase() === 'undefined' ||
+                nameTrimmed.toLowerCase() === 'null' ||
+                student._deleted === true) {
+                
+                console.log('🗑️ Basura detectada:', student.name);
+                garbageDocIds.push(item.docId);
+                return;
+            }
                     
                     const nameLower = student.name.toLowerCase().trim();
                     
