@@ -1703,26 +1703,29 @@
        function mergeStudentsData(firebaseStudents, localStudents) {
     const mergedMap = new Map();
     
-    // 🔥 PRIMERO: Agregar de Firebase con ID como key
+    // Solo agregar estudiantes VÁLIDOS de Firebase
     firebaseStudents.forEach(s => {
-        if (s && s.id) {  // ← Verificar que existe y tiene ID
+        if (s && s.id && s.name && s.name.trim() !== '' && 
+            !s.name.includes('no se modificaron') &&
+            !s.name.toLowerCase().includes('undefined')) {
             mergedMap.set(s.id, {...s});
         }
     });
     
-    // 🔥 SEGUNDO: Fusionar con locales (solo si no existe en Firebase)
+    // Fusionar con locales válidos
     localStudents.forEach(local => {
-        if (!local || !local.id) return; // ← Skip si no tiene ID
+        if (!local || !local.id || !local.name || local.name.trim() === '' ||
+            local.name.includes('no se modificaron') ||
+            local.name.toLowerCase().includes('undefined')) {
+            return; // Skip basura
+        }
         
         const existing = mergedMap.get(local.id);
         
         if (!existing) {
-            // No existe en Firebase → agregar local
             mergedMap.set(local.id, {...local});
         } else {
-            // Ya existe en Firebase → fusionar datos adicionales
-            
-            // Fusionar sesiones SIN duplicar
+            // Fusionar sesiones
             const sessionMap = new Map();
             (existing.sessions || []).forEach(s => {
                 const key = `${s.timestamp}_${s.date}`;
@@ -1730,27 +1733,20 @@
             });
             (local.sessions || []).forEach(s => {
                 const key = `${s.timestamp}_${s.date}`;
-                if (!sessionMap.has(key)) {
-                    sessionMap.set(key, s);
-                }
+                if (!sessionMap.has(key)) sessionMap.set(key, s);
             });
             
-            // Fusionar objetivos SIN duplicar
+            // Fusionar objetivos
             const goalMap = new Map();
             (existing.goals || []).forEach(g => goalMap.set(g.id, g));
             (local.goals || []).forEach(g => {
-                if (!goalMap.has(g.id)) {
-                    goalMap.set(g.id, g);
-                }
+                if (!goalMap.has(g.id)) goalMap.set(g.id, g);
             });
             
-            // Actualizar el estudiante con datos fusionados
             const merged = {...existing};
             merged.sessions = Array.from(sessionMap.values())
                 .sort((a, b) => new Date(b.date) - new Date(a.date));
             merged.goals = Array.from(goalMap.values());
-            
-            // Mantener máximos
             merged.totalXP = Math.max(existing.totalXP || 0, local.totalXP || 0);
             merged.level = Math.max(existing.level || 1, local.level || 1);
             merged.badges = [...new Set([...(existing.badges || []), ...(local.badges || [])])];
@@ -1759,7 +1755,6 @@
         }
     });
     
-    // 🔥 RETORNAR ARRAY SIN DUPLICADOS
     return Array.from(mergedMap.values());
 }
           
@@ -2586,33 +2581,60 @@ setTimeout(cleanDuplicateStudents, 2000); // Ejecutar 2 segundos después
             if (s.level >= 100 && !s.badges.includes('lvl_100')) s.badges.push('lvl_100');
         }
 
-        function updateGoals(s) {
-            if (!s.goals) s.goals = [];
-            const now = new Date();
+      function updateGoals(s) {
+    if (!s.goals) s.goals = [];
+    const now = new Date();
+    
+    s.goals.forEach(g => {
+        // ❌ NO TOCAR si ya está completado o fallado
+        if (g.status === 'completed' || g.status === 'failed') return;
+        
+        if (now > new Date(g.deadline)) { 
+            g.status = 'failed'; 
+            return; 
+        }
+        
+        let curr = 0;
+        
+        if (g.type === 'volume') {
+            const ms = new Date(now.getFullYear(), now.getMonth(), 1);
+            curr = Math.floor(s.sessions.filter(sess => new Date(sess.date) >= ms)
+                .reduce((sum, sess) => sum + (sess.volume || 0), 0) / 1000);
             
-            s.goals.forEach(g => {
-                if (g.status === 'completed' || g.status === 'failed') return;
-                if (now > new Date(g.deadline)) { g.status = 'failed'; return; }
-                
-                let curr = 0;
-                
-                if (g.type === 'volume') {
-                    const ms = new Date(now.getFullYear(), now.getMonth(), 1);
-                    curr = Math.floor(s.sessions.filter(sess => new Date(sess.date) >= ms)
-                        .reduce((sum, sess) => sum + (sess.volume || 0), 0) / 1000);
-                    
-                } else if (g.type === 'strength') {
-    // Si hay ejercicio específico, buscar ese. Si no, buscar el máximo en cualquier ejercicio
-    s.sessions.forEach(sess => {
-        if (sess.blocks) sess.blocks.forEach(b => {
-            if (b.exercises) b.exercises.forEach(e => {
-                // Si especificó ejercicio, filtrar por ese. Si no, cualquier ejercicio cuenta
-                if ((!g.exerciseName || e.name.toLowerCase().includes(g.exerciseName.toLowerCase())) && e.weight > curr) {
-                    curr = e.weight;
-                }
+        } else if (g.type === 'strength') {
+            s.sessions.forEach(sess => {
+                if (sess.blocks) sess.blocks.forEach(b => {
+                    if (b.exercises) b.exercises.forEach(e => {
+                        if ((!g.exerciseName || e.name.toLowerCase().includes(g.exerciseName.toLowerCase())) && e.weight > curr) {
+                            curr = e.weight;
+                        }
+                    });
+                });
             });
-        });
+            
+        } else if (g.type === 'attendance') {
+            const ms = new Date(now.getFullYear(), now.getMonth(), 1);
+            curr = s.sessions.filter(sess => new Date(sess.date) >= ms).length;
+            
+        } else if (g.type === 'prs') {
+            const start = new Date(g.startDate || g.deadline);
+            curr = s.sessions.filter(sess => new Date(sess.date) >= start)
+                .reduce((sum, sess) => sum + (sess.prs || 0), 0);
+        }
+        
+        g.currentValue = curr;
+        g.progress = Math.min((curr / g.targetValue) * 100, 100);
+        
+        // ✅ MARCAR COMO COMPLETADO (pero NO eliminar)
+        if (g.progress >= 100 && g.status !== 'completed') {
+            g.status = 'completed';
+            g.completedAt = new Date().toISOString(); // ← Fecha de logro
+            setTimeout(() => {
+                alert('🏆 ¡OBJETIVO CUMPLIDO!\n\n' + s.name + ' completó:\n' + g.description + '\n\n🎁 Recompensa: ' + (g.reward || 'Sin recompensa'));
+            }, 1500);
+        }
     });
+}
                     
                 } else if (g.type === 'attendance') {
                     const ms = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -2837,44 +2859,80 @@ if (exerciseValue) {
                         <h3 style="margin: 0; color: var(--text-primary);">🎯 Objetivos SMART</h3>
                         <button onclick="openModal('newGoal')" class="btn btn-primary btn-sm">➕ Nuevo Objetivo</button>
                     </div>
-                    
                     ${(() => {
-                        const active = (currentStudent.goals || []).filter(g => g.status === 'in_progress');
-                        if (active.length === 0) {
-                            return '<p style="color: var(--text-secondary); padding: 20px; text-align: center;">No hay objetivos activos. ¡Creá uno!</p>';
-                        }
-                        return active.map(g => {
-                            const days = Math.ceil((new Date(g.deadline) - new Date()) / 86400000);
-                            const progressColor = g.progress >= 75 ? '#22c55e' : g.progress >= 50 ? '#f59e0b' : '#3b82f6';
-                            return `
-                                <div style="border: 2px solid var(--border-color); padding: 20px; border-radius: 12px; margin-bottom: 16px; background: var(--bg-secondary);">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-                                        <div style="flex: 1;">
-                                            <div style="font-size: 18px; font-weight: bold; color: var(--accent-blue);">${g.description}</div>
-                                            <div style="font-size: 13px; color: var(--text-secondary);">
-                                                ${g.type === 'volume' ? '📈 Volumen' : g.type === 'strength' ? '💪 Fuerza' : g.type === 'attendance' ? '📅 Asistencia' : '🏆 PRs'}${g.exerciseName ? ' · 🎯 ' + g.exerciseName : ''}
-                                            </div>
-                                        </div>
-                                        <button onclick="deleteGoal(${g.id})" style="background: var(--danger); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">🗑️</button>
-                                    </div>
-                                    <div style="background: var(--bg-primary); padding: 16px; border-radius: 8px; margin-bottom: 12px;">
-                                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-                                            <span style="font-size: 28px; font-weight: bold; color: var(--accent-blue);">${g.currentValue}</span>
-                                            <span style="font-size: 16px; color: var(--text-secondary);">/ ${g.targetValue} ${g.unit}</span>
-                                        </div>
-                                        <div style="background: var(--border-color); height: 12px; border-radius: 6px; overflow: hidden;">
-                                            <div style="background: ${progressColor}; height: 100%; width: ${g.progress}%;"></div>
-                                        </div>
-                                        <div style="font-size: 13px; color: var(--text-secondary); margin-top: 8px; text-align: right;">${Math.round(g.progress)}%</div>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary);">
-                                        <div>📅 ${days > 0 ? days + ' días' : '❌ Venció'}</div>
-                                        ${g.reward ? '<div style="color: var(--success); font-weight: 700;">🎁 ' + g.reward + '</div>' : ''}
-                                    </div>
-                                </div>
-                            `;
-                        }).join('');
-                    })()}
+    const active = (currentStudent.goals || []).filter(g => g.status === 'in_progress');
+    const completed = (currentStudent.goals || []).filter(g => g.status === 'completed');
+    
+    let html = '';
+    
+    // OBJETIVOS ACTIVOS
+    if (active.length > 0) {
+        html += '<h4 style="color: var(--accent-blue); margin-bottom: 12px;">🎯 Objetivos Activos</h4>';
+        html += active.map(g => {
+            const days = Math.ceil((new Date(g.deadline) - new Date()) / 86400000);
+            const progressColor = g.progress >= 75 ? '#22c55e' : g.progress >= 50 ? '#f59e0b' : '#3b82f6';
+            return `
+                <div style="border: 2px solid var(--border-color); padding: 20px; border-radius: 12px; margin-bottom: 16px; background: var(--bg-secondary);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                        <div style="flex: 1;">
+                            <div style="font-size: 18px; font-weight: bold; color: var(--accent-blue);">${g.description}</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">
+                                ${g.type === 'volume' ? '📈 Volumen' : g.type === 'strength' ? '💪 Fuerza' : g.type === 'attendance' ? '📅 Asistencia' : '🏆 PRs'}${g.exerciseName ? ' · 🎯 ' + g.exerciseName : ''}
+                            </div>
+                        </div>
+                        <button onclick="deleteGoal(${g.id})" style="background: var(--danger); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">🗑️</button>
+                    </div>
+                    <div style="background: var(--bg-primary); padding: 16px; border-radius: 8px; margin-bottom: 12px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                            <span style="font-size: 28px; font-weight: bold; color: var(--accent-blue);">${g.currentValue}</span>
+                            <span style="font-size: 16px; color: var(--text-secondary);">/ ${g.targetValue} ${g.unit}</span>
+                        </div>
+                        <div style="background: var(--border-color); height: 12px; border-radius: 6px; overflow: hidden;">
+                            <div style="background: ${progressColor}; height: 100%; width: ${g.progress}%;"></div>
+                        </div>
+                        <div style="font-size: 13px; color: var(--text-secondary); margin-top: 8px; text-align: right;">${Math.round(g.progress)}%</div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary);">
+                        <div>📅 ${days > 0 ? days + ' días restantes' : '❌ Venció'}</div>
+                        ${g.reward ? '<div style="color: var(--success); font-weight: 700;">🎁 ' + g.reward + '</div>' : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    // OBJETIVOS COMPLETADOS
+    if (completed.length > 0) {
+        html += '<h4 style="color: var(--success); margin-top: 24px; margin-bottom: 12px;">✅ Objetivos Completados</h4>';
+        html += completed.map(g => {
+            const completedDate = g.completedAt ? new Date(g.completedAt).toLocaleDateString('es-AR') : 'Fecha desconocida';
+            return `
+                <div style="border: 2px solid var(--success); padding: 20px; border-radius: 12px; margin-bottom: 16px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                        <div style="flex: 1;">
+                            <div style="font-size: 18px; font-weight: bold; color: var(--success);">✅ ${g.description}</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">
+                                Completado el ${completedDate} · Logró ${g.targetValue} ${g.unit}
+                            </div>
+                        </div>
+                        <button onclick="deleteGoal(${g.id})" style="background: var(--danger); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">🗑️</button>
+                    </div>
+                    ${g.reward ? `
+                        <div style="background: var(--success); color: white; padding: 12px; border-radius: 8px; font-weight: 700; text-align: center;">
+                            🎁 RECOMPENSA: ${g.reward}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }).join('');
+    }
+    
+    if (active.length === 0 && completed.length === 0) {
+        html = '<p style="color: var(--text-secondary); padding: 20px; text-align: center;">No hay objetivos. ¡Creá uno!</p>';
+    }
+    
+    return html;
+})()}
                 </div>
                 
                 <div class="attendance-section">
@@ -3635,6 +3693,140 @@ if (exerciseValue) {
             
             currentEditingSessionIndex = null;
         }
+        // ============================================
+// 🧹 LIMPIEZA COMPLETA DE DUPLICADOS Y BASURA
+// ============================================
+async function cleanAllDuplicatesAndGarbage() {
+    console.log('🧹 Iniciando limpieza completa...');
+    
+    if (!db) {
+        console.log('⚠️ Firebase no disponible, limpiando solo local');
+        cleanLocalOnly();
+        return;
+    }
+    
+    showLoading(true);
+    
+    try {
+        // 1. Cargar TODOS los documentos de Firebase
+        const snapshot = await window.firebaseGetDocs(studentsCollection);
+        const allDocs = [];
+        
+        snapshot.forEach(doc => {
+            allDocs.push({
+                docId: doc.id,
+                data: doc.data()
+            });
+        });
+        
+        console.log('📦 Documentos encontrados en Firebase:', allDocs.length);
+        
+        // 2. Identificar válidos vs basura
+        const validStudents = new Map();
+        const garbageDocIds = [];
+        
+        allDocs.forEach(item => {
+            const student = item.data;
+            
+            // BASURA: Sin ID, sin nombre, o ID inválido
+            if (!student || 
+                !student.id || 
+                !student.name || 
+                student.name.trim() === '' ||
+                student.name.includes('no se modificaron') ||
+                student.name.toLowerCase().includes('undefined') ||
+                student.name.toLowerCase().includes('null')) {
+                
+                console.log('🗑️ Basura detectada:', student.name || 'Sin nombre');
+                garbageDocIds.push(item.docId);
+                return;
+            }
+            
+            // DUPLICADO: Ya existe otro con mismo ID
+            if (validStudents.has(student.id)) {
+                console.log('🔁 Duplicado detectado:', student.name);
+                garbageDocIds.push(item.docId);
+                return;
+            }
+            
+            // VÁLIDO
+            validStudents.set(student.id, student);
+        });
+        
+        console.log('✅ Estudiantes válidos:', validStudents.size);
+        console.log('🗑️ Documentos basura:', garbageDocIds.length);
+        
+        // 3. ELIMINAR BASURA DE FIREBASE
+        if (garbageDocIds.length > 0) {
+            for (const docId of garbageDocIds) {
+                try {
+                    const docRef = window.firebaseDoc(db, 'students', docId);
+                    await window.firebaseSetDoc(docRef, { _deleted: true, deletedAt: new Date().toISOString() }, { merge: true });
+                    console.log('🗑️ Eliminado:', docId);
+                } catch (error) {
+                    console.error('❌ Error eliminando:', docId, error);
+                }
+            }
+        }
+        
+        // 4. Actualizar array local
+        students = Array.from(validStudents.values());
+        
+        // 5. Guardar en localStorage limpio
+        localStorage.setItem('gymTracker_students', JSON.stringify(students));
+        
+        // 6. Renderizar
+        renderStudents();
+        
+        showLoading(false);
+        showNotification(`✅ Limpieza completa: ${validStudents.size} atletas, ${garbageDocIds.length} eliminados`, 'success');
+        
+    } catch (error) {
+        console.error('❌ Error en limpieza:', error);
+        showLoading(false);
+        cleanLocalOnly();
+    }
+}
+
+function cleanLocalOnly() {
+    console.log('🧹 Limpieza solo localStorage...');
+    
+    const seen = new Map();
+    const cleaned = [];
+    
+    students.forEach(s => {
+        // Validar que es un estudiante real
+        if (!s || !s.id || !s.name || s.name.trim() === '' ||
+            s.name.includes('no se modificaron') ||
+            s.name.toLowerCase().includes('undefined')) {
+            console.log('🗑️ Basura local:', s.name || 'Sin nombre');
+            return;
+        }
+        
+        // Evitar duplicados
+        if (!seen.has(s.id)) {
+            seen.set(s.id, true);
+            cleaned.push(s);
+        } else {
+            console.log('🔁 Duplicado local:', s.name);
+        }
+    });
+    
+    students = cleaned;
+    localStorage.setItem('gymTracker_students', JSON.stringify(students));
+    renderStudents();
+    
+    showNotification(`🧹 Limpieza local: ${cleaned.length} atletas válidos`, 'info');
+}
+
+// Ejecutar limpieza al cargar
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        if (window.firebaseDB) {
+            cleanAllDuplicatesAndGarbage();
+        }
+    }, 3000);
+});
     </script>
 </body>
 </html>
