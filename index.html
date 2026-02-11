@@ -1488,50 +1488,65 @@
 }
         
         function setupRealtimeListener() {
-            if (!studentsCollection) return;
+    if (!studentsCollection) return;
+    
+    unsubscribeStudents = window.firebaseOnSnapshot(studentsCollection, (snapshot) => {
+        console.log('🔄 Datos actualizados en tiempo real');
+        
+        const firebaseStudents = [];
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            // ✅ IGNORAR BASURA Y ELIMINADOS
+            if (data && data.id && data.name && !data._deleted) {
+                firebaseStudents.push(data);
+            }
+        });
+        
+        // ✅ NO FUSIONAR - REEMPLAZAR DIRECTO SI VIENE DE FIREBASE
+        if (firebaseStudents.length > 0) {
+            // Eliminar duplicados por nombre
+            const uniqueMap = new Map();
             
-            unsubscribeStudents = window.firebaseOnSnapshot(studentsCollection, (snapshot) => {
-                console.log('🔄 Datos actualizados en tiempo real');
+            firebaseStudents.forEach(s => {
+                const nameLower = s.name.toLowerCase().trim();
                 
-                const firebaseStudents = [];
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    if (data && data.id) {
-                        firebaseStudents.push(data);
+                if (!uniqueMap.has(nameLower)) {
+                    uniqueMap.set(nameLower, s);
+                } else {
+                    // Ya existe, mantener el que tenga más sesiones
+                    const existing = uniqueMap.get(nameLower);
+                    if ((s.sessions || []).length > (existing.sessions || []).length) {
+                        uniqueMap.set(nameLower, s);
                     }
-                });
-                
-                // Fusionar con datos locales
-                if (firebaseStudents.length > 0) {
-                    const localData = localStorage.getItem('gymTracker_students');
-                    const localStudents = localData ? JSON.parse(localData) : [];
-                    
-                    students = mergeStudentsData(firebaseStudents, localStudents);
-                    
-                    // Guardar en localStorage
-                    localStorage.setItem('gymTracker_students', JSON.stringify(students));
-                    
-                    // Actualizar UI
-                    renderStudents();
-                    
-                    if (currentStudent) {
-                        const updated = students.find(s => s.id === currentStudent.id);
-                        if (updated) {
-                            currentStudent = updated;
-                            if (document.getElementById('view-dashboard').classList.contains('active')) {
-                                renderDashboard();
-                            }
-                        }
-                    }
-                    
-                    console.log('✅ Sincronizado:', students.length, 'atletas');
                 }
-                
-            }, (error) => {
-                console.error('❌ Error en listener:', error);
-                updateConnectionStatus(false, 'Error de sincronización');
             });
+            
+            students = Array.from(uniqueMap.values());
+            
+            // Guardar en localStorage
+            localStorage.setItem('gymTracker_students', JSON.stringify(students));
+            
+            // Actualizar UI
+            renderStudents();
+            
+            if (currentStudent) {
+                const updated = students.find(s => s.id === currentStudent.id);
+                if (updated) {
+                    currentStudent = updated;
+                    if (document.getElementById('view-dashboard').classList.contains('active')) {
+                        renderDashboard();
+                    }
+                }
+            }
+            
+            console.log('✅ Sincronizado:', students.length, 'atletas únicos');
         }
+        
+    }, (error) => {
+        console.error('❌ Error en listener:', error);
+        updateConnectionStatus(false, 'Error de sincronización');
+    });
+}
         
         function setupConnectionListener() {
             window.addEventListener('online', () => {
@@ -1619,30 +1634,37 @@
         }
 
         async function saveToFirebase() {
-            if (!db || !isOnline) {
-                console.log('💾 Solo local (offline o Firebase no listo)');
-                pendingChanges = true;
-                return false;
+    if (!db || !isOnline) {
+        console.log('💾 Solo local (offline o Firebase no listo)');
+        pendingChanges = true;
+        return false;
+    }
+    
+    try {
+        // ✅ GUARDAR CON VALIDACIÓN DE DUPLICADOS
+        for (const student of students) {
+            // Validar que es un estudiante válido
+            if (!student || !student.id || !student.name || student.name.trim() === '') {
+                console.log('⚠️ Skipping invalid student:', student);
+                continue;
             }
             
-            try {
-                // Guardar cada estudiante como un documento
-                for (const student of students) {
-                    const studentRef = window.firebaseDoc(db, 'students', student.id.toString());
-                    await window.firebaseSetDoc(studentRef, student);
-                }
-                
-                console.log('✅ Guardado en Firebase:', students.length, 'atletas');
-                pendingChanges = false;
-                return true;
-                
-            } catch (error) {
-                console.error('❌ Error guardando en Firebase:', error);
-                pendingChanges = true;
-                return false;
-            }
+            const studentRef = window.firebaseDoc(db, 'students', student.id.toString());
+            
+            // ✅ USAR MERGE en vez de sobrescribir
+            await window.firebaseSetDoc(studentRef, student, { merge: true });
         }
-
+        
+        console.log('✅ Guardado en Firebase:', students.length, 'atletas');
+        pendingChanges = false;
+        return true;
+        
+    } catch (error) {
+        console.error('❌ Error guardando en Firebase:', error);
+        pendingChanges = true;
+        return false;
+    }
+}
         async function manualSync() {
             const btn = document.getElementById('syncBtn');
             btn.classList.add('syncing');
@@ -1707,17 +1729,44 @@
 
        function mergeStudentsData(firebaseStudents, localStudents) {
     const mergedMap = new Map();
+    const seenNames = new Map(); // ← DETECTAR DUPLICADOS POR NOMBRE
     
-    // Solo agregar estudiantes VÁLIDOS de Firebase
+    // ✅ SOLO AGREGAR ESTUDIANTES VÁLIDOS DE FIREBASE
     firebaseStudents.forEach(s => {
-        if (s && s.id && s.name && s.name.trim() !== '' && 
-            !s.name.includes('no se modificaron') &&
-            !s.name.toLowerCase().includes('undefined')) {
+        if (!s || !s.id || !s.name || s.name.trim() === '' || 
+            s.name.includes('no se modificaron') ||
+            s.name.toLowerCase().includes('undefined') ||
+            s.name.toLowerCase().includes('null') ||
+            s._deleted) {
+            return; // Skip basura
+        }
+        
+        const nameLower = s.name.toLowerCase().trim();
+        
+        // ✅ DETECTAR DUPLICADOS POR NOMBRE
+        if (seenNames.has(nameLower)) {
+            // Ya existe uno con este nombre, mantener el que tenga MÁS sesiones
+            const existing = seenNames.get(nameLower);
+            const existingSessionsCount = (existing.sessions || []).length;
+            const currentSessionsCount = (s.sessions || []).length;
+            
+            if (currentSessionsCount > existingSessionsCount) {
+                // Este tiene más datos, reemplazar
+                mergedMap.delete(existing.id);
+                mergedMap.set(s.id, {...s});
+                seenNames.set(nameLower, s);
+                console.log('🔄 Reemplazado duplicado:', s.name, `(${currentSessionsCount} vs ${existingSessionsCount} sesiones)`);
+            } else {
+                console.log('⏭️ Ignorado duplicado:', s.name, `(menos sesiones: ${currentSessionsCount} vs ${existingSessionsCount})`);
+            }
+        } else {
+            // Primera vez que vemos este nombre
             mergedMap.set(s.id, {...s});
+            seenNames.set(nameLower, s);
         }
     });
     
-    // Fusionar con locales válidos
+    // ✅ FUSIONAR CON LOCALES VÁLIDOS (solo si NO existen en Firebase)
     localStudents.forEach(local => {
         if (!local || !local.id || !local.name || local.name.trim() === '' ||
             local.name.includes('no se modificaron') ||
@@ -1725,11 +1774,12 @@
             return; // Skip basura
         }
         
-        const existing = mergedMap.get(local.id);
+        const nameLower = local.name.toLowerCase().trim();
         
-        if (!existing) {
-            mergedMap.set(local.id, {...local});
-        } else {
+        // Si ya existe en Firebase por NOMBRE, fusionar sesiones
+        if (seenNames.has(nameLower)) {
+            const existing = seenNames.get(nameLower);
+            
             // Fusionar sesiones
             const sessionMap = new Map();
             (existing.sessions || []).forEach(s => {
@@ -1748,15 +1798,20 @@
                 if (!goalMap.has(g.id)) goalMap.set(g.id, g);
             });
             
-            const merged = {...existing};
-            merged.sessions = Array.from(sessionMap.values())
+            // Actualizar el existente con datos fusionados
+            existing.sessions = Array.from(sessionMap.values())
                 .sort((a, b) => new Date(b.date) - new Date(a.date));
-            merged.goals = Array.from(goalMap.values());
-            merged.totalXP = Math.max(existing.totalXP || 0, local.totalXP || 0);
-            merged.level = Math.max(existing.level || 1, local.level || 1);
-            merged.badges = [...new Set([...(existing.badges || []), ...(local.badges || [])])];
+            existing.goals = Array.from(goalMap.values());
+            existing.totalXP = Math.max(existing.totalXP || 0, local.totalXP || 0);
+            existing.level = Math.max(existing.level || 1, local.level || 1);
+            existing.badges = [...new Set([...(existing.badges || []), ...(local.badges || [])])];
             
-            mergedMap.set(local.id, merged);
+            mergedMap.set(existing.id, existing);
+            
+        } else {
+            // No existe en Firebase, agregar desde local
+            mergedMap.set(local.id, {...local});
+            seenNames.set(nameLower, local);
         }
     });
     
@@ -1959,35 +2014,43 @@ setTimeout(cleanDuplicateStudents, 2000); // Ejecutar 2 segundos después
             }, 4000);
         }
 
-        // STUDENT MANAGEMENT
-        function addStudent(e) {
-            e.preventDefault();
-            
-            const student = {
-                id: Date.now(),
-                name: document.getElementById('studentName').value,
-                age: parseInt(document.getElementById('studentAge').value),
-                weight: parseFloat(document.getElementById('studentWeight').value),
-                goal: document.getElementById('studentGoal').value,
-                monthlyClasses: parseInt(document.getElementById('studentClasses').value),
-                trainingDays: [],
-                sessions: [],
-                attendance: {},
-                createdAt: new Date().toISOString(),
-                totalXP: 0,
-                level: 1,
-                badges: [],
-                goals: []
-            };
+      function addStudent(e) {
+    e.preventDefault();
+    
+    const newName = document.getElementById('studentName').value.trim();
+    
+    // ✅ VERIFICAR SI YA EXISTE
+    const exists = students.find(s => s.name.toLowerCase().trim() === newName.toLowerCase());
+    if (exists) {
+        alert('⚠️ Ya existe un atleta con ese nombre');
+        return;
+    }
+    
+    const student = {
+        id: Date.now(),
+        name: newName,
+        age: parseInt(document.getElementById('studentAge').value),
+        weight: parseFloat(document.getElementById('studentWeight').value),
+        goal: document.getElementById('studentGoal').value,
+        monthlyClasses: parseInt(document.getElementById('studentClasses').value),
+        trainingDays: [],
+        sessions: [],
+        attendance: {},
+        createdAt: new Date().toISOString(),
+        totalXP: 0,
+        level: 1,
+        badges: [],
+        goals: []
+    };
 
-            students.push(student);
-            saveData();
-            renderStudents();
-            closeModal('addStudent');
-            e.target.reset();
-            
-            showNotification(`✅ ${student.name} agregado`, 'success');
-        }
+    students.push(student);
+    saveData();
+    renderStudents();
+    closeModal('addStudent');
+    e.target.reset();
+    
+    showNotification(`✅ ${student.name} agregado`, 'success');
+}
 
         function renderStudents() {
             const container = document.getElementById('studentsContainer');
