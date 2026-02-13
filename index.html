@@ -399,21 +399,25 @@ background: rgba(20, 26, 36, 0.8);
         }
         
         .students-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 24px;
-        }
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
         
-        .student-card {
+     .student-card {
     backdrop-filter: blur(12px);
     background: rgba(20, 26, 36, 0.8);
     border: 2px solid var(--border-color);
     border-radius: 12px;
-    padding: 24px;
+    padding: 16px 24px;
     cursor: pointer;
     transition: all 0.3s;
     position: relative;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
 }
         
         .student-card:hover {
@@ -422,20 +426,57 @@ background: rgba(20, 26, 36, 0.8);
             box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
         }
         
-        .student-name {
-            font-family: 'Inter', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
+       .student-name {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex: 0 0 200px;
+}
         
         .student-info {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.student-stats {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex: 1;
+}
+
+.student-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.student-stat-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.student-stat-value {
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.student-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
         
         .student-goal {
             font-size: 12px;
@@ -2094,25 +2135,68 @@ setTimeout(cleanDuplicateStudents, 2000); // Ejecutar 2 segundos después
             }
 
             container.innerHTML = students.map(student => {
-                const daysCount = student.trainingDays ? student.trainingDays.length : 0;
-                const sessionsCount = student.sessions ? student.sessions.length : 0;
+    const daysCount = student.trainingDays ? student.trainingDays.length : 0;
+    const sessionsCount = student.sessions ? student.sessions.length : 0;
+    
+    // Calcular última sesión
+    let lastSession = 'Nunca';
+    if (sessionsCount > 0) {
+        const sortedSessions = [...student.sessions].sort((a, b) => 
+            new Date(b.date) - new Date(a.date)
+        );
+        const lastDate = new Date(sortedSessions[0].date);
+        const today = new Date();
+        const diffDays = Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 0) lastSession = 'Hoy';
+        else if (diffDays === 1) lastSession = 'Ayer';
+        else if (diffDays < 7) lastSession = `Hace ${diffDays} días`;
+        else if (diffDays < 30) lastSession = `Hace ${Math.floor(diffDays / 7)} semanas`;
+        else lastSession = `Hace ${Math.floor(diffDays / 30)} meses`;
+    }
+    
+    return `
+        <div class="student-card" onclick="selectStudent(${student.id})">
+            <div class="student-name">${student.name}</div>
+            
+            <div class="student-stats">
+                <div class="student-stat">
+                    <span class="student-stat-label">Plan</span>
+                    <span class="student-stat-value">${daysCount} día${daysCount !== 1 ? 's' : ''}</span>
+                </div>
                 
-                return `
-                    <div class="student-card" onclick="selectStudent(${student.id})" style="position: relative;">
-                        <div style="position: absolute; top: 12px; right: 12px; display: flex; gap: 8px;">
-    <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); editStudent(${student.id})" style="padding: 6px 10px; background: var(--accent-blue); color: #0d1117; border: none;">✏️</button>
-    <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); duplicateStudent(${student.id})" style="padding: 6px 10px; background: var(--success); color: #0d1117; border: none;">📋</button>
-    <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); deleteStudent(${student.id})" style="padding: 6px 10px; background: var(--danger); color: white; border: none;">🗑️</button>
-</div>
-                        <div class="student-name">${student.name}</div>
-                        <div class="student-info">📅 ${student.age} años • ⚖️ ${student.weight}kg</div>
-                        <div class="student-info">🎯 ${student.monthlyClasses} clases/mes</div>
-                        <div class="student-info">🏋️ ${daysCount} día${daysCount !== 1 ? 's' : ''} de entrenamiento</div>
-                        <div class="student-info">📊 ${sessionsCount} sesiones guardadas</div>
-                        <div class="student-goal">${student.goal}</div>
-                    </div>
-                `;
-            }).join('');
+                <div class="student-stat">
+                    <span class="student-stat-label">Sesiones</span>
+                    <span class="student-stat-value">${sessionsCount}</span>
+                </div>
+                
+                <div class="student-stat">
+                    <span class="student-stat-label">Última</span>
+                    <span class="student-stat-value" style="color: ${
+                        lastSession === 'Nunca' ? 'var(--text-muted)' :
+                        lastSession === 'Hoy' || lastSession === 'Ayer' ? 'var(--accent-green)' :
+                        lastSession.includes('días') ? 'var(--accent-yellow)' : 'var(--text-secondary)'
+                    }">${lastSession}</span>
+                </div>
+            </div>
+            
+            <div class="student-actions">
+                <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); editStudent(${student.id})" 
+                        style="padding: 8px 12px; background: var(--accent-blue); color: #0d1117; border: none; font-size: 12px;">
+                    ✏️
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); duplicateStudent(${student.id})" 
+                        style="padding: 8px 12px; background: var(--success); color: #0d1117; border: none; font-size: 12px;">
+                    📋
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); deleteStudent(${student.id})" 
+                        style="padding: 8px 12px; background: var(--danger); color: white; border: none; font-size: 12px;">
+                    🗑️
+                </button>
+            </div>
+        </div>
+    `;
+}).join('');
         }
 
         function selectStudent(studentId) {
