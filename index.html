@@ -9,8 +9,7 @@
     <script type="module">
         // Import Firebase functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, onSnapshot, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        
+        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, onSnapshot, enableIndexedDbPersistence, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";        
         // Tu configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAI6H-s2ntsWX9bEKk-0quMvSnhfI5S-Hs",
@@ -36,13 +35,14 @@
         });
         
         // Exponer db globalmente para el resto del código
-        window.firebaseDB = db;
-        window.firebaseCollection = collection;
-        window.firebaseDoc = doc;
-        window.firebaseSetDoc = setDoc;
-        window.firebaseGetDoc = getDoc;
-        window.firebaseGetDocs = getDocs;
-        window.firebaseOnSnapshot = onSnapshot;
+       window.firebaseDB = db;
+window.firebaseCollection = collection;
+window.firebaseDoc = doc;
+window.firebaseSetDoc = setDoc;
+window.firebaseGetDoc = getDoc;
+window.firebaseGetDocs = getDocs;
+window.firebaseOnSnapshot = onSnapshot;
+window.firebaseDeleteDoc = deleteDoc;
         
         console.log('✅ Firebase inicializado correctamente');
     </script>
@@ -1531,28 +1531,18 @@ background: rgba(20, 26, 36, 0.8);
             }, 1000);
         });
         
-      function initializeFirebase() {
+   function initializeFirebase() {
     try {
         db = window.firebaseDB;
         studentsCollection = window.firebaseCollection(db, 'students');
         
-        console.log('✅ Firebase Firestore inicializado');
-        
-        // Escuchar cambios en tiempo real
         setupRealtimeListener();
-        
-        // Detectar estado de conexión
         setupConnectionListener();
-        
-        // Cargar datos iniciales
         loadFromFirebase();
-        
         updateConnectionStatus(true, 'Conectado');
         
-        // 🧹 EJECUTAR LIMPIEZA DESPUÉS DE CARGAR
-        setTimeout(() => {
-            cleanAllDuplicatesAndGarbage();
-        }, 3000);
+        // ❌ LIMPIEZA AUTOMÁTICA DESACTIVADA
+        // Solo ejecutar manualmente si es necesario desde CONFIG
         
     } catch (error) {
         console.error('❌ Error inicializando Firebase:', error);
@@ -1564,17 +1554,25 @@ background: rgba(20, 26, 36, 0.8);
         function setupRealtimeListener() {
     if (!studentsCollection) return;
     
-    unsubscribeStudents = window.firebaseOnSnapshot(studentsCollection, (snapshot) => {
-        console.log('🔄 Datos actualizados en tiempo real');
+   unsubscribeStudents = window.firebaseOnSnapshot(studentsCollection, (snapshot) => {
+    console.log('🔄 Datos actualizados en tiempo real');
+    
+    const firebaseStudents = [];
+    snapshot.forEach((doc) => {
+        const data = doc.data();
         
-        const firebaseStudents = [];
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            // ✅ IGNORAR BASURA Y ELIMINADOS
-            if (data && data.id && data.name && !data._deleted) {
-                firebaseStudents.push(data);
-            }
-        });
+        // ✅ FILTRAR: Solo válidos (con nombre real, NO eliminados, NO basura)
+        if (data && 
+            data.id && 
+            data.name && 
+            data.name.trim() !== '' &&
+            !data._deleted &&
+            !data.name.toLowerCase().startsWith('no se modificaron') &&
+            data.name.toLowerCase() !== 'undefined' &&
+            data.name.toLowerCase() !== 'null') {
+            firebaseStudents.push(data);
+        }
+    });
         
         // ✅ NO FUSIONAR - REEMPLAZAR DIRECTO SI VIENE DE FIREBASE
         if (firebaseStudents.length > 0) {
@@ -2252,24 +2250,37 @@ setTimeout(cleanDuplicateStudents, 2000); // Ejecutar 2 segundos después
             showNotification('✅ Datos actualizados', 'success');
         }
 
-        function deleteStudent(studentId) {
-            const student = students.find(s => s.id === studentId);
-            if (!student) return;
-            
-            if (!confirm('¿Eliminar a ' + student.name + '?')) return;
-            
-            students = students.filter(s => s.id !== studentId);
-            
-            if (currentStudent && currentStudent.id === studentId) {
-                currentStudent = null;
-                currentDay = null;
-            }
-            
-            saveData();
-            renderStudents();
-            
-            showNotification(`🗑️ ${student.name} eliminado`, 'success');
+ async function deleteStudent(studentId) {
+    const student = students.find(s => s.id === studentId);
+    if (!student) return;
+    
+    if (!confirm('¿Eliminar a ' + student.name + '?')) return;
+    
+    // Eliminar del array local
+    students = students.filter(s => s.id !== studentId);
+    
+    if (currentStudent && currentStudent.id === studentId) {
+        currentStudent = null;
+        currentDay = null;
+    }
+    
+    // ✅ ELIMINAR PERMANENTEMENTE DE FIREBASE
+    if (db && isOnline) {
+        try {
+            const docRef = window.firebaseDoc(db, 'students', studentId.toString());
+            await window.firebaseDeleteDoc(docRef);
+            console.log('✅ Eliminado de Firebase:', student.name);
+        } catch (error) {
+            console.error('❌ Error eliminando de Firebase:', error);
         }
+    }
+    
+    // Guardar en localStorage
+    localStorage.setItem('gymTracker_students', JSON.stringify(students));
+    
+    renderStudents();
+    showNotification(`🗑️ ${student.name} eliminado`, 'success');
+}
         function duplicateStudent(studentId) {
     const originalStudent = students.find(s => s.id === studentId);
     if (!originalStudent) return;
